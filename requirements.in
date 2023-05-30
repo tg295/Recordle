@@ -1,7 +1,14 @@
 spotipy
+python-twitter
 matplotlib
 accelerate
 torch 
 torchvision 
 torchaudio
+transformers
 diffusers[torch]
+boto3
+ipykernel
+notebook
+replicate
+aws_lambda_powertools

@@ -4,3 +4,416 @@
 #
 #    pip-compile --output-file=requirements.txt requirements.in
 #
+accelerate==0.19.0
+    # via
+    #   -r requirements.in
+    #   diffusers
+anyio==3.6.2
+    # via jupyter-server
+appnope==0.1.3
+    # via
+    #   ipykernel
+    #   ipython
+argon2-cffi==21.3.0
+    # via
+    #   jupyter-server
+    #   nbclassic
+    #   notebook
+argon2-cffi-bindings==21.2.0
+    # via argon2-cffi
+arrow==1.2.3
+    # via isoduration
+asttokens==2.2.1
+    # via stack-data
+async-timeout==4.0.2
+    # via redis
+attrs==23.1.0
+    # via jsonschema
+aws-lambda-powertools==2.15.0
+    # via -r requirements.in
+backcall==0.2.0
+    # via ipython
+beautifulsoup4==4.12.2
+    # via nbconvert
+bleach==6.0.0
+    # via nbconvert
+boto3==1.26.141
+    # via -r requirements.in
+botocore==1.29.141
+    # via
+    #   boto3
+    #   s3transfer
+certifi==2023.5.7
+    # via requests
+cffi==1.15.1
+    # via argon2-cffi-bindings
+charset-normalizer==3.1.0
+    # via requests
+comm==0.1.3
+    # via ipykernel
+contourpy==1.0.7
+    # via matplotlib
+cycler==0.11.0
+    # via matplotlib
+debugpy==1.6.7
+    # via ipykernel
+decorator==5.1.1
+    # via ipython
+defusedxml==0.7.1
+    # via nbconvert
+diffusers[torch]==0.16.1
+    # via -r requirements.in
+executing==1.2.0
+    # via stack-data
+fastjsonschema==2.17.1
+    # via nbformat
+filelock==3.12.0
+    # via
+    #   diffusers
+    #   huggingface-hub
+    #   torch
+    #   transformers
+fonttools==4.39.4
+    # via matplotlib
+fqdn==1.5.1
+    # via jsonschema
+fsspec==2023.5.0
+    # via huggingface-hub
+future==0.18.3
+    # via python-twitter
+huggingface-hub==0.14.1
+    # via
+    #   diffusers
+    #   transformers
+idna==3.4
+    # via
+    #   anyio
+    #   jsonschema
+    #   requests
+importlib-metadata==6.6.0
+    # via
+    #   diffusers
+    #   jupyter-client
+    #   nbconvert
+importlib-resources==5.12.0
+    # via matplotlib
+ipykernel==6.23.1
+    # via
+    #   -r requirements.in
+    #   nbclassic
+    #   notebook
+ipython==8.13.2
+    # via ipykernel
+ipython-genutils==0.2.0
+    # via
+    #   nbclassic
+    #   notebook
+isoduration==20.11.0
+    # via jsonschema
+jedi==0.18.2
+    # via ipython
+jinja2==3.1.2
+    # via
+    #   jupyter-server
+    #   nbclassic
+    #   nbconvert
+    #   notebook
+    #   torch
+jmespath==1.0.1
+    # via
+    #   boto3
+    #   botocore
+jsonpointer==2.3
+    # via jsonschema
+jsonschema[format-nongpl]==4.17.3
+    # via
+    #   jupyter-events
+    #   nbformat
+jupyter-client==8.2.0
+    # via
+    #   ipykernel
+    #   jupyter-server
+    #   nbclassic
+    #   nbclient
+    #   notebook
+jupyter-core==5.3.0
+    # via
+    #   ipykernel
+    #   jupyter-client
+    #   jupyter-server
+    #   nbclassic
+    #   nbclient
+    #   nbconvert
+    #   nbformat
+    #   notebook
+jupyter-events==0.6.3
+    # via jupyter-server
+jupyter-server==2.6.0
+    # via
+    #   nbclassic
+    #   notebook-shim
+jupyter-server-terminals==0.4.4
+    # via jupyter-server
+jupyterlab-pygments==0.2.2
+    # via nbconvert
+kiwisolver==1.4.4
+    # via matplotlib
+markupsafe==2.1.2
+    # via
+    #   jinja2
+    #   nbconvert
+matplotlib==3.7.1
+    # via -r requirements.in
+matplotlib-inline==0.1.6
+    # via
+    #   ipykernel
+    #   ipython
+mistune==2.0.5
+    # via nbconvert
+mpmath==1.3.0
+    # via sympy
+nbclassic==1.0.0
+    # via notebook
+nbclient==0.8.0
+    # via nbconvert
+nbconvert==7.4.0
+    # via
+    #   jupyter-server
+    #   nbclassic
+    #   notebook
+nbformat==5.8.0
+    # via
+    #   jupyter-server
+    #   nbclassic
+    #   nbclient
+    #   nbconvert
+    #   notebook
+nest-asyncio==1.5.6
+    # via
+    #   ipykernel
+    #   nbclassic
+    #   notebook
+networkx==3.1
+    # via torch
+notebook==6.5.4
+    # via -r requirements.in
+notebook-shim==0.2.3
+    # via nbclassic
+numpy==1.24.3
+    # via
+    #   accelerate
+    #   contourpy
+    #   diffusers
+    #   matplotlib
+    #   torchvision
+    #   transformers
+oauthlib==3.2.2
+    # via requests-oauthlib
+overrides==7.3.1
+    # via jupyter-server
+packaging==23.1
+    # via
+    #   accelerate
+    #   huggingface-hub
+    #   ipykernel
+    #   jupyter-server
+    #   matplotlib
+    #   nbconvert
+    #   replicate
+    #   transformers
+pandocfilters==1.5.0
+    # via nbconvert
+parso==0.8.3
+    # via jedi
+pexpect==4.8.0
+    # via ipython
+pickleshare==0.7.5
+    # via ipython
+pillow==9.5.0
+    # via
+    #   diffusers
+    #   matplotlib
+    #   torchvision
+platformdirs==3.5.1
+    # via jupyter-core
+prometheus-client==0.17.0
+    # via
+    #   jupyter-server
+    #   nbclassic
+    #   notebook
+prompt-toolkit==3.0.38
+    # via ipython
+psutil==5.9.5
+    # via
+    #   accelerate
+    #   ipykernel
+ptyprocess==0.7.0
+    # via
+    #   pexpect
+    #   terminado
+pure-eval==0.2.2
+    # via stack-data
+pycparser==2.21
+    # via cffi
+pydantic==1.10.8
+    # via replicate
+pygments==2.15.1
+    # via
+    #   ipython
+    #   nbconvert
+pyparsing==3.0.9
+    # via matplotlib
+pyrsistent==0.19.3
+    # via jsonschema
+python-dateutil==2.8.2
+    # via
+    #   botocore
+    #   jupyter-client
+    #   matplotlib
+python-json-logger==2.0.7
+    # via jupyter-events
+python-twitter==3.5
+    # via -r requirements.in
+pyyaml==6.0
+    # via
+    #   accelerate
+    #   huggingface-hub
+    #   jupyter-events
+    #   transformers
+pyzmq==25.0.2
+    # via
+    #   ipykernel
+    #   jupyter-client
+    #   jupyter-server
+    #   nbclassic
+    #   notebook
+redis==4.5.5
+    # via spotipy
+regex==2023.5.5
+    # via
+    #   diffusers
+    #   transformers
+replicate==0.8.3
+    # via -r requirements.in
+requests==2.31.0
+    # via
+    #   diffusers
+    #   huggingface-hub
+    #   python-twitter
+    #   replicate
+    #   requests-oauthlib
+    #   spotipy
+    #   torchvision
+    #   transformers
+requests-oauthlib==1.3.1
+    # via python-twitter
+rfc3339-validator==0.1.4
+    # via
+    #   jsonschema
+    #   jupyter-events
+rfc3986-validator==0.1.1
+    # via
+    #   jsonschema
+    #   jupyter-events
+s3transfer==0.6.1
+    # via boto3
+send2trash==1.8.2
+    # via
+    #   jupyter-server
+    #   nbclassic
+    #   notebook
+six==1.16.0
+    # via
+    #   asttokens
+    #   bleach
+    #   python-dateutil
+    #   rfc3339-validator
+    #   spotipy
+sniffio==1.3.0
+    # via anyio
+soupsieve==2.4.1
+    # via beautifulsoup4
+spotipy==2.23.0
+    # via -r requirements.in
+stack-data==0.6.2
+    # via ipython
+sympy==1.12
+    # via torch
+terminado==0.17.1
+    # via
+    #   jupyter-server
+    #   jupyter-server-terminals
+    #   nbclassic
+    #   notebook
+tinycss2==1.2.1
+    # via nbconvert
+tokenizers==0.13.3
+    # via transformers
+torch==2.0.1
+    # via
+    #   -r requirements.in
+    #   accelerate
+    #   diffusers
+    #   torchaudio
+    #   torchvision
+torchaudio==2.0.2
+    # via -r requirements.in
+torchvision==0.15.2
+    # via -r requirements.in
+tornado==6.3.2
+    # via
+    #   ipykernel
+    #   jupyter-client
+    #   jupyter-server
+    #   nbclassic
+    #   notebook
+    #   terminado
+tqdm==4.65.0
+    # via
+    #   huggingface-hub
+    #   transformers
+traitlets==5.9.0
+    # via
+    #   comm
+    #   ipykernel
+    #   ipython
+    #   jupyter-client
+    #   jupyter-core
+    #   jupyter-events
+    #   jupyter-server
+    #   matplotlib-inline
+    #   nbclassic
+    #   nbclient
+    #   nbconvert
+    #   nbformat
+    #   notebook
+transformers==4.29.2
+    # via -r requirements.in
+typing-extensions==4.6.2
+    # via
+    #   aws-lambda-powertools
+    #   huggingface-hub
+    #   ipython
+    #   pydantic
+    #   torch
+uri-template==1.2.0
+    # via jsonschema
+urllib3==1.26.16
+    # via
+    #   botocore
+    #   requests
+    #   spotipy
+wcwidth==0.2.6
+    # via prompt-toolkit
+webcolors==1.13
+    # via jsonschema
+webencodings==0.5.1
+    # via
+    #   bleach
+    #   tinycss2
+websocket-client==1.5.2
+    # via jupyter-server
+zipp==3.15.0
+    # via
+    #   importlib-metadata
+    #   importlib-resources
