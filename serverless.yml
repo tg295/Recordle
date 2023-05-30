@@ -1,0 +1,82 @@
+service: "album-cover-generator"
+
+provider:
+  name: aws
+  runtime: python3.8
+  stage: ${opt:stage, 'dev'}
+  region: eu-west-2
+  deploymentBucket:
+    blockPublicAccess: true
+    name: serverless-${self:service}
+  stackTags:
+    Project: ${self:service}
+    deployed_by: "Theo"
+    deployed_tag: ${opt:stage, 'dev'}
+  environment:
+    ENV: ${self:provider.stage}
+    POWERTOOLS_SERVICE_NAME: ${self:service}
+    # MAJOR_LABEL_BUCKET: instrumental-ds-models
+    # MAJOR_LABEL_LIST: spotify/label/major_label_list.csv
+  memorySize: 128
+  timeout: 5
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:List*"
+        - "s3:Get*"
+      Resource: arn:aws:s3:::alt-covers-bucket/data/*
+
+plugins:
+  - serverless-python-requirements
+  - serverless-prune-plugin
+
+custom:
+  myStage: ${self:provider.stage}
+  prune:
+    automatic: true
+    number: 3
+  pythonRequirements:
+    useDownloadCache: true
+    useStaticCache: true
+    invalidateCaches: false
+    noDeploy:
+      - boto3
+      - botocore
+      - docutils
+      - jmespath
+      - pkgresources
+      - python-dateutil
+      - setuptools
+      - s3transfer
+      - six
+      - pip
+      - setuptools
+    # slim to reduce package size, but customise patterns to avoid breaking jsonschema
+    slim: true
+    slimPatternsAppendDefaults: false
+    slimPatterns:
+      - "**/*.pyc"
+      - "**/*.pyo"
+      - "**/__pycache__*"
+
+# you can add packaging information here
+package:
+  exclude:
+    - bin/**
+    - coverage/**
+    - logs/**
+    - node_modules/**
+    - htmlcov/**
+    - tests/**
+    - venv/**
+    - .coverage
+    - .test-reports/**
+    - .vscode/**
+    - package-lock.json
+    - .ipynb_checkpoints/**
+
+functions:
+  coverGenerator:
+    description: Parses the track information and returns the best guess for the label classification for that track
+    handler: src.handlers.main.handler
+    timeout: 30
