@@ -1,0 +1,105 @@
+service: "album-cover-generator"
+
+provider:
+  name: aws
+  runtime: python3.9
+  stage: ${opt:stage, 'prod'}
+  region: eu-west-2
+  deploymentBucket:
+    # blockPublicAccess: true
+    name: serverless-${self:service}
+  stackTags:
+    Project: ${self:service}
+    deployed_by: "Theo"
+    deployed_tag: ${opt:stage, 'prod'}
+  environment:
+    ENV: ${self:provider.stage}
+    LOG_LEVEL: ${self:custom.logLevel.${self:custom.myStage}, 'INFO'}
+    # Powertools config
+    POWERTOOLS_SERVICE_NAME: ${self:service}
+    POWERTOOLS_METRICS_NAMESPACE: "Recordle"
+    # AWS
+    S3_ACCESS_KEY: ${ssm:/recordle/s3_access_key}
+    S3_SECRET_KEY: ${ssm:/recordle/s3_secret_key}
+    # Spotify
+    SPOTIPY_CLIENT_ID: ${ssm:/recordle/spotify_client_id}
+    SPOTIPY_CLIENT_SECRET: ${ssm:/recordle/spotify_client_secret}
+    SPOTIPY_REDIRECT_URI: ${ssm:/recordle/spotify_redirect_uri}
+    # Replicate
+    REPLICATE_API_TOKEN: ${ssm:/recordle/replicate_api_token}
+  memorySize: 128
+  timeout: 5
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "s3:List*"
+        - "s3:Get*"
+      Resource: arn:aws:s3:::alt-covers-bucket/*
+    - Effect: "Allow"
+      Action:
+        - "ssm:GetParameter"
+      Resource: "*"
+
+plugins:
+  - serverless-python-requirements
+  - serverless-prune-plugin
+  - serverless-deployment-bucket
+
+custom:
+  myStage: ${self:provider.stage}
+  prune:
+    automatic: true
+    number: 3
+  pythonRequirements:
+    useDownloadCache: true
+    useStaticCache: true
+    invalidateCaches: false
+    noDeploy:
+      - boto3
+      - botocore
+      - docutils
+      - jmespath
+      - pkgresources
+      - python-dateutil
+      - setuptools
+      - s3transfer
+      - six
+      - pip
+    # slim to reduce package size, but customise patterns to avoid breaking jsonschema
+    slim: true
+    slimPatternsAppendDefaults: false
+    slimPatterns:
+      - "**/*.pyc"
+      - "**/*.pyo"
+      - "**/__pycache__*"
+
+# you can add packaging information here
+package:
+  exclude:
+    - bin/**
+    - coverage/**
+    - logs/**
+    - node_modules/**
+    - htmlcov/**
+    - tests/**
+    - venv/**
+    - .coverage
+    - .test-reports/**
+    - .vscode/**
+    - package-lock.json
+    - .ipynb_checkpoints/**
+    - img/**
+    - data/**
+    - notebooks/**
+
+functions:
+  coverGenerator:
+    description: Generates stable diff covers everyday at midnight
+    handler: src.handlers.main.handler
+    timeout: 120
+    events:
+      - schedule:
+          rate: cron(0 0 ? * * *)
+          enabled: true
+          input:
+            period: day
