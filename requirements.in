@@ -1,7 +1,0 @@
-spotipy
-matplotlib
-accelerate
-torch 
-torchvision 
-torchaudio
-diffusers[torch]

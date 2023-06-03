@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "live-server": "^1.2.2"
+  },
+  "devDependencies": {
+    "serverless-deployment-bucket": "^1.6.0",
+    "serverless-prune-plugin": "^2.0.2",
+    "serverless-python-requirements": "^6.0.0"
+  }
+}

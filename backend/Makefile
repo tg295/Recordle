@@ -1,4 +1,5 @@
 SHELL := /bin/bash
+stage=prod
 
 .PHONY: deps
 
@@ -12,3 +13,7 @@ deps:
 ifneq ("","$(wildcard package.json)")
 	npm install
 endif
+
+deploy:
+	@echo "Deploying service" && \
+	serverless deploy --verbose --stage $(stage) --force
