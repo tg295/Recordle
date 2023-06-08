@@ -96,7 +96,7 @@ functions:
   coverGenerator:
     description: Generates stable diff covers everyday at midnight
     handler: src.handlers.main.handler
-    timeout: 120
+    timeout: 300
     events:
       - schedule:
           rate: cron(0 0 ? * * *)

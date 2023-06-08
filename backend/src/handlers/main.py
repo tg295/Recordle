@@ -9,7 +9,6 @@ import requests
 import random
 
 import boto3
-from botocore.exceptions import NoCredentialsError
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from aws_lambda_powertools.utilities import parameters
@@ -43,7 +42,7 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
 def run(n=3, remove=True, local=False):
     album_list = get_album_list(local)
     album_id = album_list[0]
-    logging.info('===== {} ===='.format(album_id))
+    logger.info('===== {} ===='.format(album_id))
     create_and_upload_images(album_id, local, n)
     update_list(album_list, album_id, remove, local)
     update_done(album_id, local)
@@ -205,6 +204,6 @@ def get_boto3_client():
 
 if __name__ == "__main__":
 
-    run(local=True)
-
+    # run(local=True)
+    create_and_upload_images('6dVIqQ8qmQ5GBnJ9shOYGE', True)
 
