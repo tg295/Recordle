@@ -5,6 +5,14 @@ async function downloadJSON(url) {
     return content;
 }
 
+async function downloadAlbumList() {
+    const response = await (fetch("https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/albums_done.txt"));
+    const content = await (response.text());
+    const textByLine = content.split("\n");
+    console.log(textByLine);
+    return textByLine;
+}
+
 function getAlbumClueURL(album_data, n) {
     // for clue n (e.g. 0, 1, 2)
     // return formatted URL for grabbing image 
@@ -19,9 +27,9 @@ function getAlbumAnswerURL(album_data) {
     return `https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/${album_data.id}_${album_data.formatted_title}_REAL.png`
 }
 
-function getAlbumOfTheDay() {
+function getAlbumOfTheDay(answers) {
     const now = new Date()
-    const start = new Date(2023, 4, 23)
+    const start = new Date(2023, 5, 6)
     console.log(now.toString());
     console.log(start.toString());
     const diff = Number(now) - Number(start)
@@ -30,18 +38,15 @@ function getAlbumOfTheDay() {
         day -= answers.length
       } */
     console.log(`album idx: ${day}`);
+    console.log(answers[day]);
     return answers[day]
 }
 
-const answers = [
-    "7nXJ5k4XgRj5OLg9m8V3zc",
-    "5h3WJG0aZjNOrayFu3MhCS",
-    "04sSPjO9MQFQ6fG4lpBI3G"
-]
-
 
 function AlbumLoader() {
-    const album_id = getAlbumOfTheDay();
+    const answers = downloadAlbumList();
+    console.log(answers);
+    const album_id = getAlbumOfTheDay(answers);
     console.log("album of the day: " + album_id);
     const album_data_url = `https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/data/${album_id}.json`;
     console.log(album_data_url);
