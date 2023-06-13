@@ -2,31 +2,31 @@ import { useState } from "react";
 import React from 'react';
 
 const slideStyles = {
-    width: "100%",
-    height: "100%",
-    borderRadius: "10px",
+    width: "50%",
+    height: "50%",
+    borderRadius: "5px",
     backgroundSize: "cover",
     backgroundPosition: "center",
 };
 
 const rightArrowStyles = {
     position: "absolute",
-    top: "50%",
+    top: "25%",
     transform: "translate(0, -50%)",
-    right: "32px",
+    right: "85px",
     fontSize: "45px",
-    color: "#fff",
+    color: "#181818",
     zIndex: 1,
     cursor: "pointer",
 };
 
 const leftArrowStyles = {
     position: "absolute",
-    top: "50%",
+    top: "25%",
     transform: "translate(0, -50%)",
-    left: "32px",
+    left: "85px",
     fontSize: "45px",
-    color: "#fff",
+    color: "#181818",
     zIndex: 1,
     cursor: "pointer",
 };
@@ -34,11 +34,15 @@ const leftArrowStyles = {
 const sliderStyles = {
     position: "relative",
     height: "100%",
+    justifyContent: "center",
+    display: "flex",
 };
 
 const dotsContainerStyles = {
     display: "flex",
     justifyContent: "center",
+    position: "absolute",
+    marginTop: "260px",
 };
 
 const dotStyle = {

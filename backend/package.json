@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "@types/react-router-dom": "^5.3.3",
     "live-server": "^1.2.2"
   },
   "devDependencies": {

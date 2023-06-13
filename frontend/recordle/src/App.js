@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import Header from "./Components/Header";
+import Footer from "./Components/Footer";
 import ImageSlider from "./ImageSlider";
+import vinyl from './Images/vinyl.jpeg';
 
 const App = () => {
   const now = new Date();
-  const start = new Date(2023, 4, 25);
+  const start = new Date(2023, 4, 31);
   const diff = now.getTime() - start.getTime();
   const day = Math.floor(diff / (1000 * 60 * 60 * 24));
 
   const [textData, setTextData] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(day);
   const [slides, setSlides] = useState([]);
+  const [answer, setAnswer] = useState(null);
   const [jsonData, setJsonData] = useState(null);
+  const [showReleaseDate, setShowReleaseDate] = useState(false);
 
   useEffect(() => {
     const fetchTextData = async () => {
@@ -42,8 +48,11 @@ const App = () => {
             { url: `https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/${jsonData.id}_${jsonData.formatted_title}_GEN_2.png`, title: "clue3" },
           ];
 
+          const answer = { url: `https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/${jsonData.id}_${jsonData.formatted_title}_REAL.png`, title: "answer" }
+
           setJsonData(jsonData);
           setSlides(newSlides);
+          setAnswer(answer);
         }
       } catch (error) {
         console.error('Error:', error);
@@ -52,6 +61,10 @@ const App = () => {
 
     fetchJsonData();
   }, [selectedIndex, textData]);
+
+  const handleReleaseDateClick = () => {
+    setShowReleaseDate(true);
+  };
 
   const containerStyles = {
     display: "flex",
@@ -67,27 +80,82 @@ const App = () => {
   };
 
   const headerStyles = {
-    fontFamily: "Arial, sans-serif",
-    fontSize: "32px",
+    // position: "relative",
+    fontFamily: "VT323, monospace",
+    fontSize: "28px",
     fontWeight: "bold",
     color: "black",
     marginTop: "left",
     marginBottom: "top",
+    textAlign: "center",
   };
+
+  const releaseDateStyles = {
+    cursor: "pointer",
+    marginTop: "10px",
+    fontFamily: "VT323, monospace",
+    fontSize: "16px",
+    fontWeight: "bold",
+    color: "black",
+    textAlign: "center",
+  };
+
+  const anwserStyles = {
+    width: "58%",
+    height: "100%",
+    borderRadius: "5px",
+    // overflow: "hidden",
+    backgroundSize: "cover",
+    backgroundPosition: "center",
+    marginRight: "auto",
+    marginLeft: "auto",
+    marginTop: "-220px",
+  };
+
+  const logoStyles = {
+    position: "absolute",
+    width: "12%",
+    height: "8%",
+    top: "16px",
+    left: "30px",
+  }
 
   return (
     <div style={containerStyles}>
-      <div>
-        <h1 style={headerStyles}>Day {selectedIndex}</h1>
-        <div style={imgContainerStyles}>
-          {slides.length > 0 && jsonData ? (
-            <ImageSlider slides={slides} />
-          ) : (
-            <p>Loading slides...</p>
+      <Router>
+
+        <div>
+          {/* <Header /> */}
+          <img
+            src={vinyl}
+            alt="Logo"
+            style={logoStyles}
+          />
+          <h1 style={headerStyles}>Recordle - Day {selectedIndex}</h1>
+          {jsonData && (
+            <p
+              style={releaseDateStyles}
+              onClick={handleReleaseDateClick}
+            >
+              Release date: {showReleaseDate ? jsonData.release_date : "???"}
+            </p>
+          )}
+          <div style={imgContainerStyles}>
+            {slides.length > 0 && jsonData ? (
+              <ImageSlider slides={slides} />
+            ) : (
+              <p>Loading slides...</p>
+            )}
+          </div>
+          {answer && (
+            <div style={anwserStyles}>
+              <img src={answer.url} alt={answer.title} />
+            </div>
           )}
         </div>
-      </div>
-    </div>
+        <Footer />
+      </Router>
+    </div >
   );
 };
 
