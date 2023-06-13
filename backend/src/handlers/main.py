@@ -2,7 +2,6 @@
 import re
 import os
 from datetime import datetime
-import logging
 from typing import Dict, Any
 import json
 import requests
@@ -125,7 +124,7 @@ def get_album_data(album_id, local):
 
 
 def _format_title(title):
-    punc = '''!()-[]{};:'",.'''
+    punc = '''!()-[]{};:'",./?@#$%^&*_~'''
 
     title = title.lower().replace(' ', '_')
     for ele in title:

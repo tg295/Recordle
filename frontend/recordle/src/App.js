@@ -3,7 +3,7 @@ import ImageSlider from "./ImageSlider";
 
 const App = () => {
   const now = new Date();
-  const start = new Date(2023, 5, 2);
+  const start = new Date(2023, 4, 25);
   const diff = now.getTime() - start.getTime();
   const day = Math.floor(diff / (1000 * 60 * 60 * 24));
 

@@ -2,3 +2,4 @@ spotipy
 boto3
 replicate
 aws_lambda_powertools
+click
