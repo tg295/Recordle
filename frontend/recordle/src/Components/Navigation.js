@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faBars } from '@fortawesome/free-solid-svg-icons'
-import {useTransition, animated} from 'react-spring'
+import { faCalendarDay } from '@fortawesome/free-solid-svg-icons'
+import { useTransition, animated } from 'react-spring'
 import NavigationMenu from './NavigationMenu'
-  
 
-function Navigation(){
+
+function Navigation() {
     const [showMenu, setShowMenu] = useState(false)
 
     const maskTransitions = useTransition(showMenu, null, {
@@ -23,17 +23,18 @@ function Navigation(){
     return (
         <nav>
             <span className="text-xl">
-                <FontAwesomeIcon 
-                    icon={faBars}
+                <FontAwesomeIcon
+                    icon={faCalendarDay}
+                    size='l'
                     onClick={() => setShowMenu(!showMenu)}
                 />
             </span>
 
             {
                 maskTransitions.map(({ item, key, props }) =>
-                    item && 
-                    <animated.div 
-                        key={key} 
+                    item &&
+                    <animated.div
+                        key={key}
                         style={props}
                         className="bg-black-t-50 fixed top-0 left-0 w-full h-full z-50"
                         onClick={() => setShowMenu(false)}
@@ -44,13 +45,13 @@ function Navigation(){
 
             {
                 menuTransitions.map(({ item, key, props }) =>
-                    item && 
-                    <animated.div 
-                        key={key} 
+                    item &&
+                    <animated.div
+                        key={key}
                         style={props}
                         className="fixed bg-white top-0 left-0 w-4/5 h-full z-50 shadow p-3"
                     >
-                        <NavigationMenu 
+                        <NavigationMenu
                             closeMenu={() => setShowMenu(false)}
                         />
                     </animated.div>

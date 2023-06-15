@@ -8,6 +8,7 @@ const slideStyles = {
     backgroundSize: "cover",
     backgroundPosition: "center",
     border: "3px solid #e66439",
+    borderRadius: "5px",
 };
 
 const rightArrowStyles = {
@@ -39,19 +40,6 @@ const sliderStyles = {
     display: "flex",
 };
 
-const dotsContainerStyles = {
-    display: "flex",
-    justifyContent: "center",
-    position: "absolute",
-    marginTop: "260px",
-};
-
-const dotStyle = {
-    margin: "0 3px",
-    cursor: "pointer",
-    fontSize: "20px",
-};
-
 const ImageSlider = ({ slides }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const goToPrevious = () => {
@@ -76,26 +64,23 @@ const ImageSlider = ({ slides }) => {
         <div style={sliderStyles}>
             <div>
                 <div onClick={goToPrevious} style={leftArrowStyles}>
-                    {"<"}
+                    {"-"}
                 </div>
                 <div onClick={goToNext} style={rightArrowStyles}>
-                    {">"}
+                    {"+"}
                 </div>
             </div>
             <div style={slideStylesWidthBackground}></div>
-            <div style={dotsContainerStyles}>
-                {slides.map((slide, slideIndex) => (
-                    <div
-                        style={dotStyle}
-                        key={slideIndex}
-                        onClick={() => goToSlide(slideIndex)}
-                    >
-                        ■
-                    </div>
-                ))}
-            </div>
         </div>
     );
 };
+
+{
+    answer && (
+        <div style={anwserStyles}>
+            <img src={answer.url} alt={answer.title} style={answerImageStyles} />
+        </div>
+    )
+}
 
 export default ImageSlider;
