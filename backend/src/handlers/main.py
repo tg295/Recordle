@@ -1,6 +1,12 @@
+import os
+import sys
+
+sys.path.append(os.path.join(os.getcwd()))
+
+
 """Track parser handler"""
 import re
-import os
+
 from datetime import datetime
 from typing import Dict, Any
 import json
@@ -124,7 +130,7 @@ def get_album_data(album_id, local):
 
 
 def _format_title(title):
-    punc = '''!()-[]{};:'",./?@#$%^&*_~'''
+    punc = '''!()-[]{};:'",./?@#$%^&*~'''
 
     title = title.lower().replace(' ', '_')
     for ele in title:
@@ -204,5 +210,10 @@ def get_boto3_client():
 if __name__ == "__main__":
 
     # run(local=True)
-    create_and_upload_images('6dVIqQ8qmQ5GBnJ9shOYGE', True)
+    # create_and_upload_images('6dVIqQ8qmQ5GBnJ9shOYGE', True)
+    # album_id = '6PanEvuo9ZNvGT39v50xp6'
+    album_id = 'https://open.spotify.com/album/1Dh27pjT3IEdiRG9Se5uQn?si=_-rpew1cTt-T9muAWAUncw'
+    sp = Spotify(client_credentials_manager=SpotifyClientCredentials())
+    album = sp.album(album_id)
+    print(album['images'])
 

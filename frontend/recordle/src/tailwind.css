@@ -19212,21 +19212,56 @@ video {
 }
 
 .loader {
-  border: 5px solid #f3f3f3;
+  border: 5px solid #e33636;
   border-radius: 50%;
-  border-top: 5px solid #3498db;
+  border-top: 5px solid #db4a34;
   width: 50px;
-  height: 50px; /* Safari */
+  height: 50px;
+  /* Safari */
   animation: spin 2s linear infinite;
 }
 
 /* Safari */
 
 @keyframes spin {
-  0% { transform: rotate(0deg);
+  0% {
+    transform: rotate(0deg);
   }
 
-  100% { transform: rotate(360deg);
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@font-face {
+  font-family: "AssistantRegular";
+
+  src: local("AssistantRegular"),
+        url("./fonts/slkscrb.ttf") format("truetype");
+
+  font-weight: normal;
+}
+
+@keyframes shake {
+  10%,
+    90% {
+    transform: translateX(-5px);
+  }
+
+  20%,
+    80% {
+    transform: translateX(5px);
+  }
+
+  30%,
+    50%,
+    70% {
+    transform: translateX(-5px);
+  }
+
+  40%,
+    60% {
+    transform: translateX(5px);
   }
 }
 
