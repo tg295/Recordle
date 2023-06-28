@@ -9,7 +9,7 @@ import './index.css';
 
 // TO DO 
 // Fix layout - plus and minus need to be anchored to the answer image
-// AND the vinyl image needs to be anchored to the "o" in the Recordle header
+// AND the vinl image needs to be anchored to the "o" in the Recordle header
 // AND the main container should always fill the full screen with everything centred
 
 // Then we need to build the answer sumbission form on top of the answer image
@@ -251,7 +251,7 @@ const App = () => {
   const answerContainerStyles = {
     width: "80%",
     height: "22%",
-    position: "absolute",
+    position: "relative",
     top: "calc(100% )",
     right: "calc(50% - 23%)",
   }
@@ -307,6 +307,7 @@ const App = () => {
 
   const inputContainerStyles = {
     width: "100%",
+    height: "100%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
