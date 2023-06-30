@@ -130,7 +130,7 @@ def get_album_data(album_id, local):
 
 
 def _format_title(title):
-    punc = '''!()-[]{};:'",./?@#$%^&*~'''
+    punc = '''()-[]{};:'",./@#$%^*~'''
 
     title = title.lower().replace(' ', '_')
     for ele in title:

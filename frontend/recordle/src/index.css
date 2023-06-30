@@ -1,10 +1,10 @@
-@tailwind base;
+/* @tailwind base;
 
 @tailwind components;
 
-@tailwind utilities;
+@tailwind utilities; */
 
-html {
+/* html {
     @apply h-full;
 }
 
@@ -18,6 +18,13 @@ div#__next {
 
 main {
     @apply h-full;
+} */
+
+html,
+body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden
 }
 
 .loader {
@@ -34,7 +41,7 @@ main {
     */
 }
 
-@media screen and (max-width: 667px) {
+/* @media screen and (max-width: 667px) {
     body {
         overflow-x: hidden !important;
     }
@@ -43,10 +50,9 @@ main {
         max-width: 100% !important;
         overflow-x: hidden !important;
     }
-}
+} */
 
-/* Safari */
-@-webkit-keyframes spin {
+Safari @-webkit-keyframes spin {
     0% {
         -webkit-transform: rotate(0deg);
     }

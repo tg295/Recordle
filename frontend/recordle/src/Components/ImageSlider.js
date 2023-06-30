@@ -1,31 +1,33 @@
 import { useState } from "react";
+import React from 'react';
 
 const slideStyles = {
-    width: "100%",
-    height: "100%",
-    borderRadius: "10px",
+    width: "60%",
+    height: "60%",
+    borderRadius: "5px",
     backgroundSize: "cover",
     backgroundPosition: "center",
+    border: "3px solid #e66439",
 };
 
 const rightArrowStyles = {
     position: "absolute",
-    top: "50%",
+    top: "30%",
     transform: "translate(0, -50%)",
-    right: "32px",
+    right: "45px",
     fontSize: "45px",
-    color: "#fff",
+    color: "#181818",
     zIndex: 1,
     cursor: "pointer",
 };
 
 const leftArrowStyles = {
     position: "absolute",
-    top: "50%",
+    top: "30%",
     transform: "translate(0, -50%)",
-    left: "32px",
+    left: "45px",
     fontSize: "45px",
-    color: "#fff",
+    color: "#181818",
     zIndex: 1,
     cursor: "pointer",
 };
@@ -33,11 +35,15 @@ const leftArrowStyles = {
 const sliderStyles = {
     position: "relative",
     height: "100%",
+    justifyContent: "center",
+    display: "flex",
 };
 
 const dotsContainerStyles = {
     display: "flex",
     justifyContent: "center",
+    position: "absolute",
+    marginTop: "260px",
 };
 
 const dotStyle = {
@@ -70,10 +76,10 @@ const ImageSlider = ({ slides }) => {
         <div style={sliderStyles}>
             <div>
                 <div onClick={goToPrevious} style={leftArrowStyles}>
-                    ❰
+                    {"<"}
                 </div>
                 <div onClick={goToNext} style={rightArrowStyles}>
-                    ❱
+                    {">"}
                 </div>
             </div>
             <div style={slideStylesWidthBackground}></div>
@@ -84,7 +90,7 @@ const ImageSlider = ({ slides }) => {
                         key={slideIndex}
                         onClick={() => goToSlide(slideIndex)}
                     >
-                        ●
+                        ■
                     </div>
                 ))}
             </div>

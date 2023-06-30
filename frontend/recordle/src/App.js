@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import Footer from "./Components/Footer";
-import ImageSlider from "./ImageSlider";
+import ImageSlider from "./Components/ImageSlider";
 import vinyl from './Images/vinyl.png';
-import question from './Images/question.png';
 import './fonts.css';
 import './index.css';
 
@@ -27,7 +26,7 @@ const App = () => {
 
   const placeholderImage = vinyl; // Replace with your desired placeholder image URL
   const now = new Date();
-  const start = new Date(2023, 4, 25);
+  const start = new Date(2023, 4, 26);
   const diff = now.getTime() - start.getTime();
   const day = Math.floor(diff / (1000 * 60 * 60 * 24));
 
@@ -108,9 +107,19 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    if (inputValue.trim().toLowerCase() === answer.formatted_title.toLowerCase().replace("_", " ")) {
+    let checkAnswer = answer.formatted_title.toLowerCase().replace(/_/g, " ");
+    const regex = /([a-zA-Z0-9]{22})$/;
+    let parsedInput = inputValue.match(regex);
+    if (inputValue.trim().toLowerCase() === checkAnswer) {
       setIsAnswerVisible(true); // Show the answer slide
       setIsFieldVisible(true); // Reveal the field values
+      setShowReleaseDate(true); // Show the release date
+      setIsIncorrectAnswer(false); // Reset the incorrect answer state
+    }
+    else if (parsedInput && parsedInput[0] === jsonData.id) {
+      setIsAnswerVisible(true); // Show the answer slide
+      setIsFieldVisible(true); // Reveal the field values
+      setShowReleaseDate(true); // Show the release date
       setIsIncorrectAnswer(false); // Reset the incorrect answer state
     } else {
       setIsIncorrectAnswer(true);
@@ -129,36 +138,20 @@ const App = () => {
       }
     }, [isAnswerVisible]);
 
-    // if (!isFieldVisible) {
-    //   return null; // Render nothing if the field values are not visible
-    // }
+    const textBoxStyles = {
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "center",
+      alignItems: "center",
+      marginTop: "20px",
+      fonSize: "12px",
+    };
 
-    const keysToShow = ["title", "artist", "label"]; // Define the keys to include
+    const textBoxContent = isFieldVisible
+      ? `${jsonData.artist} - ${jsonData.title}`
+      : "????? - ?????";
 
-    return (
-      <div style={textBoxStyles}>
-        {keysToShow.map((key) => (
-          <p key={key}>
-            <strong>{key}:</strong> {isFieldVisible ? jsonData[key] : "?"}
-          </p>
-        ))}
-      </div>
-    );
-  };
-
-  const textBoxStyles = {
-    width: "300px",
-    height: "100px",
-    position: "absolute",
-    bottom: "70px",
-    right: "-110px",
-    padding: "10px",
-    fontSize: "12px",
-    // border: "3px solid #e66439",
-    // borderRadius: "5px",
-    // overflow: "hidden",
-    fontFamily: "CustomFont2",
-    marginBottom: "20px",
+    return <div style={textBoxStyles}>{textBoxContent}</div>;
   };
 
   const containerStyles = {
@@ -166,8 +159,8 @@ const App = () => {
     // height: "100vh", // Set height to 100vh for full-screen
     margin: "0",
     boxSizing: "border-box",
-    border: "8px solid #e66439",
-    borderStyle: "double", //triple
+    border: "8px double #e66439",
+    // borderStyle: "double", //triple
     borderRadius: "5px",
     display: "flex",
     padding: "24px",
@@ -182,8 +175,9 @@ const App = () => {
   };
 
   const imgContainerStyles = {
-    width: "512px",
-    height: "512px",
+    bottom: "10px",
+    width: "400px",
+    height: "400px",
     margin: "0 auto",
     position: "relative",
     // display: "flex",
@@ -221,39 +215,28 @@ const App = () => {
     },
   };
 
-
-  const logoStyles = {
-    width: "5%",
-    aspectRatio: "1/1",
-    height: "100%",
-    top: "-1px",
-    left: "153px",
-    marginTop: 0,
-    position: 'absolute',
-    // top: "calc(6% - 32px)",
-    // left: "calc(38% - 2.5%)",
-    // right: 20,
-  }
-
   const releaseDateStyles = {
-    cursor: "pointer",
-    marginTop: "10px",
     fontFamily: "CustomFont2",
     fontSize: "12px",
-    fontWeight: "bold",
-    color: "black",
     textAlign: "center",
-    position: "absolute",
-    top: "100px",
-    right: "130px"
+    justifyContent: "center",
+    alignItems: "center",
   };
 
   const answerContainerStyles = {
-    width: "80%",
-    height: "22%",
+    // width: "400px",
+    // height: "200px",
+    // position: "relative",
+    // top: "50px",
+    bottom: "150px",
+    width: "400px",
+    height: "200px",
+    margin: "0 auto",
     position: "relative",
-    top: "calc(100% )",
-    right: "calc(50% - 23%)",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundPosition: "center",
+    right: "calc(-24%)",
   }
 
   const anwserStyles = {
@@ -261,26 +244,13 @@ const App = () => {
     height: "100%",
     border: "3px solid #e66439",
     borderRadius: "5px",
-    overflow: "hidden",
-    position: "relative",
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-    marginRight: "auto",
-    marginLeft: "auto",
-    marginTop: "-220px",
-    display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    '@media (maxWidth: 768px)': {
-      width: "90%",
-      marginTop: "-150px",
-    },
   };
 
   const answerImageStyles = {
     width: "100%",
     height: "100%",
-    // objectFit: "cover",
   };
 
   const plusStyles = {
@@ -307,37 +277,41 @@ const App = () => {
 
   const inputContainerStyles = {
     width: "100%",
+    maxWidth: "600px",
     height: "100%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
     marginTop: "20px",
+    marginLeft: "50px",
   };
 
   const inputStyles = {
-    width: "300px",
+    width: "230px",
     padding: "10px",
     fontSize: "10px",
     border: "3px solid #e66439",
     borderRadius: "5px",
-    overflow: "hidden",
+    // overflow: "hidden",
     fontFamily: "CustomFont2",
     animation: isIncorrectAnswer ? 'shake 0.4s ease-in-out' : 'none',
   };
 
   const bottomContainerStyles = {
-    position: "absolute",
-    bottom: 0,
-    width: "100%",
+    position: "fixed",
+    bottom: 20,
+    width: "300px",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    padding: "20px",
-    left: '-5%'
+    padding: "40px",
+    // left: '-5%',
+    // right: '-5%'
   };
 
   const enterButtonStyles = {
     marginLeft: "10px",
+    marginRight: "40px",
     padding: "10px",
     background: "#e66439",
     color: "white",
@@ -345,6 +319,7 @@ const App = () => {
     borderRadius: "5px",
     cursor: "pointer",
     fontFamily: "CustomFont2",
+    // right: "-5%"
   };
 
   const shakeAnimationStyles = {
@@ -357,22 +332,23 @@ const App = () => {
       <Router>
         <div>
           <div style={headerContainerStyles} >
-            {/* <img src={vinyl} alt="Recordle" style={logoStyles} /> */}
             <h1 style={headerStyles}>Recordle</h1>
             <h2 style={subHeaderStyles}>Day {selectedIndex}</h2>
             <div>
               <div style={minusStyles} onClick={() => handleDayChange(-1)}>{'-'}</div>
               <div style={plusStyles} onClick={() => handleDayChange(1)}>{'+'}</div>
             </div>
+            {/* <h3 style={subHeaderStyles}>Guess the song</h3> */}
+            <TextBox />
+            {jsonData && (
+              <p
+                style={releaseDateStyles}
+                onClick={handleReleaseDateClick}
+              >
+                Year of release: {showReleaseDate ? jsonData.release_date.substring(0, 4) : "????"}
+              </p>
+            )}
           </div>
-          {jsonData && (
-            <p
-              style={releaseDateStyles}
-              onClick={handleReleaseDateClick}
-            >
-              Year of release: {showReleaseDate ? jsonData.release_date.substring(0, 4) : "????"}
-            </p>
-          )}
           <div style={imgContainerStyles}>
             {slides.length > 0 && jsonData ? (
               <ImageSlider slides={slides} />
@@ -404,7 +380,6 @@ const App = () => {
                 <button type="submit" style={enterButtonStyles}>Go</button>
               </div>
             </form>
-            <TextBox />
           </div>
         </div>
         <Footer />
