@@ -2,8 +2,9 @@ import { useState } from "react";
 import React from 'react';
 
 const slideStyles = {
-    width: "60%",
-    height: "60%",
+    width: "35vh",
+    aspectRatio: "16/9",
+    height: "35vh",
     borderRadius: "5px",
     backgroundSize: "cover",
     backgroundPosition: "center",
@@ -34,23 +35,23 @@ const leftArrowStyles = {
 
 const sliderStyles = {
     position: "relative",
-    height: "100%",
+    alignItems: "center",
     justifyContent: "center",
     display: "flex",
 };
 
-const dotsContainerStyles = {
-    display: "flex",
-    justifyContent: "center",
-    position: "absolute",
-    marginTop: "260px",
-};
+// const dotsContainerStyles = {
+//     display: "flex",
+//     justifyContent: "center",
+//     position: "absolute",
+//     marginTop: "260px",
+// };
 
-const dotStyle = {
-    margin: "0 3px",
-    cursor: "pointer",
-    fontSize: "20px",
-};
+// const dotStyle = {
+//     margin: "0 3px",
+//     cursor: "pointer",
+//     fontSize: "20px",
+// };
 
 const ImageSlider = ({ slides }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -64,9 +65,9 @@ const ImageSlider = ({ slides }) => {
         const newIndex = isLastSlide ? 0 : currentIndex + 1;
         setCurrentIndex(newIndex);
     };
-    const goToSlide = (slideIndex) => {
-        setCurrentIndex(slideIndex);
-    };
+    // const goToSlide = (slideIndex) => {
+    //     setCurrentIndex(slideIndex);
+    // };
     const slideStylesWidthBackground = {
         ...slideStyles,
         backgroundImage: `url(${slides[currentIndex].url})`,
@@ -83,7 +84,7 @@ const ImageSlider = ({ slides }) => {
                 </div>
             </div>
             <div style={slideStylesWidthBackground}></div>
-            <div style={dotsContainerStyles}>
+            {/* <div style={dotsContainerStyles}>
                 {slides.map((slide, slideIndex) => (
                     <div
                         style={dotStyle}
@@ -93,7 +94,7 @@ const ImageSlider = ({ slides }) => {
                         ■
                     </div>
                 ))}
-            </div>
+            </div> */}
         </div>
     );
 };

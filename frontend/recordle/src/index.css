@@ -102,3 +102,8 @@ Safari @-webkit-keyframes spin {
         transform: translateX(5px);
     }
 }
+
+.dissolve {
+    opacity: 0;
+    transition: opacity 1s;
+}

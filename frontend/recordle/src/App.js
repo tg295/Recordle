@@ -7,12 +7,13 @@ import './fonts.css';
 import './index.css';
 
 // TO DO 
-// Fix layout - plus and minus need to be anchored to the answer image
-// AND the vinl image needs to be anchored to the "o" in the Recordle header
-// AND the main container should always fill the full screen with everything centred
-
-// Then we need to build the answer sumbission form on top of the answer image
-// If right we reveal the answer, if wrong we send a try again message and reset the form
+// the main container should always fill the full screen with everything centred
+// images should resize based on screen size
+// add fuzzy text matching
+// store correct results in local storage (maybe just store the days as an array?)
+// use local storage to show proportion of correct results on the main page
+// make sure the clues size resets when you move onto an incompleted day
+// add a button to reset local storage?
 
 // Finally add link to listen the album on Spotify
 // And a link to share your result on twitter/fb/insta etc.
@@ -20,7 +21,6 @@ import './index.css';
 
 // Extra bits
 // Grey out plus sign when you can't go any further
-// Shake the input when wrong answer entered
 
 const App = () => {
 
@@ -30,17 +30,25 @@ const App = () => {
   const diff = now.getTime() - start.getTime();
   const day = Math.floor(diff / (1000 * 60 * 60 * 24));
 
+  const [showClueMessage, setShowClueMessage] = useState(true);
   const [textData, setTextData] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(day);
   const [slides, setSlides] = useState([]);
   const [answer, setAnswer] = useState(null);
   const [jsonData, setJsonData] = useState(null);
-  const [showReleaseDate, setShowReleaseDate] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [inputKey, setInputKey] = useState(0);
-  const [isAnswerVisible, setIsAnswerVisible] = useState(false);
   const [isIncorrectAnswer, setIsIncorrectAnswer] = useState(false);
-  const [isFieldVisible, setIsFieldVisible] = useState(false);
+  const [isImageVisible, setIsImageVisible] = useState(false);
+
+  const storedDays = JSON.parse(localStorage.getItem('guessedDays')) || [];
+  const isDayGuessedCorrectly = (day) => {
+    return storedDays.includes(day);
+  };
+  const [isFieldVisible, setIsFieldVisible] = useState(isDayGuessedCorrectly(selectedIndex));
+  const [showReleaseDate, setShowReleaseDate] = useState(isDayGuessedCorrectly(selectedIndex));
+  const [isAnswerVisible, setIsAnswerVisible] = useState(isDayGuessedCorrectly(selectedIndex));
+  const [progressMessage, setProgressMessage] = useState(`${storedDays.length} / ${day}`);
 
 
   useEffect(() => {
@@ -78,7 +86,11 @@ const App = () => {
           setJsonData(jsonData);
           setSlides(newSlides);
           setAnswer(answer);
-          setIsAnswerVisible(false); // Hide the answer initially
+          setIsFieldVisible(isDayGuessedCorrectly(selectedIndex)); // Set isFieldVisible based on whether the day is correctly guessed
+          setShowReleaseDate(isDayGuessedCorrectly(selectedIndex)); // Set showReleaseDate based on whether the day is correctly guessed
+          setIsAnswerVisible(isDayGuessedCorrectly(selectedIndex)); // Set isAnswerVisible based on whether the day is correctly guessed
+          setIsIncorrectAnswer(false); // Reset the incorrect answer state
+          setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
         }
       } catch (error) {
         console.error('Error:', error);
@@ -104,23 +116,36 @@ const App = () => {
     setInputValue(event.target.value);
   };
 
-
   const handleSubmit = (event) => {
     event.preventDefault();
     let checkAnswer = answer.formatted_title.toLowerCase().replace(/_/g, " ");
-    const regex = /([a-zA-Z0-9]{22})$/;
+    const regex = /([a-zA-Z0-9]{22})/;
     let parsedInput = inputValue.match(regex);
     if (inputValue.trim().toLowerCase() === checkAnswer) {
       setIsAnswerVisible(true); // Show the answer slide
       setIsFieldVisible(true); // Reveal the field values
       setShowReleaseDate(true); // Show the release date
       setIsIncorrectAnswer(false); // Reset the incorrect answer state
+      const storedDays = JSON.parse(localStorage.getItem('guessedDays')) || [];
+      if (!storedDays.includes(selectedIndex)) {
+        storedDays.push(selectedIndex);
+        localStorage.setItem('guessedDays', JSON.stringify(storedDays));
+        setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
+      }
+      setInputValue("");
     }
     else if (parsedInput && parsedInput[0] === jsonData.id) {
       setIsAnswerVisible(true); // Show the answer slide
       setIsFieldVisible(true); // Reveal the field values
       setShowReleaseDate(true); // Show the release date
       setIsIncorrectAnswer(false); // Reset the incorrect answer state
+      const storedDays = JSON.parse(localStorage.getItem('guessedDays')) || [];
+      if (!storedDays.includes(selectedIndex)) {
+        storedDays.push(selectedIndex);
+        localStorage.setItem('guessedDays', JSON.stringify(storedDays));
+        setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
+      }
+      setInputValue("");
     } else {
       setIsIncorrectAnswer(true);
       setInputKey((prevKey) => prevKey + 1); // Update the key to trigger re-render
@@ -128,6 +153,12 @@ const App = () => {
       // Add shake animation or display an error message for wrong answer
     }
   };
+
+  useEffect(() => {
+    if (isAnswerVisible) {
+      setIsImageVisible(true);
+    }
+  }, [isAnswerVisible]);
 
   const TextBox = () => {
     const [isFieldVisible, setIsFieldVisible] = useState(false); // Track the visibility of the field values
@@ -143,7 +174,8 @@ const App = () => {
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
-      marginTop: "20px",
+      textAlign: "center",
+      marginTop: "50px",
       fonSize: "12px",
     };
 
@@ -154,6 +186,14 @@ const App = () => {
     return <div style={textBoxStyles}>{textBoxContent}</div>;
   };
 
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setShowClueMessage(false);
+    }, 4000); // Hide the pulsating message after 4 seconds
+
+    return () => clearTimeout(timeout);
+  }, []);
+
   const containerStyles = {
     width: "100%",
     // height: "100vh", // Set height to 100vh for full-screen
@@ -162,7 +202,7 @@ const App = () => {
     border: "8px double #e66439",
     // borderStyle: "double", //triple
     borderRadius: "5px",
-    display: "flex",
+    // display: "flex",
     padding: "24px",
     position: "relative",
     flexDirection: "column",
@@ -175,17 +215,28 @@ const App = () => {
   };
 
   const imgContainerStyles = {
-    bottom: "10px",
-    width: "400px",
-    height: "400px",
+    // bottom: "10px",
+    width: "80%",
+    height: "80%",
+    // margin: "0 auto",
+    position: "relative",
+    transform: isImageVisible ? 'scale(0.8)  translate(-15%, -15%)' : 'none', // Shrink the container when the answer is correct 
+    transition: 'transform 0.3s ease', // Add a smooth transition effect
+  };
+
+  const defaultImgStyles = {
+    // bottom: "10px",
+    width: "80%",
+    height: "80%",
     margin: "0 auto",
     position: "relative",
-    // display: "flex",
+    transition: 'transform 0.3s ease', // Add a smooth transition effect
   };
+
 
   const headerContainerStyles = {
     position: "relative",
-    marginBottom: "40px",
+    marginBottom: "15%",
   };
 
   const headerStyles = {
@@ -224,23 +275,23 @@ const App = () => {
   };
 
   const answerContainerStyles = {
-    // width: "400px",
-    // height: "200px",
-    // position: "relative",
-    // top: "50px",
-    bottom: "150px",
-    width: "400px",
-    height: "200px",
+    transition: 'opacity 0.5s, transform 0.5s',
+    opacity: isAnswerVisible ? '1' : '0',
+    transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
+    bottom: "250px",
+    width: "65%",
+    height: "80%",
     margin: "0 auto",
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
     backgroundPosition: "center",
-    right: "calc(-24%)",
+    right: "calc(-35%)",
+
   }
 
   const anwserStyles = {
-    width: "50%",
+    width: "65%",
     height: "100%",
     border: "3px solid #e66439",
     borderRadius: "5px",
@@ -256,7 +307,7 @@ const App = () => {
   const plusStyles = {
     position: "absolute",
     top: "50%",
-    right: "85px", // Adjust as needed
+    right: "45px", // Adjust as needed
     fontSize: "45px",
     color: "#181818",
     zIndex: 1,
@@ -267,7 +318,7 @@ const App = () => {
   const minusStyles = {
     position: "absolute",
     top: "50%",
-    left: "85px", // Adjust as needed
+    left: "45px", // Adjust as needed
     fontSize: "45px",
     color: "#181818",
     zIndex: 1,
@@ -279,19 +330,21 @@ const App = () => {
     width: "100%",
     maxWidth: "600px",
     height: "100%",
-    display: "flex",
+    // display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: "20px",
+    marginTop: "70px",
     marginLeft: "50px",
+    animation: isAnswerVisible ? 'none' : 'shake 0.4s ease-in-out',
   };
 
   const inputStyles = {
-    width: "230px",
+    width: "190px",
     padding: "10px",
     fontSize: "10px",
     border: "3px solid #e66439",
     borderRadius: "5px",
+    position: "fixed",
     // overflow: "hidden",
     fontFamily: "CustomFont2",
     animation: isIncorrectAnswer ? 'shake 0.4s ease-in-out' : 'none',
@@ -299,19 +352,25 @@ const App = () => {
 
   const bottomContainerStyles = {
     position: "fixed",
-    bottom: 20,
-    width: "300px",
-    display: "flex",
+    // bottom: 20,
+    width: "80%",
+    // display: "flex",
+    padding: "20px",
+    // left: '-7%',
+    right: '-5%',
+    position: "fixed",
+    bottom: 0,
+    // left: 0,
+    height: "140px", // Adjust the height as needed
+    // display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    padding: "40px",
-    // left: '-5%',
-    // right: '-5%'
+    zIndex: 1,
   };
 
   const enterButtonStyles = {
     marginLeft: "10px",
-    marginRight: "40px",
+    marginRight: "10px",
     padding: "10px",
     background: "#e66439",
     color: "white",
@@ -319,13 +378,52 @@ const App = () => {
     borderRadius: "5px",
     cursor: "pointer",
     fontFamily: "CustomFont2",
-    // right: "-5%"
+    position: "fixed",
+    right: "28%"
   };
 
   const shakeAnimationStyles = {
     animation: "shake 0.5s",
+    animation: isIncorrectAnswer ? 'shake 0.4s ease-in-out' : 'none',
   };
 
+  const progressMessageStyles = {
+    fontFamily: "CustomFont2",
+    fontSize: "16px",
+    fontWeight: "bold",
+    color: "black",
+    marginTop: "-2px",
+    top: "1%",
+    right: "2%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "absolute",
+  }
+
+  // const pulsatingMessageStyles = {
+  //   position: 'absolute',
+  //   top: '50%',
+  //   left: '50%',
+  //   transform: 'translate(-50%, -50%)',
+  //   display: 'flex',
+  //   alignItems: 'center',
+  //   fontSize: '14px',
+  //   fontWeight: 'bold',
+  //   padding: '10px',
+  //   borderRadius: '5px',
+  //   animation: 'pulsate 1s infinite',
+  // };
+
+  // const arrowStyles = {
+  //   position: 'absolute',
+  //   top: '50%',
+  //   left: 'calc(50% + 50px)',
+  //   transform: 'translate(-50%, -50%)',
+  //   display: 'inline-block',
+  //   padding: '4px',
+  //   transform: 'rotate(45deg)',
+  // };
 
   return (
     <div style={containerStyles}>
@@ -347,9 +445,16 @@ const App = () => {
               >
                 Year of release: {showReleaseDate ? jsonData.release_date.substring(0, 4) : "????"}
               </p>
+
             )}
+            {/* {showClueMessage && (
+              <div style={pulsatingMessageStyles}>
+                <span>Click me for a clue!</span>
+                <span style={arrowStyles}></span>
+              </div>
+            )} */}
           </div>
-          <div style={imgContainerStyles}>
+          <div style={isAnswerVisible ? imgContainerStyles : defaultImgStyles}>
             {slides.length > 0 && jsonData ? (
               <ImageSlider slides={slides} />
             ) : (
@@ -365,6 +470,7 @@ const App = () => {
               </div>
             )}
           </div>
+          <div>  <p style={progressMessageStyles}>{progressMessage}</p></div>
           <div style={bottomContainerStyles}>
             <form onSubmit={handleSubmit}>
               <div id="input-container" style={{ ...inputContainerStyles, ...(isAnswerVisible ? {} : shakeAnimationStyles) }}>
@@ -383,7 +489,7 @@ const App = () => {
           </div>
         </div>
         <Footer />
-      </Router>
+      </Router >
     </div >
   );
 };
