@@ -220,11 +220,12 @@ const App = () => {
     height: "80%",
     // margin: "0 auto",
     position: "relative",
-    transform: isImageVisible ? 'scale(0.8)  translate(-15%, -15%)' : 'none', // Shrink the container when the answer is correct 
+    transform: isImageVisible ? 'scale(0.8)  translate(-2%, -20%)' : 'none', // Shrink the container when the answer is correct 
     transition: 'transform 0.3s ease', // Add a smooth transition effect
   };
 
   const defaultImgStyles = {
+
     // bottom: "10px",
     width: "80%",
     height: "80%",
@@ -278,16 +279,15 @@ const App = () => {
     transition: 'opacity 0.5s, transform 0.5s',
     opacity: isAnswerVisible ? '1' : '0',
     transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
-    bottom: "250px",
-    width: "65%",
-    height: "80%",
+    width: "35vh",
+    height: "22vh",
     margin: "0 auto",
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
     backgroundPosition: "center",
-    right: "calc(-35%)",
-
+    right: "calc(-30%)",
+    bottom: "8vh",
   }
 
   const anwserStyles = {
@@ -307,7 +307,7 @@ const App = () => {
   const plusStyles = {
     position: "absolute",
     top: "50%",
-    right: "45px", // Adjust as needed
+    right: "20px", // Adjust as needed
     fontSize: "45px",
     color: "#181818",
     zIndex: 1,
@@ -318,7 +318,7 @@ const App = () => {
   const minusStyles = {
     position: "absolute",
     top: "50%",
-    left: "45px", // Adjust as needed
+    left: "20px", // Adjust as needed
     fontSize: "45px",
     color: "#181818",
     zIndex: 1,
@@ -328,18 +328,19 @@ const App = () => {
 
   const inputContainerStyles = {
     width: "100%",
-    maxWidth: "600px",
+    // maxWidth: "900px",
+    left: "20%",
     height: "100%",
     // display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "right",
+    alignItems: "right",
     marginTop: "70px",
-    marginLeft: "50px",
+    marginLeft: "100px",
     animation: isAnswerVisible ? 'none' : 'shake 0.4s ease-in-out',
   };
 
   const inputStyles = {
-    width: "190px",
+    width: "52%",
     padding: "10px",
     fontSize: "10px",
     border: "3px solid #e66439",
@@ -353,25 +354,27 @@ const App = () => {
   const bottomContainerStyles = {
     position: "fixed",
     // bottom: 20,
-    width: "80%",
-    // display: "flex",
-    padding: "20px",
-    // left: '-7%',
-    right: '-5%',
-    position: "fixed",
-    bottom: 0,
+    // width: "100%",
+    display: "flex",
+    // padding: "20px",
+    // left: '-0%',
+    right: '60%',
+    marginRight: "27%",
+    marginLeft: "50px",
+    bottom: "20px",
     // left: 0,
     height: "140px", // Adjust the height as needed
-    // display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    zIndex: 1,
+    justifyContent: "right",
+    alignItems: "right",
+    // zIndex: 1,
   };
 
   const enterButtonStyles = {
-    marginLeft: "10px",
-    marginRight: "10px",
+    // marginLeft: "100px",
+    float: "left",
+    marginRight: "50px",
     padding: "10px",
+    fontSize: "20px",
     background: "#e66439",
     color: "white",
     border: "none",
@@ -379,7 +382,8 @@ const App = () => {
     cursor: "pointer",
     fontFamily: "CustomFont2",
     position: "fixed",
-    right: "28%"
+    left: "75%",
+    bottom: "52px"
   };
 
   const shakeAnimationStyles = {
@@ -484,6 +488,7 @@ const App = () => {
                   placeholder="Enter album title / Spotify ID"
                 />
                 <button type="submit" style={enterButtonStyles}>Go</button>
+
               </div>
             </form>
           </div>
