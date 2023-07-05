@@ -477,13 +477,13 @@ const App = () => {
 
   const gifStyles = {
     transition: 'opacity 0.5s, transform 0.5s',
-    opacity: isAnswerVisible ? '1' : '0',
+    opacity: isAnswerVisible ? '0.5' : '0',
     transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
     border: "0.01px solid #deb7db",
-    borderRadius: "200%",
-    width: "65px",
-    height: "55px",
-    top: "75%",
+    borderRadius: "20%",
+    width: "100px",
+    height: "120px",
+    top: "60%",
     left: "10%",
     position: "absolute",
     // frameBorder: "0",
@@ -493,11 +493,14 @@ const App = () => {
     transition: 'opacity 0.5s, transform 0.5s',
     opacity: isAnswerVisible ? '1' : '0',
     transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
-    height: "50px",
-    width: "50px",
+    height: "40px",
+    width: "40px",
     position: "absolute",
-    top: "65%",
-    left: "10%",
+    // top: "1.5%",
+    // left: "5%",
+    top: "25%",
+    left: "75%",
+    animation: "spin 4s linear infinite",
   }
 
   return (
