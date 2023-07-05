@@ -22,6 +22,47 @@ import './index.css';
 // Extra bits
 // Grey out plus sign when you can't go any further
 
+function editDistance(s1, s2) {
+  s1 = s1.toLowerCase();
+  s2 = s2.toLowerCase();
+
+  var costs = new Array();
+  for (var i = 0; i <= s1.length; i++) {
+    var lastValue = i;
+    for (var j = 0; j <= s2.length; j++) {
+      if (i == 0)
+        costs[j] = j;
+      else {
+        if (j > 0) {
+          var newValue = costs[j - 1];
+          if (s1.charAt(i - 1) != s2.charAt(j - 1))
+            newValue = Math.min(Math.min(newValue, lastValue),
+              costs[j]) + 1;
+          costs[j - 1] = lastValue;
+          lastValue = newValue;
+        }
+      }
+    }
+    if (i > 0)
+      costs[s2.length] = lastValue;
+  }
+  return costs[s2.length];
+}
+
+function similarity(s1, s2) {
+  var longer = s1;
+  var shorter = s2;
+  if (s1.length < s2.length) {
+    longer = s2;
+    shorter = s1;
+  }
+  var longerLength = longer.length;
+  if (longerLength == 0) {
+    return 1.0;
+  }
+  return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
+}
+
 const App = () => {
 
   const placeholderImage = vinyl; // Replace with your desired placeholder image URL
@@ -40,6 +81,7 @@ const App = () => {
   const [inputKey, setInputKey] = useState(0);
   const [isIncorrectAnswer, setIsIncorrectAnswer] = useState(false);
   const [isImageVisible, setIsImageVisible] = useState(false);
+  const [isPlusGreyedOut, setIsPlusGreyedOut] = useState(selectedIndex === day);
 
   const storedDays = JSON.parse(localStorage.getItem('guessedDays')) || [];
   const isDayGuessedCorrectly = (day) => {
@@ -49,7 +91,6 @@ const App = () => {
   const [showReleaseDate, setShowReleaseDate] = useState(isDayGuessedCorrectly(selectedIndex));
   const [isAnswerVisible, setIsAnswerVisible] = useState(isDayGuessedCorrectly(selectedIndex));
   const [progressMessage, setProgressMessage] = useState(`${storedDays.length} / ${day}`);
-
 
   useEffect(() => {
     const fetchTextData = async () => {
@@ -109,6 +150,7 @@ const App = () => {
     if (newIndex >= 0 && newIndex < textData.length) {
       setSelectedIndex(newIndex);
       setShowReleaseDate(false);
+      setIsPlusGreyedOut(newIndex === day); // Update the isPlusGreyedOut state based on the selectedIndex
     }
   };
 
@@ -119,9 +161,11 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     let checkAnswer = answer.formatted_title.toLowerCase().replace(/_/g, " ");
+    let inputSimilarity = similarity(checkAnswer, inputValue);
+    console.log(inputSimilarity);
     const regex = /([a-zA-Z0-9]{22})/;
     let parsedInput = inputValue.match(regex);
-    if (inputValue.trim().toLowerCase() === checkAnswer) {
+    if (inputSimilarity > 0.85) {
       setIsAnswerVisible(true); // Show the answer slide
       setIsFieldVisible(true); // Reveal the field values
       setShowReleaseDate(true); // Show the release date
@@ -309,7 +353,7 @@ const App = () => {
     top: "50%",
     right: "20px", // Adjust as needed
     fontSize: "45px",
-    color: "#181818",
+    color: isPlusGreyedOut ? "#606060" : "#181818",
     zIndex: 1,
     cursor: "pointer",
     transform: "translateY(-50%)", // Center vertically
@@ -361,7 +405,7 @@ const App = () => {
     right: '60%',
     marginRight: "27%",
     marginLeft: "50px",
-    bottom: "20px",
+    bottom: "10px",
     // left: 0,
     height: "140px", // Adjust the height as needed
     justifyContent: "right",
@@ -383,7 +427,7 @@ const App = () => {
     fontFamily: "CustomFont2",
     position: "fixed",
     left: "75%",
-    bottom: "52px"
+    bottom: "43px"
   };
 
   const shakeAnimationStyles = {

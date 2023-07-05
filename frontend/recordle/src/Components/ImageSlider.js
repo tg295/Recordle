@@ -2,14 +2,14 @@ import { useState } from "react";
 import React from 'react';
 
 const slideStyles = {
-    width: "32vh",
+    width: "35vh",
     aspectRatio: "16/9",
-    height: "36vh",
+    height: "35vh",
     borderRadius: "5px",
     backgroundSize: "cover",
     backgroundPosition: "center",
     border: "3px solid #e66439",
-    padding: "0 10px",
+    // padding: "0 10px",
     // objectFit: "cover",
 };
 
@@ -68,6 +68,8 @@ const sliderContainerStyles = {
 
 const ImageSlider = ({ slides }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [isLoading, setIsLoading] = useState(false); // Added loading state
+
     const goToPrevious = () => {
         const isFirstSlide = currentIndex === 0;
         const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
@@ -78,13 +80,17 @@ const ImageSlider = ({ slides }) => {
         const newIndex = isLastSlide ? 0 : currentIndex + 1;
         setCurrentIndex(newIndex);
     };
+
+    const handleImageLoad = () => {
+        setIsLoading(false);
+    };
     // const goToSlide = (slideIndex) => {
     //     setCurrentIndex(slideIndex);
     // };
-    const slideStylesWidthBackground = {
-        ...slideStyles,
-        backgroundImage: `url(${slides[currentIndex].url})`,
-    };
+    // const slideStylesWidthBackground = {
+    //     ...slideStyles,
+    //     backgroundImage: `url(${slides[currentIndex].url})`,
+    // };
 
     const calculateArrowLeftPosition = () => {
         const screenWidth = window.innerWidth;
@@ -118,7 +124,15 @@ const ImageSlider = ({ slides }) => {
                         {">"}
                     </div>
                 </div>
-                <div style={slideStylesWidthBackground}></div>
+                {isLoading ? (
+                    <div style={slideStyles}>Loading...</div>
+                ) : (
+                    <img
+                        src={slides[currentIndex].url}
+                        style={{ ...slideStyles }}
+                        onLoad={handleImageLoad}
+                    />
+                )}
             </div>
         </div>
 
