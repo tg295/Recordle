@@ -15,7 +15,7 @@ import React from 'react'
 // };
 
 const footerStyle = {
-    fontFamily: "VT323, monospace",
+    fontFamily: "CustomFont2",
     color: "white",
     backgroundPosition: "left",
     justifyContent: "left",

@@ -7,20 +7,7 @@ import './fonts.css';
 import './index.css';
 
 // TO DO 
-// the main container should always fill the full screen with everything centred
-// images should resize based on screen size
-// add fuzzy text matching
-// store correct results in local storage (maybe just store the days as an array?)
-// use local storage to show proportion of correct results on the main page
-// make sure the clues size resets when you move onto an incompleted day
-// add a button to reset local storage?
-
-// Finally add link to listen the album on Spotify
-// And a link to share your result on twitter/fb/insta etc.
 // Link to my GitHub
-
-// Extra bits
-// Grey out plus sign when you can't go any further
 
 function editDistance(s1, s2) {
   s1 = s1.toLowerCase();
@@ -375,51 +362,45 @@ const App = () => {
   const inputContainerStyles = {
     width: "100%",
     // maxWidth: "900px",
-    left: "20%",
     height: "100%",
     // display: "flex",
-    justifyContent: "right",
-    alignItems: "right",
-    marginTop: "70px",
-    marginLeft: "100px",
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: "80px",
+    marginLeft: "-5px",
     animation: isAnswerVisible ? 'none' : 'shake 0.4s ease-in-out',
   };
 
   const inputStyles = {
-    width: "52%",
+    width: "65%",
+    height: "2%",
     padding: "10px",
-    fontSize: "10px",
+    fontSize: "70%",
     border: "3px solid #e66439",
     borderRadius: "5px",
     position: "fixed",
+    bottom: "5vh",
     // overflow: "hidden",
     fontFamily: "CustomFont2",
     animation: isIncorrectAnswer ? 'shake 0.4s ease-in-out' : 'none',
+    alignItems: "center",
+    justifyContent: "center",
   };
 
   const bottomContainerStyles = {
     position: "fixed",
-    // bottom: 20,
-    // width: "100%",
     display: "flex",
-    // padding: "20px",
-    // left: '-0%',
-    right: '60%',
-    marginRight: "27%",
-    marginLeft: "50px",
     bottom: "10px",
-    // left: 0,
     height: "140px", // Adjust the height as needed
-    justifyContent: "right",
-    alignItems: "right",
-    // zIndex: 1,
+    justifyContent: "center",
+    alignItems: "center",
   };
 
   const enterButtonStyles = {
-    // marginLeft: "100px",
+    marginLeft: "50px",
     float: "left",
-    marginRight: "50px",
-    padding: "10px",
+    // display: "flex",
+    padding: "3%",
     fontSize: "20px",
     background: "#e66439",
     color: "white",
@@ -428,8 +409,10 @@ const App = () => {
     cursor: "pointer",
     fontFamily: "CustomFont2",
     position: "fixed",
-    left: "75%",
-    bottom: "43px"
+    left: "68%",
+    bottom: "5vh",
+    alignItems: "bottom",
+    justifyContent: "bottom",
   };
 
   const shakeAnimationStyles = {
@@ -477,13 +460,13 @@ const App = () => {
 
   const gifStyles = {
     transition: 'opacity 0.5s, transform 0.5s',
-    opacity: isAnswerVisible ? '0.5' : '0',
+    opacity: isAnswerVisible ? '0.3' : '0',
     transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
     border: "0.01px solid #deb7db",
     borderRadius: "20%",
     width: "100px",
-    height: "120px",
-    top: "60%",
+    height: "200px",
+    top: "65%",
     left: "10%",
     position: "absolute",
     // frameBorder: "0",
@@ -493,13 +476,13 @@ const App = () => {
     transition: 'opacity 0.5s, transform 0.5s',
     opacity: isAnswerVisible ? '1' : '0',
     transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
-    height: "40px",
-    width: "40px",
+    height: "30px",
+    width: "30px",
     position: "absolute",
     // top: "1.5%",
     // left: "5%",
-    top: "25%",
-    left: "75%",
+    top: "90%",
+    left: "80%",
     animation: "spin 4s linear infinite",
   }
 
@@ -523,8 +506,10 @@ const App = () => {
               >
                 Year of release: {showReleaseDate ? jsonData.release_date.substring(0, 4) : "????"}
               </p>
-
             )}
+            <a href={spotifyLink} target="_blank" rel="norefferer">
+              <img style={spotifyLinkStyles} src="https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/8554553e351ae8c.png" alt="Spotify link"></img>
+            </a>
             {/* {showClueMessage && (
               <div style={pulsatingMessageStyles}>
                 <span>Click me for a clue!</span>
@@ -549,9 +534,6 @@ const App = () => {
             )}
           </div>
           <iframe src="https://giphy.com/embed/4oMoIbIQrvCjm" style={gifStyles} class="gifyEmbed"></iframe><p><a href="https://giphy.com/gifs/the-simpsons-bart-simpson-4oMoIbIQrvCjm"></a></p>
-          <a href={spotifyLink} target="_blank" rel="norefferer">
-            <img style={spotifyLinkStyles} src="https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/8554553e351ae8c.png" alt="Spotify link"></img>
-          </a>
           <div>  <p style={progressMessageStyles}>{progressMessage}</p></div>
           <div style={bottomContainerStyles}>
             <form onSubmit={handleSubmit}>
