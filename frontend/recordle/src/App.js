@@ -473,6 +473,19 @@ const App = () => {
   //   transform: 'rotate(45deg)',
   // };
 
+  const gifStyles = {
+    transition: 'opacity 0.5s, transform 0.5s',
+    opacity: isAnswerVisible ? '1' : '0',
+    transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
+    border: "0.01px solid #deb7db",
+    borderRadius: "150%",
+    width: "95px",
+    height: "75px",
+    top: "80%",
+    position: "absolute",
+    // frameBorder: "0",
+  }
+
   return (
     <div style={containerStyles}>
       <Router>
@@ -518,6 +531,7 @@ const App = () => {
               </div>
             )}
           </div>
+          <iframe src="https://giphy.com/embed/4oMoIbIQrvCjm" style={gifStyles} class="gifyEmbed"></iframe><p><a href="https://giphy.com/gifs/the-simpsons-bart-simpson-4oMoIbIQrvCjm"></a></p>
           <div>  <p style={progressMessageStyles}>{progressMessage}</p></div>
           <div style={bottomContainerStyles}>
             <form onSubmit={handleSubmit}>
