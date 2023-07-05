@@ -76,6 +76,7 @@ const App = () => {
   const [selectedIndex, setSelectedIndex] = useState(day);
   const [slides, setSlides] = useState([]);
   const [answer, setAnswer] = useState(null);
+  const [spotifyLink, setSpotifyLink] = useState(null);
   const [jsonData, setJsonData] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [inputKey, setInputKey] = useState(0);
@@ -127,6 +128,7 @@ const App = () => {
           setJsonData(jsonData);
           setSlides(newSlides);
           setAnswer(answer);
+          setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
           setIsFieldVisible(isDayGuessedCorrectly(selectedIndex)); // Set isFieldVisible based on whether the day is correctly guessed
           setShowReleaseDate(isDayGuessedCorrectly(selectedIndex)); // Set showReleaseDate based on whether the day is correctly guessed
           setIsAnswerVisible(isDayGuessedCorrectly(selectedIndex)); // Set isAnswerVisible based on whether the day is correctly guessed
@@ -478,12 +480,24 @@ const App = () => {
     opacity: isAnswerVisible ? '1' : '0',
     transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
     border: "0.01px solid #deb7db",
-    borderRadius: "150%",
-    width: "95px",
-    height: "75px",
-    top: "80%",
+    borderRadius: "200%",
+    width: "65px",
+    height: "55px",
+    top: "75%",
+    left: "10%",
     position: "absolute",
     // frameBorder: "0",
+  }
+
+  const spotifyLinkStyles = {
+    transition: 'opacity 0.5s, transform 0.5s',
+    opacity: isAnswerVisible ? '1' : '0',
+    transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
+    height: "50px",
+    width: "50px",
+    position: "absolute",
+    top: "65%",
+    left: "10%",
   }
 
   return (
@@ -532,6 +546,9 @@ const App = () => {
             )}
           </div>
           <iframe src="https://giphy.com/embed/4oMoIbIQrvCjm" style={gifStyles} class="gifyEmbed"></iframe><p><a href="https://giphy.com/gifs/the-simpsons-bart-simpson-4oMoIbIQrvCjm"></a></p>
+          <a href={spotifyLink} target="_blank" rel="norefferer">
+            <img style={spotifyLinkStyles} src="https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/8554553e351ae8c.png" alt="Spotify link"></img>
+          </a>
           <div>  <p style={progressMessageStyles}>{progressMessage}</p></div>
           <div style={bottomContainerStyles}>
             <form onSubmit={handleSubmit}>
