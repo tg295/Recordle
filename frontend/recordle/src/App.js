@@ -13,16 +13,16 @@ function editDistance(s1, s2) {
   s1 = s1.toLowerCase();
   s2 = s2.toLowerCase();
 
-  var costs = new Array();
+  var costs = [];
   for (var i = 0; i <= s1.length; i++) {
     var lastValue = i;
     for (var j = 0; j <= s2.length; j++) {
-      if (i == 0)
+      if (i === 0)
         costs[j] = j;
       else {
         if (j > 0) {
           var newValue = costs[j - 1];
-          if (s1.charAt(i - 1) != s2.charAt(j - 1))
+          if (s1.charAt(i - 1) !== s2.charAt(j - 1))
             newValue = Math.min(Math.min(newValue, lastValue),
               costs[j]) + 1;
           costs[j - 1] = lastValue;
@@ -44,7 +44,7 @@ function similarity(s1, s2) {
     shorter = s1;
   }
   var longerLength = longer.length;
-  if (longerLength == 0) {
+  if (longerLength === 0) {
     return 1.0;
   }
   return (longerLength - editDistance(longer, shorter)) / parseFloat(longerLength);
@@ -54,11 +54,11 @@ const App = () => {
 
   const placeholderImage = vinyl; // Replace with your desired placeholder image URL
   const now = new Date();
-  const start = new Date(2023, 4, 26);
+  const start = new Date(2023, 5, 7);
   const diff = now.getTime() - start.getTime();
   const day = Math.floor(diff / (1000 * 60 * 60 * 24));
 
-  const [showClueMessage, setShowClueMessage] = useState(true);
+  // const [showClueMessage, setShowClueMessage] = useState(true);
   const [textData, setTextData] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(day);
   const [slides, setSlides] = useState([]);
@@ -75,7 +75,6 @@ const App = () => {
   const isDayGuessedCorrectly = (day) => {
     return storedDays.includes(day);
   };
-  const [isFieldVisible, setIsFieldVisible] = useState(isDayGuessedCorrectly(selectedIndex));
   const [showReleaseDate, setShowReleaseDate] = useState(isDayGuessedCorrectly(selectedIndex));
   const [isAnswerVisible, setIsAnswerVisible] = useState(isDayGuessedCorrectly(selectedIndex));
   const [progressMessage, setProgressMessage] = useState(`${storedDays.length} / ${day}`);
@@ -83,7 +82,7 @@ const App = () => {
   useEffect(() => {
     const fetchTextData = async () => {
       try {
-        const response = await fetch('https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/albums_done.txt');
+        const response = await fetch('https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/albums_filtered.txt');
         const data = await response.text();
         const dataArray = data.split('\n').filter(item => item.trim() !== '');
         setTextData(dataArray);
@@ -116,7 +115,6 @@ const App = () => {
           setSlides(newSlides);
           setAnswer(answer);
           setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
-          setIsFieldVisible(isDayGuessedCorrectly(selectedIndex)); // Set isFieldVisible based on whether the day is correctly guessed
           setShowReleaseDate(isDayGuessedCorrectly(selectedIndex)); // Set showReleaseDate based on whether the day is correctly guessed
           setIsAnswerVisible(isDayGuessedCorrectly(selectedIndex)); // Set isAnswerVisible based on whether the day is correctly guessed
           setIsIncorrectAnswer(false); // Reset the incorrect answer state
@@ -156,7 +154,6 @@ const App = () => {
     let parsedInput = inputValue.match(regex);
     if (inputSimilarity > 0.85) {
       setIsAnswerVisible(true); // Show the answer slide
-      setIsFieldVisible(true); // Reveal the field values
       setShowReleaseDate(true); // Show the release date
       setIsIncorrectAnswer(false); // Reset the incorrect answer state
       const storedDays = JSON.parse(localStorage.getItem('guessedDays')) || [];
@@ -169,7 +166,6 @@ const App = () => {
     }
     else if (parsedInput && parsedInput[0] === jsonData.id) {
       setIsAnswerVisible(true); // Show the answer slide
-      setIsFieldVisible(true); // Reveal the field values
       setShowReleaseDate(true); // Show the release date
       setIsIncorrectAnswer(false); // Reset the incorrect answer state
       const storedDays = JSON.parse(localStorage.getItem('guessedDays')) || [];
@@ -194,13 +190,6 @@ const App = () => {
   }, [isAnswerVisible]);
 
   const TextBox = () => {
-    const [isFieldVisible, setIsFieldVisible] = useState(false); // Track the visibility of the field values
-
-    useEffect(() => {
-      if (isAnswerVisible) {
-        setIsFieldVisible(true); // Show the field values when the answer is visible
-      }
-    }, [isAnswerVisible]);
 
     const textBoxStyles = {
       display: "flex",
@@ -208,24 +197,27 @@ const App = () => {
       justifyContent: "center",
       alignItems: "center",
       textAlign: "center",
-      marginTop: "50px",
-      fonSize: "12px",
+      marginTop: "40px",
+      fontSize: "16px",
     };
 
-    const textBoxContent = isFieldVisible
-      ? `${jsonData.artist} - ${jsonData.title}`
-      : "????? - ?????";
+    let textBoxContent;
+    if (isAnswerVisible && jsonData) {
+      textBoxContent = `${jsonData.artist} - ${jsonData.title}`;
+    } else {
+      textBoxContent = "????? - ?????";
+    }
 
     return <div style={textBoxStyles}>{textBoxContent}</div>;
   };
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      setShowClueMessage(false);
-    }, 4000); // Hide the pulsating message after 4 seconds
+  // useEffect(() => {
+  //   const timeout = setTimeout(() => {
+  //     setShowClueMessage(false);
+  //   }, 4000); // Hide the pulsating message after 4 seconds
 
-    return () => clearTimeout(timeout);
-  }, []);
+  //   return () => clearTimeout(timeout);
+  // }, []);
 
   const containerStyles = {
     width: "100%",
@@ -270,7 +262,7 @@ const App = () => {
 
   const headerContainerStyles = {
     position: "relative",
-    marginBottom: "15%",
+    marginBottom: "10%",
   };
 
   const headerStyles = {
@@ -416,7 +408,7 @@ const App = () => {
   };
 
   const shakeAnimationStyles = {
-    animation: "shake 0.5s",
+    // animation: "shake 0.5s",
     animation: isIncorrectAnswer ? 'shake 0.4s ease-in-out' : 'none',
   };
 
@@ -507,7 +499,7 @@ const App = () => {
                 Year of release: {showReleaseDate ? jsonData.release_date.substring(0, 4) : "????"}
               </p>
             )}
-            <a href={spotifyLink} target="_blank" rel="norefferer">
+            <a href={spotifyLink} target="_blank" rel="noopener noreferrer">
               <img style={spotifyLinkStyles} src="https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/8554553e351ae8c.png" alt="Spotify link"></img>
             </a>
             {/* {showClueMessage && (
