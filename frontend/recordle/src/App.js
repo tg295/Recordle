@@ -8,6 +8,7 @@ import './index.css';
 
 // TO DO 
 // Link to my GitHub
+// could have a message like - close! if the simiarity score is high, or close enough if its over the threshold etc.
 
 function editDistance(s1, s2) {
   s1 = s1.toLowerCase();
@@ -54,7 +55,7 @@ const App = () => {
 
   const placeholderImage = vinyl; // Replace with your desired placeholder image URL
   const now = new Date();
-  const start = new Date(2023, 5, 7);
+  const start = new Date(2023, 5, 6);
   const diff = now.getTime() - start.getTime();
   const day = Math.floor(diff / (1000 * 60 * 60 * 24));
 
@@ -82,7 +83,7 @@ const App = () => {
   useEffect(() => {
     const fetchTextData = async () => {
       try {
-        const response = await fetch('https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/albums_filtered.txt');
+        const response = await fetch('https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/albums_filtered.txt', { cache: "no-cache" });
         const data = await response.text();
         const dataArray = data.split('\n').filter(item => item.trim() !== '');
         setTextData(dataArray);
@@ -102,7 +103,6 @@ const App = () => {
           const url = `https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/data/${albumId}.json`;
           const response = await fetch(url);
           const jsonData = await response.json();
-          console.log(jsonData);
           const newSlides = [
             { url: `https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/${jsonData.id}_${jsonData.formatted_title}_GEN_0.png`, title: "clue1" },
             { url: `https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/${jsonData.id}_${jsonData.formatted_title}_GEN_1.png`, title: "clue2" },
@@ -201,12 +201,13 @@ const App = () => {
       fontSize: "16px",
     };
 
-    let textBoxContent;
-    if (isAnswerVisible && jsonData) {
-      textBoxContent = `${jsonData.artist} - ${jsonData.title}`;
-    } else {
-      textBoxContent = "????? - ?????";
+    if (!jsonData) {
+      return null; // Return null if jsonData is not yet loaded
     }
+
+    const textBoxContent = isAnswerVisible
+      ? `${jsonData.artist} - ${jsonData.title}`
+      : `${jsonData.artist.replace(/\S/g, '?')} - ${jsonData.title.replace(/\S/g, '?')}`;
 
     return <div style={textBoxStyles}>{textBoxContent}</div>;
   };
@@ -538,6 +539,7 @@ const App = () => {
                   onChange={handleInputChange}
                   style={inputStyles}
                   placeholder="Enter album title / Spotify ID"
+                  autoFocus
                 />
                 <button type="submit" style={enterButtonStyles}>Go</button>
 

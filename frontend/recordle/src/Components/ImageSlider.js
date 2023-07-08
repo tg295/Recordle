@@ -131,6 +131,7 @@ const ImageSlider = ({ slides }) => {
                         src={slides[currentIndex].url}
                         style={{ ...slideStyles }}
                         onLoad={handleImageLoad}
+                        alt="loading..."
                     />
                 )}
             </div>
