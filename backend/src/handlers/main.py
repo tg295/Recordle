@@ -190,6 +190,12 @@ def update_done(album_id, local):
         f.write(album_id+'\n')
     upload_to_aws(filepath, 'albums_done.txt')
 
+    # temporarily update filtered too
+    filepath = download_from_aws('albums_filtered.txt', '{}/albums_filtered.txt'.format(prefix))
+    with open(filepath, 'a') as f:
+        f.write(album_id+'\n')
+    upload_to_aws(filepath, 'albums_filtered.txt')
+
 
 def upload_to_aws(local_file, s3_file, bucket=BUCKET):
     s3 = get_boto3_client()
@@ -205,15 +211,4 @@ def download_from_aws(s3_file, local_file, bucket=BUCKET):
 def get_boto3_client():
     return boto3.client('s3', aws_access_key_id=ACCESS_KEY,
                       aws_secret_access_key=SECRET_KEY)
-    
-
-if __name__ == "__main__":
-
-    # run(local=True)
-    # create_and_upload_images('6dVIqQ8qmQ5GBnJ9shOYGE', True)
-    # album_id = '6PanEvuo9ZNvGT39v50xp6'
-    album_id = 'https://open.spotify.com/album/1Dh27pjT3IEdiRG9Se5uQn?si=_-rpew1cTt-T9muAWAUncw'
-    sp = Spotify(client_credentials_manager=SpotifyClientCredentials())
-    album = sp.album(album_id)
-    print(album['images'])
 
