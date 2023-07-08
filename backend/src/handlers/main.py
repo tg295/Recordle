@@ -1,15 +1,19 @@
+import os
+import sys
+
+sys.path.append(os.path.join(os.getcwd()))
+
+
 """Track parser handler"""
 import re
-import os
+
 from datetime import datetime
-import logging
 from typing import Dict, Any
 import json
 import requests
 import random
 
 import boto3
-from botocore.exceptions import NoCredentialsError
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from aws_lambda_powertools.utilities import parameters
@@ -43,7 +47,7 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
 def run(n=3, remove=True, local=False):
     album_list = get_album_list(local)
     album_id = album_list[0]
-    logging.info('===== {} ===='.format(album_id))
+    logger.info('===== {} ===='.format(album_id))
     create_and_upload_images(album_id, local, n)
     update_list(album_list, album_id, remove, local)
     update_done(album_id, local)
@@ -126,7 +130,7 @@ def get_album_data(album_id, local):
 
 
 def _format_title(title):
-    punc = '''!()-[]{};:'",.'''
+    punc = '''()-[]{};:'",./@#$%^*~'''
 
     title = title.lower().replace(' ', '_')
     for ele in title:
@@ -186,6 +190,12 @@ def update_done(album_id, local):
         f.write(album_id+'\n')
     upload_to_aws(filepath, 'albums_done.txt')
 
+    # temporarily update filtered too
+    filepath = download_from_aws('albums_filtered.txt', '{}/albums_filtered.txt'.format(prefix))
+    with open(filepath, 'a') as f:
+        f.write(album_id+'\n')
+    upload_to_aws(filepath, 'albums_filtered.txt')
+
 
 def upload_to_aws(local_file, s3_file, bucket=BUCKET):
     s3 = get_boto3_client()
@@ -201,10 +211,4 @@ def download_from_aws(s3_file, local_file, bucket=BUCKET):
 def get_boto3_client():
     return boto3.client('s3', aws_access_key_id=ACCESS_KEY,
                       aws_secret_access_key=SECRET_KEY)
-    
-
-if __name__ == "__main__":
-
-    run(local=True)
-
 

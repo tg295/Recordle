@@ -1,0 +1,119 @@
+/* @tailwind base;
+
+@tailwind components;
+
+@tailwind utilities; */
+
+/* html {
+    @apply h-full;
+}
+
+body {
+    @apply h-full;
+}
+
+div#__next {
+    @apply h-full;
+}
+
+main {
+    @apply h-full;
+} */
+
+html,
+body {
+    margin: 0;
+    /* height: 100%; */
+    overflow: hidden
+}
+
+.loader {
+    box-sizing: border-box !important;
+    position: absolute !important;
+    border: 5px solid #e33636;
+    /* border-radius: 50%; */
+    /* border-top: 5px solid #db4a34; */
+    width: 100% !important;
+    height: 100% !important;
+    /* -webkit-animation: spin 2s linear infinite;
+    /* Safari */
+    /*animation: spin 2s linear infinite;
+    */
+}
+
+/* @media screen and (max-width: 667px) {
+    body {
+        overflow-x: hidden !important;
+    }
+
+    .container {
+        max-width: 100% !important;
+        overflow-x: hidden !important;
+    }
+} */
+
+Safari @-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@font-face {
+    font-family: "AssistantRegular";
+    src: local("AssistantRegular"),
+        url("./fonts/slkscrb.ttf") format("truetype");
+    font-weight: normal;
+}
+
+@keyframes shake {
+
+    10%,
+    90% {
+        transform: translateX(-5px);
+    }
+
+    20%,
+    80% {
+        transform: translateX(5px);
+    }
+
+    30%,
+    50%,
+    70% {
+        transform: translateX(-5px);
+    }
+
+    40%,
+    60% {
+        transform: translateX(5px);
+    }
+}
+
+.dissolve {
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
