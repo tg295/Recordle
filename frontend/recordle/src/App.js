@@ -138,9 +138,6 @@ const App = () => {
     const newIndex = selectedIndex + increment;
     if (newIndex >= 0 && newIndex < textData.length) {
       setSelectedIndex(newIndex);
-      setIsAnswerVisible(true); // Show the answer slide
-      setShowReleaseDate(true);
-      setIsArtistVisible(true);
       setIsPlusGreyedOut(newIndex === day); // Update the isPlusGreyedOut state based on the selectedIndex
     }
   };
