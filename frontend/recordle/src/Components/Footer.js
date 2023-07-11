@@ -31,10 +31,19 @@ const footerStyle = {
     backgroundColor: "#009900",
 };
 
+const beerContainerStyles = {
+    height: "10px",
+    left: "80vw",
+    position: "absolute"
+}
+
 function Footer() {
     return (
         <footer style={footerStyle} className="text-center text-xs m-auto">
             &copy; Gurt Data 2023
+            <a style={beerContainerStyles} href="https://www.buymeacoffee.com/thebacongardner">
+                buy me beer
+            </a>
         </footer>
     )
 }
