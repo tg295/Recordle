@@ -2,13 +2,14 @@ import { useState } from "react";
 import React from 'react';
 
 const slideStyles = {
-    width: "35vh",
+    width: "70vw",
     aspectRatio: "16/9",
-    height: "35vh",
+    height: "70vw",
     borderRadius: "5px",
     backgroundSize: "cover",
     backgroundPosition: "center",
     border: "3px solid #e66439",
+    position: "absolute",
     // padding: "0 10px",
     // objectFit: "cover",
 };
@@ -39,7 +40,7 @@ const sliderStyles = {
     alignItems: "center",
     justifyContent: "center",
     display: "flex",
-    position: "relative",
+    position: "absolute",
     width: "100%",
     height: "100%",
     // objectFit: "cover",
@@ -48,7 +49,7 @@ const sliderStyles = {
 const sliderContainerStyles = {
     position: "relative",
     width: "100%",
-    height: "100%",
+    height: "50vh",
     // padding: "0 15px",
     // objectFit: "cover",
 };

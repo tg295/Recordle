@@ -218,6 +218,7 @@ const App = () => {
       textAlign: "center",
       marginTop: "40px",
       fontSize: "3.5vw",
+      position: "relative",
 
     };
 
@@ -253,6 +254,7 @@ const App = () => {
     // display: "flex",
     padding: "24px",
     position: "relative",
+    overflowY: "scroll",
     flexDirection: "column",
     alignItems: "center",
     minHeight: "100vh",
@@ -335,7 +337,7 @@ const App = () => {
     alignItems: "center",
     backgroundPosition: "center",
     right: "calc(-30%)",
-    bottom: "8vh",
+    bottom: "15vh",
   }
 
   const anwserStyles = {
@@ -392,9 +394,13 @@ const App = () => {
     padding: "10px",
     fontSize: "70%",
     border: "3px solid #e66439",
+    height: "3vh",
+    padding: "8px",
+    fontSize: "3vw",
+    border: "1vw solid #e66439",
     borderRadius: "5px",
     position: "fixed",
-    bottom: "5vh",
+    bottom: "5.2vh",
     // overflow: "hidden",
     fontFamily: "CustomFont2",
     animation: isIncorrectAnswer ? 'shake 0.4s ease-in-out' : 'none',
@@ -412,11 +418,11 @@ const App = () => {
   };
 
   const enterButtonStyles = {
-    marginLeft: "50px",
-    float: "left",
+    // marginLeft: "50px",
+    // float: "left",
     // display: "flex",
     padding: "3%",
-    fontSize: "20px",
+    fontSize: "5vw",
     background: "#e66439",
     color: "white",
     border: "none",
@@ -424,8 +430,8 @@ const App = () => {
     cursor: "pointer",
     fontFamily: "CustomFont2",
     position: "fixed",
-    left: "68%",
-    bottom: "5vh",
+    left: "82%",
+    bottom: "5.3vh",
     alignItems: "bottom",
     justifyContent: "bottom",
   };
@@ -474,15 +480,17 @@ const App = () => {
   // };
 
   const gifStyles = {
-    transition: 'opacity 0.5s, transform 0.5s',
-    opacity: isDayGuessedCorrectly(selectedIndex) ? '0.3' : '0',
+    transition: 'opacity 0.3s, transform 0.5s',
+    opacity: isDayGuessedCorrectly(selectedIndex) ? '0.6' : '0',
     transform: isDayGuessedCorrectly(selectedIndex) ? 'scale(1)' : 'scale(0.1)',
-    border: "0.01px solid #deb7db",
-    borderRadius: "20%",
+    border: "none",
     width: "100px",
     height: "200px",
-    top: "65%",
-    left: "10%",
+    top: "60vh",
+    left: "6vw",
+    position: "absolute",
+  }
+
     position: "absolute",
   }
 
