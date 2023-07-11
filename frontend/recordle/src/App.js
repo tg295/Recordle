@@ -211,13 +211,14 @@ const App = () => {
   const TextBox = () => {
 
     const textBoxStyles = {
-      display: "flex",
+      // display: "flex",
       flexDirection: "row",
       justifyContent: "center",
       alignItems: "center",
       textAlign: "center",
       marginTop: "40px",
-      fontSize: "16px",
+      fontSize: "3.5vw",
+
     };
 
     if (!jsonData) {
@@ -289,7 +290,7 @@ const App = () => {
 
   const headerStyles = {
     fontFamily: "CustomFont",
-    fontSize: "32px",
+    fontSize: "7.5vw",
     fontWeight: "bold",
     color: "black",
     marginTop: "-2px",
@@ -302,7 +303,7 @@ const App = () => {
 
   const subHeaderStyles = {
     fontFamily: "CustomFont",
-    fontSize: "18px",
+    fontSize: "4vw",
     fontWeight: "bold",
     color: "black",
     order: "-1",
@@ -316,7 +317,7 @@ const App = () => {
 
   const releaseDateStyles = {
     fontFamily: "CustomFont2",
-    fontSize: "12px",
+    fontSize: "3vw",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -352,10 +353,10 @@ const App = () => {
   };
 
   const plusStyles = {
-    position: "absolute",
-    top: "50%",
-    right: "20px", // Adjust as needed
-    fontSize: "45px",
+    position: "fixed",
+    top: "12%",
+    right: "40px", // Adjust as needed
+    fontSize: "10vw",
     color: isPlusGreyedOut ? "#606060" : "#181818",
     zIndex: 1,
     cursor: "pointer",
@@ -363,10 +364,10 @@ const App = () => {
   };
 
   const minusStyles = {
-    position: "absolute",
-    top: "50%",
-    left: "20px", // Adjust as needed
-    fontSize: "45px",
+    position: "fixed",
+    top: "12%",
+    left: "40px", // Adjust as needed
+    fontSize: "10vw",
     color: isMinusGreyedOut ? "#606060" : "#181818",
     zIndex: 1,
     cursor: "pointer",
@@ -483,7 +484,6 @@ const App = () => {
     top: "65%",
     left: "10%",
     position: "absolute",
-    // frameBorder: "0",
   }
 
   const spotifyLinkStyles = {
@@ -493,8 +493,6 @@ const App = () => {
     height: "30px",
     width: "30px",
     position: "absolute",
-    // top: "1.5%",
-    // left: "5%",
     top: "90%",
     left: "80%",
     animation: "spin 4s linear infinite",
@@ -506,11 +504,10 @@ const App = () => {
         <div>
           <div style={headerContainerStyles} >
             <h1 style={headerStyles}>Recordle</h1>
+            <div style={minusStyles} onClick={() => handleDayChange(-1)}>{'-'}</div>
+            <div style={plusStyles} onClick={() => handleDayChange(1)}>{'+'}</div>
             <h2 style={subHeaderStyles}>Day {selectedIndex}</h2>
-            <div>
-              <div style={minusStyles} onClick={() => handleDayChange(-1)}>{'-'}</div>
-              <div style={plusStyles} onClick={() => handleDayChange(1)}>{'+'}</div>
-            </div>
+
             {/* <h3 style={subHeaderStyles}>Guess the song</h3> */}
             <TextBox />
             {jsonData && (
