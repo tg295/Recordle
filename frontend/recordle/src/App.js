@@ -84,6 +84,8 @@ const App = () => {
   const [isAnswerVisible, setIsAnswerVisible] = useState(isDayGuessedCorrectly(selectedIndex));
   const [progressMessage, setProgressMessage] = useState(`${storedDays.length} / ${day}`);
   const [isArtistVisible, setIsArtistVisible] = useState(false);
+  const [isArtistGifVisible, setIsArtistGifVisible] = useState(false);
+  const [isReleaseDateGifVisible, setIsReleaseDateGifVisible] = useState(false);
 
   useEffect(() => {
     const fetchTextData = async () => {
@@ -139,6 +141,9 @@ const App = () => {
 
   const handleReleaseDateClick = () => {
     setShowReleaseDate(true);
+    if (selectedIndex === day) {
+      setIsReleaseDateGifVisible(true);
+    }
   };
 
   const handleDayChange = (increment) => {
@@ -151,6 +156,8 @@ const App = () => {
       setIsPlusGreyedOut(newIndex === day); // Update the isPlusGreyedOut state based on the selectedIndex
       setIsMinusGreyedOut(newIndex === 0); // Update the isMinusGreyedOut state based on the selectedIndex
 
+      setIsArtistGifVisible(false);
+      setIsReleaseDateGifVisible(false);
     }
   };
 
@@ -177,10 +184,13 @@ const App = () => {
         localStorage.setItem('guessedDays', JSON.stringify(storedDays));
         setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
       }
+      setIsArtistGifVisible(false);
+      setIsReleaseDateGifVisible(false);
       setInputValue("");
     }
     else if (inputSimilarityArtist > 0.9) {
       setIsArtistVisible(true); // Show the artist
+      setIsArtistGifVisible(true); // Show the batman
       setInputValue("");
     }
     else if (parsedInput && parsedInput[0] === jsonData.id) {
@@ -194,6 +204,8 @@ const App = () => {
         setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
       }
       setInputValue("");
+      setIsArtistGifVisible(false);
+      setIsReleaseDateGifVisible(false);
     } else {
       setIsIncorrectAnswer(true);
       setInputKey((prevKey) => prevKey + 1); // Update the key to trigger re-render
@@ -491,6 +503,27 @@ const App = () => {
     position: "absolute",
   }
 
+  const gif2styles = {
+    transition: 'opacity 0.3s, transform 0.5s',
+    opacity: isArtistGifVisible ? '0.6' : '0',
+    transform: isArtistGifVisible ? 'scale(1)' : 'scale(0.1)',
+    border: "none",
+    width: "100px",
+    height: "200px",
+    top: "65vh",
+    left: "6vw",
+    position: "absolute",
+  }
+
+  const gif3styles = {
+    transition: 'opacity 0.3s, transform 0.5s',
+    opacity: isReleaseDateGifVisible ? '0.6' : '0',
+    transform: isReleaseDateGifVisible ? 'scale(1)' : 'scale(0.1)',
+    border: "none",
+    width: "90px",
+    height: "120px",
+    top: "70vh",
+    right: "6vw",
     position: "absolute",
   }
 
@@ -553,6 +586,8 @@ const App = () => {
             )}
           </div>
           <iframe src="https://giphy.com/embed/4oMoIbIQrvCjm" style={gifStyles} class="gifyEmbed"></iframe><p><a href="https://giphy.com/gifs/the-simpsons-bart-simpson-4oMoIbIQrvCjm"></a></p>
+          <iframe src="https://giphy.com/embed/DpPUDW4XTw4EM" style={gif2styles} class="giphyEmbed"></iframe><p><a href="https://giphy.com/gifs/reaction-a5viI92PAF89q"></a></p>
+          <iframe src="https://giphy.com/embed/a5viI92PAF89q" style={gif3styles} class="giphy-embed"></iframe><p><a href="https://giphy.com/gifs/lol-futurama-humor-cFgb5p5e1My3K"></a></p>
           <div>  <p style={progressMessageStyles}>{progressMessage}</p></div>
           <div style={bottomContainerStyles}>
             <form onSubmit={handleSubmit}>
