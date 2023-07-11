@@ -77,6 +77,9 @@ const App = () => {
   const isDayGuessedCorrectly = (day) => {
     return storedDays.includes(day);
   };
+  const isPreviousDay = (selectedIndex, day) => {
+    return selectedIndex !== day;
+  };
   const [showReleaseDate, setShowReleaseDate] = useState(isDayGuessedCorrectly(selectedIndex));
   const [isAnswerVisible, setIsAnswerVisible] = useState(isDayGuessedCorrectly(selectedIndex));
   const [progressMessage, setProgressMessage] = useState(`${storedDays.length} / ${day}`);
@@ -113,12 +116,16 @@ const App = () => {
 
           const answer = { url: `${process.env.REACT_APP_BASE_URL}/img/${jsonData.id}_${jsonData.formatted_title}_REAL.png`, title: jsonData.title, formatted_title: jsonData.formatted_title, artist: jsonData.artist }
 
+          console.log(isPreviousDay);
+          console.log(isDayGuessedCorrectly);
           setJsonData(jsonData);
           setSlides(newSlides);
           setAnswer(answer);
           setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
-          setShowReleaseDate(isDayGuessedCorrectly(selectedIndex)); // Set showReleaseDate based on whether the day is correctly guessed
-          setIsAnswerVisible(isDayGuessedCorrectly(selectedIndex)); // Set isAnswerVisible based on whether the day is correctly guessed
+          // setShowReleaseDate(isDayGuessedCorrectly(selectedIndex)); // Set showReleaseDate based on whether the day is correctly guessed
+          // setIsAnswerVisible(isDayGuessedCorrectly(selectedIndex)); // Set isAnswerVisible based on whether the day is correctly guessed
+          setShowReleaseDate(isPreviousDay(selectedIndex, day)); // Set showReleaseDate based on whether were on the latest day
+          setIsAnswerVisible(isPreviousDay(selectedIndex, day)); // Set isAnswerVisible based on whether were on the latest day
           setIsIncorrectAnswer(false); // Reset the incorrect answer state
           setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
         }
@@ -142,6 +149,8 @@ const App = () => {
       setShowReleaseDate(true);
       setIsArtistVisible(true);
       setIsPlusGreyedOut(newIndex === day); // Update the isPlusGreyedOut state based on the selectedIndex
+      setIsMinusGreyedOut(newIndex === 0); // Update the isMinusGreyedOut state based on the selectedIndex
+
     }
   };
 
@@ -358,7 +367,7 @@ const App = () => {
     top: "50%",
     left: "20px", // Adjust as needed
     fontSize: "45px",
-    color: "#181818",
+    color: isMinusGreyedOut ? "#606060" : "#181818",
     zIndex: 1,
     cursor: "pointer",
     transform: "translateY(-50%)", // Center vertically
@@ -465,8 +474,8 @@ const App = () => {
 
   const gifStyles = {
     transition: 'opacity 0.5s, transform 0.5s',
-    opacity: isAnswerVisible ? '0.3' : '0',
-    transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
+    opacity: isDayGuessedCorrectly(selectedIndex) ? '0.3' : '0',
+    transform: isDayGuessedCorrectly(selectedIndex) ? 'scale(1)' : 'scale(0.1)',
     border: "0.01px solid #deb7db",
     borderRadius: "20%",
     width: "100px",
