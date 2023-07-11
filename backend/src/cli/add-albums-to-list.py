@@ -45,4 +45,4 @@ def add_album_complete(album_id):
 
 
 if __name__ == "__main__":
-    add_album_todo("3i8ojYITZwfiZilo8ShpxQ")
+    add_album_todo("7xlWX3qBfCI68LjswqlBH6")

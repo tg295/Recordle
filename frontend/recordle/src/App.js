@@ -71,6 +71,7 @@ const App = () => {
   const [isIncorrectAnswer, setIsIncorrectAnswer] = useState(false);
   const [isImageVisible, setIsImageVisible] = useState(false);
   const [isPlusGreyedOut, setIsPlusGreyedOut] = useState(selectedIndex === day);
+  const [isMinusGreyedOut, setIsMinusGreyedOut] = useState(selectedIndex === 0);
 
   const storedDays = JSON.parse(localStorage.getItem('guessedDays')) || [];
   const isDayGuessedCorrectly = (day) => {
@@ -79,11 +80,12 @@ const App = () => {
   const [showReleaseDate, setShowReleaseDate] = useState(isDayGuessedCorrectly(selectedIndex));
   const [isAnswerVisible, setIsAnswerVisible] = useState(isDayGuessedCorrectly(selectedIndex));
   const [progressMessage, setProgressMessage] = useState(`${storedDays.length} / ${day}`);
+  const [isArtistVisible, setIsArtistVisible] = useState(false);
 
   useEffect(() => {
     const fetchTextData = async () => {
       try {
-        const response = await fetch('https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/albums_filtered.txt', { cache: "no-cache" });
+        const response = await fetch(`${process.env.REACT_APP_BASE_URL}/albums_filtered.txt`, { cache: "no-cache" });
         const data = await response.text();
         const dataArray = data.split('\n').filter(item => item.trim() !== '');
         setTextData(dataArray);
@@ -100,16 +102,16 @@ const App = () => {
       try {
         if (textData.length > 0) {
           const albumId = textData[selectedIndex];
-          const url = `https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/data/${albumId}.json`;
+          const url = `${process.env.REACT_APP_BASE_URL}/data/${albumId}.json`;
           const response = await fetch(url);
           const jsonData = await response.json();
           const newSlides = [
-            { url: `https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/${jsonData.id}_${jsonData.formatted_title}_GEN_0.png`, title: "clue1" },
-            { url: `https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/${jsonData.id}_${jsonData.formatted_title}_GEN_1.png`, title: "clue2" },
-            { url: `https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/${jsonData.id}_${jsonData.formatted_title}_GEN_2.png`, title: "clue3" },
+            { url: `${process.env.REACT_APP_BASE_URL}/img/${jsonData.id}_${jsonData.formatted_title}_GEN_0.png`, title: "clue1" },
+            { url: `${process.env.REACT_APP_BASE_URL}/img/${jsonData.id}_${jsonData.formatted_title}_GEN_1.png`, title: "clue2" },
+            { url: `${process.env.REACT_APP_BASE_URL}/img/${jsonData.id}_${jsonData.formatted_title}_GEN_2.png`, title: "clue3" },
           ];
 
-          const answer = { url: `https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/${jsonData.id}_${jsonData.formatted_title}_REAL.png`, title: jsonData.title, formatted_title: jsonData.formatted_title }
+          const answer = { url: `${process.env.REACT_APP_BASE_URL}/img/${jsonData.id}_${jsonData.formatted_title}_REAL.png`, title: jsonData.title, formatted_title: jsonData.formatted_title, artist: jsonData.artist }
 
           setJsonData(jsonData);
           setSlides(newSlides);
@@ -136,7 +138,9 @@ const App = () => {
     const newIndex = selectedIndex + increment;
     if (newIndex >= 0 && newIndex < textData.length) {
       setSelectedIndex(newIndex);
-      setShowReleaseDate(false);
+      setIsAnswerVisible(true); // Show the answer slide
+      setShowReleaseDate(true);
+      setIsArtistVisible(true);
       setIsPlusGreyedOut(newIndex === day); // Update the isPlusGreyedOut state based on the selectedIndex
     }
   };
@@ -147,12 +151,14 @@ const App = () => {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    let checkAnswer = answer.formatted_title.toLowerCase().replace(/_/g, " ");
-    let inputSimilarity = similarity(checkAnswer, inputValue);
-    console.log(inputSimilarity);
+    let formattedTitle = answer.formatted_title.toLowerCase().replace(/_/g, " ");
+    let formattedArtist = answer.artist.toLowerCase().replace(/_/g, " ");
+    let inputSimilarityTitle = similarity(formattedTitle, inputValue);
+    let inputSimilarityArtist = similarity(formattedArtist, inputValue);
+    console.log(inputSimilarityTitle);
     const regex = /([a-zA-Z0-9]{22})/;
     let parsedInput = inputValue.match(regex);
-    if (inputSimilarity > 0.85) {
+    if (inputSimilarityTitle > 0.8) {
       setIsAnswerVisible(true); // Show the answer slide
       setShowReleaseDate(true); // Show the release date
       setIsIncorrectAnswer(false); // Reset the incorrect answer state
@@ -162,6 +168,10 @@ const App = () => {
         localStorage.setItem('guessedDays', JSON.stringify(storedDays));
         setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
       }
+      setInputValue("");
+    }
+    else if (inputSimilarityArtist > 0.9) {
+      setIsArtistVisible(true); // Show the artist
       setInputValue("");
     }
     else if (parsedInput && parsedInput[0] === jsonData.id) {
@@ -207,7 +217,9 @@ const App = () => {
 
     const textBoxContent = isAnswerVisible
       ? `${jsonData.artist} - ${jsonData.title}`
-      : `${jsonData.artist.replace(/\S/g, '?')} - ${jsonData.title.replace(/\S/g, '?')}`;
+      : isArtistVisible
+        ? `${jsonData.artist} - ${jsonData.title.replace(/\S/g, '?')}`
+        : `${jsonData.artist.replace(/\S/g, '?')} - ${jsonData.title.replace(/\S/g, '?')}`;
 
     return <div style={textBoxStyles}>{textBoxContent}</div>;
   };
