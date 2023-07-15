@@ -5,10 +5,10 @@ import isImageVisible from './../App.js';
 
 const slideStyles = {
     width: "70vmin",
-    maxWidth: "550px",
+    maxWidth: "500px",
     aspectRatio: "16/9",
     height: "70vmin",
-    maxHeight: "550px",
+    maxHeight: "500px",
     borderRadius: "5px",
     backgroundSize: "cover",
     backgroundPosition: "center",
