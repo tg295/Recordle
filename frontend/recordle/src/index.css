@@ -117,3 +117,34 @@ Safari @-webkit-keyframes spin {
         transform: rotate(360deg);
     }
 }
+
+/* img,
+div {
+    width: 100px;
+    height: 100px;
+} */
+
+/* .x {
+    animation: x 13s linear infinite alternate;
+}
+
+.y {
+    animation: y 7s linear infinite alternate;
+}
+
+.z {
+    animation: z 4s linear infinite;
+} */
+
+
+@keyframes x {
+    100% {
+        transform: translateX(calc(100vw - 100px));
+    }
+}
+
+@keyframes y {
+    100% {
+        transform: translateY(calc(200vh - 200px));
+    }
+}

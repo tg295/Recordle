@@ -1,14 +1,52 @@
 import React, { useEffect, useState } from 'react';
+import ScaleText from "react-scale-text";
 import { BrowserRouter as Router } from 'react-router-dom';
 import Footer from "./Components/Footer";
 import ImageSlider from "./Components/ImageSlider";
 import vinyl from './Images/vinyl.png';
 import './fonts.css';
 import './index.css';
+import { text } from '@fortawesome/fontawesome-svg-core';
 
 // TO DO 
 // Link to my GitHub
 // could have a message like - close! if the simiarity score is high, or close enough if its over the threshold etc.
+// show words that are guessed correctly
+// fix layout better
+// get loading screen to work, unified
+// edit list better
+
+// const delay = ms => new Promise(res => setTimeout(res, ms));
+// const wait1sec = async () => {
+//   await delay(8000);
+//   console.log("Waited 5s");
+// };
+
+function getIndicesOf(searchStr, str, caseSensitive) {
+  var searchStrLen = searchStr.length;
+  if (searchStrLen == 0) {
+    return [];
+  }
+  var startIndex = 0, index, indices = [];
+  if (!caseSensitive) {
+    str = str.toLowerCase();
+    searchStr = searchStr.toLowerCase();
+  }
+  while ((index = str.indexOf(searchStr, startIndex)) > -1) {
+    indices.push(index);
+    startIndex = index + searchStrLen;
+  }
+  return indices;
+}
+
+function setCharAt(str, index, chr) {
+  if (index > str.length - 1) return str;
+  return str.substring(0, index) + chr + str.substring(index + 1);
+}
+
+function wordInThing(word, thing) {
+  return thing.toLowerCase().indexOf(word.toLowerCase());
+}
 
 function editDistance(s1, s2) {
   s1 = s1.toLowerCase();
@@ -60,6 +98,7 @@ const App = () => {
   const day = Math.floor(diff / (1000 * 60 * 60 * 24));
 
   // const [showClueMessage, setShowClueMessage] = useState(true);
+  // const [isLoading, setIsLoading] = useState(false);
   const [textData, setTextData] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(day);
   const [slides, setSlides] = useState([]);
@@ -74,13 +113,26 @@ const App = () => {
   const [isMinusGreyedOut, setIsMinusGreyedOut] = useState(selectedIndex === 0);
 
   const storedDays = JSON.parse(localStorage.getItem('guessedDays')) || [];
+  const revealedDays = JSON.parse(localStorage.getItem('revealedDays')) || [];
+
   const isDayGuessedCorrectly = (day) => {
     return storedDays.includes(day);
   };
+  const isDayRevealed = (day) => {
+    return revealedDays.includes(day);
+  };
+
+  const isPreviousDay = (selectedIndex, day) => {
+    return selectedIndex !== day;
+  };
   const [showReleaseDate, setShowReleaseDate] = useState(isDayGuessedCorrectly(selectedIndex));
   const [isAnswerVisible, setIsAnswerVisible] = useState(isDayGuessedCorrectly(selectedIndex));
+
   const [progressMessage, setProgressMessage] = useState(`${storedDays.length} / ${day}`);
   const [isArtistVisible, setIsArtistVisible] = useState(false);
+  const [isArtistGifVisible, setIsArtistGifVisible] = useState(false);
+  const [isReleaseDateGifVisible, setIsReleaseDateGifVisible] = useState(false);
+  var [content, setContent] = useState("");
 
   useEffect(() => {
     const fetchTextData = async () => {
@@ -100,10 +152,13 @@ const App = () => {
   useEffect(() => {
     const fetchJsonData = async () => {
       try {
+        // setIsLoading(true);
+        // console.log(isLoading);
         if (textData.length > 0) {
           const albumId = textData[selectedIndex];
           const url = `${process.env.REACT_APP_BASE_URL}/data/${albumId}.json`;
-          const response = await fetch(url);
+          // const response = await fetch(url);
+          const response = await fetch(url, { cache: "no-store" });
           const jsonData = await response.json();
           const newSlides = [
             { url: `${process.env.REACT_APP_BASE_URL}/img/${jsonData.id}_${jsonData.formatted_title}_GEN_0.png`, title: "clue1" },
@@ -116,12 +171,36 @@ const App = () => {
           setJsonData(jsonData);
           setSlides(newSlides);
           setAnswer(answer);
-          setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
-          setShowReleaseDate(isDayGuessedCorrectly(selectedIndex)); // Set showReleaseDate based on whether the day is correctly guessed
-          setIsAnswerVisible(isDayGuessedCorrectly(selectedIndex)); // Set isAnswerVisible based on whether the day is correctly guessed
+          if (isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)) {
+            setContent(`${jsonData.artist} - ${jsonData.title}`)
+            setShowReleaseDate(true);
+            setIsAnswerVisible(true);
+            setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
+          }
+          else {
+            setContent(`${jsonData.artist.replace(/\S/g, '_')} - ${jsonData.title.replace(/\S/g, '_')}`);
+            setShowReleaseDate(false);
+            setIsAnswerVisible(false);
+            setSpotifyLink(null);
+          }
+          // if (isPreviousDay(selectedIndex, day)) {
+          //   setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
+          // } else {
+          //   setSpotifyLink(null);
+          // }
+          // if (isPreviousDay(selectedIndex, day)) {
+          //   setShowReleaseDate(isPreviousDay(selectedIndex, day)); // Set showReleaseDate based on whether were on the latest day
+          //   setIsAnswerVisible(isPreviousDay(selectedIndex, day)); // Set isAnswerVisible based on whether were on the latest day
+          // }
+          // else {
+          //   setShowReleaseDate(isDayGuessedCorrectly(selectedIndex)); // Set showReleaseDate based on whether the day is correctly guessed
+          //   setIsAnswerVisible(isDayGuessedCorrectly(selectedIndex)); // Set isAnswerVisible based on whether the day is correctly guessed
+          // }
           setIsIncorrectAnswer(false); // Reset the incorrect answer state
           setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
         }
+        // setIsLoading(false);
+        // console.log(isLoading);
       } catch (error) {
         console.error('Error:', error);
       }
@@ -130,24 +209,77 @@ const App = () => {
     fetchJsonData();
   }, [selectedIndex, textData]);
 
+  const handleRevealClick = () => {
+    setShowReleaseDate(true);
+    setIsAnswerVisible(true);
+    setIsImageVisible(true);
+    setContent(`${jsonData.artist} - ${jsonData.title}`)
+    const revealedDays = JSON.parse(localStorage.getItem('revealedDays')) || [];
+    if (!revealedDays.includes(selectedIndex)) {
+      revealedDays.push(selectedIndex);
+      localStorage.setItem('revealedDays', JSON.stringify(revealedDays));
+    }
+
+  };
   const handleReleaseDateClick = () => {
     setShowReleaseDate(true);
+    if (!isDayGuessedCorrectly(selectedIndex)) {
+      setIsReleaseDateGifVisible(true);
+    }
+    // if (selectedIndex === day) {
+    //   setIsReleaseDateGifVisible(true);
+    // }
   };
 
   const handleDayChange = (increment) => {
+    // setIsLoading(true);
+    // console.log(isLoading);
     const newIndex = selectedIndex + increment;
+    // console.log(newIndex);
+    // console.log(day);
     if (newIndex >= 0 && newIndex < textData.length) {
       setSelectedIndex(newIndex);
+      // setShowReleaseDate(true);
       setIsPlusGreyedOut(newIndex === day); // Update the isPlusGreyedOut state based on the selectedIndex
+      setIsMinusGreyedOut(newIndex === 0); // Update the isMinusGreyedOut state based on the selectedIndex
+      setIsArtistGifVisible(false);
+      setIsReleaseDateGifVisible(false);
+      // setIsAnswerVisible(true); // Show the answer slide
     }
+    setIsArtistGifVisible(false);
+    setIsArtistVisible(false);
+    setIsReleaseDateGifVisible(false);
+    // if (newIndex === day) {
+    //   // console.log("hellooooo")
+    //   if (isAnswerVisible === true) {
+    //     setIsArtistGifVisible(false);
+    //     setIsReleaseDateGifVisible(false);
+    //     // console.log("there");
+    //   }
+    //   else {
+    //     if (isArtistVisible === true) {
+    //       setIsArtistGifVisible(true);
+    //     }
+    //     // console.log("hiiii");
+    //     if (showReleaseDate === true) {
+    //       setShowReleaseDate(true);
+    //       setIsReleaseDateGifVisible(true);
+    //     }
+    //   }
+    // }
+    // setIsLoading(false);
+    // console.log(isLoading);
   };
 
-  const handleInputChange = (event) => {
-    setInputValue(event.target.value);
-  };
+  // let textBoxContent = isAnswerVisible
+  //   ? `${jsonData.artist} - ${jsonData.title}`
+  //   : isArtistVisible
+  //     ? `${jsonData.artist} - ${jsonData.title.replace(/\S/g, '_')}`
+  //     : `${jsonData.artist.replace(/\S/g, '_')} - ${jsonData.title.replace(/\S/g, '_')}`
 
   const handleSubmit = (event) => {
     event.preventDefault();
+    let textAnswerRevealed = `${jsonData.artist} - ${jsonData.title}`;
     let formattedTitle = answer.formatted_title.toLowerCase().replace(/_/g, " ");
     let formattedArtist = answer.artist.toLowerCase().replace(/_/g, " ");
     let inputSimilarityTitle = similarity(formattedTitle, inputValue);
@@ -156,6 +288,7 @@ const App = () => {
     const regex = /([a-zA-Z0-9]{22})/;
     let parsedInput = inputValue.match(regex);
     if (inputSimilarityTitle > 0.8) {
+      setContent(textAnswerRevealed);
       setIsAnswerVisible(true); // Show the answer slide
       setShowReleaseDate(true); // Show the release date
       setIsIncorrectAnswer(false); // Reset the incorrect answer state
@@ -165,13 +298,12 @@ const App = () => {
         localStorage.setItem('guessedDays', JSON.stringify(storedDays));
         setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
       }
-      setInputValue("");
-    }
-    else if (inputSimilarityArtist > 0.9) {
-      setIsArtistVisible(true); // Show the artist
+      setIsArtistGifVisible(false);
+      setIsReleaseDateGifVisible(false);
       setInputValue("");
     }
     else if (parsedInput && parsedInput[0] === jsonData.id) {
+      setContent(textAnswerRevealed);
       setIsAnswerVisible(true); // Show the answer slide
       setShowReleaseDate(true); // Show the release date
       setIsIncorrectAnswer(false); // Reset the incorrect answer state
@@ -182,12 +314,69 @@ const App = () => {
         setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
       }
       setInputValue("");
-    } else {
-      setIsIncorrectAnswer(true);
+      setIsArtistGifVisible(false);
+      setIsReleaseDateGifVisible(false);
+    }
+    else if (inputSimilarityArtist > 0.9) {
+      var revealedContent = content;
+      const words = formattedArtist.split(" ");
+      for (var i = 0; i < words.length; i++) {
+        const idx = wordInThing(words[i], textAnswerRevealed)
+        if (idx >= 0) {
+          var word = words[i];
+          for (var j = 0; j < word.length; j++) {
+            var revealedContent = setCharAt(revealedContent, idx + j, word[j]);
+          }
+          setContent(revealedContent);
+        }
+      }
+      setIsArtistVisible(true); // Show the artist
+      setIsArtistGifVisible(true); // Show the gif
+      setInputValue("");
+    }
+    else {
+      var revealedContent = content;
+      const words = inputValue.split(" ");
+      for (var i = 0; i < words.length; i++) {
+        var word = words[i];
+        var indices = getIndicesOf(word, textAnswerRevealed);
+        if (indices) {
+          for (var j = 0; j < indices.length; j++) {
+            for (var k = 0; k < word.length; k++) {
+              var revealedContent = setCharAt(revealedContent, indices[j] + k, word[k]);
+            }
+            setContent(revealedContent);
+          }
+        }
+      }
+      const formattedRevealedArtist = revealedContent.split(" - ")[0].toLowerCase()
+      const formattedRevealedTitle = revealedContent.split(" - ")[1].toLowerCase()
+
+      let contentSimilarityArtist = similarity(formattedArtist, formattedRevealedArtist);
+      let contentSimilarityTitle = similarity(formattedTitle, formattedRevealedTitle);
+
+      if (contentSimilarityTitle > 0.99) {
+        setContent(textAnswerRevealed);
+        setIsAnswerVisible(true); // Show the answer slide
+        setShowReleaseDate(true); // Show the release date
+        setIsIncorrectAnswer(false); // Reset the incorrect answer state
+        const storedDays = JSON.parse(localStorage.getItem('guessedDays')) || [];
+        if (!storedDays.includes(selectedIndex)) {
+          storedDays.push(selectedIndex);
+          localStorage.setItem('guessedDays', JSON.stringify(storedDays));
+          setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
+        }
+        setIsArtistGifVisible(false);
+        setIsReleaseDateGifVisible(false);
+      }
+      else if (contentSimilarityArtist > 0.99) {
+        setIsArtistVisible(true); // Show the artist
+        setIsArtistGifVisible(true); // Show the gif
+      }
       setInputKey((prevKey) => prevKey + 1); // Update the key to trigger re-render
       setInputValue("");
-      // Add shake animation or display an error message for wrong answer
     }
+    // console.log(content);
   };
 
   useEffect(() => {
@@ -196,29 +385,58 @@ const App = () => {
     }
   }, [isAnswerVisible]);
 
-  const TextBox = () => {
+  const TextBox = ({ content }) => {
+
+    const textBoxParentStyles = {
+      width: "100%",
+      marginTop: "0.5vh",
+      marginBottom: "0.2vh",
+      // height: "50px",
+      justifyContent: "center",
+      textAlign: "center",
+      display: "flex",
+      alignItems: "center",
+      // marginLeft: "20px"
+
+    }
 
     const textBoxStyles = {
-      display: "flex",
+      // display: "flex",
       flexDirection: "row",
-      justifyContent: "center",
-      alignItems: "center",
+      // justifyContent: "center",
+      // alignItems: "center",
       textAlign: "center",
-      marginTop: "40px",
-      fontSize: "16px",
+      marginTop: "3vh",
+      // marginBottom: "10px",
+      // marginBottom: "calc(5% - 3vw)",
+      padding: "3px",
+      // transform: "translateY(-70%)",
+      // top: "50%",
+      // maxHeight: "15px",
+      fontSize: "min(4vw, 35px)",
+      position: "relative",
+
     };
 
     if (!jsonData) {
       return null; // Return null if jsonData is not yet loaded
     }
-
-    const textBoxContent = isAnswerVisible
-      ? `${jsonData.artist} - ${jsonData.title}`
-      : isArtistVisible
-        ? `${jsonData.artist} - ${jsonData.title.replace(/\S/g, '?')}`
-        : `${jsonData.artist.replace(/\S/g, '?')} - ${jsonData.title.replace(/\S/g, '?')}`;
-
-    return <div style={textBoxStyles}>{textBoxContent}</div>;
+    return <div className="parent" style={textBoxParentStyles}>
+      <p style={textBoxStyles}>{content}</p>
+    </div>;
+    // return <div className="parent" style={textBoxParentStyles}>
+    //   <ScaleText style={{ alignItems: "center", justifyContent: "center", display: "flex", textAlign: "center", right: "50%" }}>
+    //     <p style={textBoxStyles} className="child">{content}</p>
+    //   </ScaleText>
+    // </div>;
+    // return <div className="parent" style={textBoxParentStyles}>
+    //   <div id="my-content">{content}</div>
+    //   <script src="fitty.min.js"></script>
+    //   <script>
+    //     fitty('#my-content', minSize=20, maxSize=200)
+    //   </script>
+    // </div>
+    // return <div style={textBoxStyles}>{content}</div>;
   };
 
   // useEffect(() => {
@@ -239,7 +457,8 @@ const App = () => {
     borderRadius: "5px",
     // display: "flex",
     padding: "24px",
-    position: "relative",
+    position: "fixed",
+    overflowY: "scroll",
     flexDirection: "column",
     alignItems: "center",
     minHeight: "100vh",
@@ -255,13 +474,14 @@ const App = () => {
     height: "80%",
     // margin: "0 auto",
     position: "relative",
-    transform: isImageVisible ? 'scale(0.8)  translate(-2%, -20%)' : 'none', // Shrink the container when the answer is correct 
+    transform: isImageVisible ? 'scale(0.8)  translate(-2vw, -20%)' : 'none', // Shrink the container when the answer is correct 
     transition: 'transform 0.3s ease', // Add a smooth transition effect
   };
 
   const defaultImgStyles = {
 
     // bottom: "10px",
+    top: "50%",
     width: "80%",
     height: "80%",
     margin: "0 auto",
@@ -272,16 +492,16 @@ const App = () => {
 
   const headerContainerStyles = {
     position: "relative",
-    marginBottom: "10%",
+    marginBottom: "10px",
   };
 
   const headerStyles = {
     fontFamily: "CustomFont",
-    fontSize: "32px",
+    fontSize: "7.5vmin",
     fontWeight: "bold",
     color: "black",
     marginTop: "-2px",
-    marginBottom: "top",
+    marginBottom: "2vmax",
     textAlign: "center",
     '@media (maxWidth: 768px)': {
       fontSize: "24px",
@@ -290,39 +510,62 @@ const App = () => {
 
   const subHeaderStyles = {
     fontFamily: "CustomFont",
-    fontSize: "18px",
+    fontSize: "5vmin",
     fontWeight: "bold",
     color: "black",
     order: "-1",
-    marginTop: "-5px",
-    marginBottom: "top",
+    marginTop: "-1vh",
+    marginBottom: "2vmax",
     textAlign: "center",
     '@media (maxWidth: 768px)': {
       fontSize: "24px",
     },
   };
 
+  const spotifyLinkStyles = {
+    transition: 'opacity 0.5s, transform 0.5s',
+    opacity: isAnswerVisible ? '1' : '0',
+    transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
+    marginTop: "2vh",
+    // marginBottom: "2vmax",
+    height: "5vmin",
+    width: "5vmin",
+    position: "absolute",
+    top: "30px",
+    left: "65%",
+    // transform: "translate(0%, -50%)",
+    animation: "spin 4s linear infinite",
+  }
+
+
   const releaseDateStyles = {
     fontFamily: "CustomFont2",
-    fontSize: "12px",
+    fontSize: "min(3vmin, 30px)",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom: "3vw",
+    marginTop: "0.5vw",
+    // position: "relative"
+    // maxBottom: "1000px",
   };
 
   const answerContainerStyles = {
     transition: 'opacity 0.5s, transform 0.5s',
     opacity: isAnswerVisible ? '1' : '0',
     transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
-    width: "35vh",
-    height: "22vh",
+    width: "60vmin",
+    height: "40vmin",
+    maxWidth: "500px",
+    maxHeight: "340px",
     margin: "0 auto",
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
     backgroundPosition: "center",
-    right: "calc(-30%)",
-    bottom: "8vh",
+    right: "-30vmin",
+    bottom: "26vw",
+    // marginBottom: "200px",
   }
 
   const anwserStyles = {
@@ -340,95 +583,81 @@ const App = () => {
   };
 
   const plusStyles = {
-    position: "absolute",
-    top: "50%",
-    right: "20px", // Adjust as needed
-    fontSize: "45px",
+    position: "fixed",
+    top: "9%",
+    right: "40px", // Adjust as needed
+    fontSize: "10vw",
     color: isPlusGreyedOut ? "#606060" : "#181818",
     zIndex: 1,
     cursor: "pointer",
-    transform: "translateY(-50%)", // Center vertically
+    transform: "translateY(-10%)", // Center vertically
   };
 
   const minusStyles = {
-    position: "absolute",
-    top: "50%",
-    left: "20px", // Adjust as needed
-    fontSize: "45px",
-    color: "#181818",
+    position: "fixed",
+    top: "9%",
+    left: "40px", // Adjust as needed
+    fontSize: "10vw",
+    color: isMinusGreyedOut ? "#606060" : "#181818",
     zIndex: 1,
     cursor: "pointer",
-    transform: "translateY(-50%)", // Center vertically
-  };
-
-  const inputContainerStyles = {
-    width: "100%",
-    // maxWidth: "900px",
-    height: "100%",
-    // display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: "80px",
-    marginLeft: "-5px",
-    animation: isAnswerVisible ? 'none' : 'shake 0.4s ease-in-out',
-  };
-
-  const inputStyles = {
-    width: "65%",
-    height: "2%",
-    padding: "10px",
-    fontSize: "70%",
-    border: "3px solid #e66439",
-    borderRadius: "5px",
-    position: "fixed",
-    bottom: "5vh",
-    // overflow: "hidden",
-    fontFamily: "CustomFont2",
-    animation: isIncorrectAnswer ? 'shake 0.4s ease-in-out' : 'none',
-    alignItems: "center",
-    justifyContent: "center",
+    transform: "translateY(-10%)", // Center vertically
   };
 
   const bottomContainerStyles = {
     position: "fixed",
-    display: "flex",
-    bottom: "10px",
+    width: "100%",
+    bottom: "calc(10vh - 80px)",
     height: "140px", // Adjust the height as needed
+    left: "0%",
+    display: "flex",
     justifyContent: "center",
     alignItems: "center",
   };
 
+  const inputContainerStyles = {
+    width: "100%",
+    height: "100%",
+    position: "relative",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+  };
+
+  const inputStyles = {
+    width: "65vw",
+    height: "5%",
+    padding: "1vmin",
+    fontSize: "3vmin",
+    border: "1vmin solid #e66439",
+    borderRadius: "5px",
+    position: "relative",
+    fontFamily: "CustomFont2",
+    animation: isIncorrectAnswer ? "shake 0.4s ease-in-out" : "none",
+  };
+
   const enterButtonStyles = {
-    marginLeft: "50px",
-    float: "left",
-    // display: "flex",
-    padding: "3%",
-    fontSize: "20px",
+    height: "7%",
+    width: "10%",
+    padding: "2vmin",
+    fontSize: "3vmin",
     background: "#e66439",
     color: "white",
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
     fontFamily: "CustomFont2",
-    position: "fixed",
-    left: "68%",
-    bottom: "5vh",
-    alignItems: "bottom",
-    justifyContent: "bottom",
-  };
-
-  const shakeAnimationStyles = {
-    // animation: "shake 0.5s",
-    animation: isIncorrectAnswer ? 'shake 0.4s ease-in-out' : 'none',
+    position: "relative",
+    marginLeft: "1vmin",
   };
 
   const progressMessageStyles = {
     fontFamily: "CustomFont2",
-    fontSize: "16px",
+    fontSize: "3vmin",
     fontWeight: "bold",
     color: "black",
-    marginTop: "-2px",
-    top: "1%",
+    marginTop: "-3px",
+    top: "1.5%",
     right: "2%",
     display: "flex",
     justifyContent: "center",
@@ -461,46 +690,92 @@ const App = () => {
   // };
 
   const gifStyles = {
-    transition: 'opacity 0.5s, transform 0.5s',
-    opacity: isAnswerVisible ? '0.3' : '0',
-    transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
-    border: "0.01px solid #deb7db",
-    borderRadius: "20%",
-    width: "100px",
+    transition: 'opacity 0.3s, transform 0.5s',
+    opacity: isDayGuessedCorrectly(selectedIndex) ? '0.6' : '0',
+    transform: isDayGuessedCorrectly(selectedIndex) ? 'scale(1)' : 'scale(0.1)',
+    border: "none",
+    width: "15vmax",
     height: "200px",
-    top: "65%",
-    left: "10%",
+    top: "60vh",
+    left: "6vw",
     position: "absolute",
-    // frameBorder: "0",
   }
 
-  const spotifyLinkStyles = {
+  const gif2styles = {
+    transition: 'opacity 0.3s, transform 0.5s',
+    opacity: isArtistGifVisible ? '0.6' : '0',
+    transform: isArtistGifVisible ? 'scale(1)' : 'scale(0.1)',
+    border: "none",
+    width: "15vmax",
+    height: "200px",
+    top: "65vh",
+    left: "6vw",
+    position: "absolute",
+  }
+
+  const gif3styles = {
+    transition: 'opacity 0.3s, transform 0.5s',
+    opacity: isReleaseDateGifVisible ? '0.6' : '0',
+    transform: isReleaseDateGifVisible ? 'scale(1)' : 'scale(0.1)',
+    border: "none",
+    width: "15vmax",
+    height: "120px",
+    top: "70vh",
+    right: "6vw",
+    position: "absolute",
+  }
+
+  const revealButtonStyles = {
+    fontFamily: "CustomFont2",
+    fontSize: "3vmin",
+    top: "-15px",
+    left: "-15px",
+    position: "absolute",
+  }
+
+  const handleInputChange = (event) => {
+    setInputValue(event.target.value);
+  };
+
+  const spotifyLogoStyles = {
     transition: 'opacity 0.5s, transform 0.5s',
     opacity: isAnswerVisible ? '1' : '0',
     transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
-    height: "30px",
-    width: "30px",
-    position: "absolute",
-    // top: "1.5%",
-    // left: "5%",
-    top: "90%",
-    left: "80%",
-    animation: "spin 4s linear infinite",
+    // marginTop: "2vh",
+    // marginBottom: "2vmax",
+    height: "5vmin",
+    width: "5vmin",
+    position: "fixed",
+    zIndex: 16777271,
+    // top: "30px",
+    // left: "65%",
+    // transform: "translate(0%, -50%)",
+    animation: "spin 5000ms linear infinite, y 30s linear infinite alternate, x 12s linear infinite alternate",
   }
 
   return (
     <div style={containerStyles}>
+      <div>
+        <a href={spotifyLink} target="_blank" rel="noopener noreferrer">
+          <img style={spotifyLogoStyles} src="https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/8554553e351ae8c.png" alt="Spotify logo"></img>
+        </a>
+      </div>
       <Router>
         <div>
           <div style={headerContainerStyles} >
             <h1 style={headerStyles}>Recordle</h1>
+            <div style={minusStyles} onClick={() => handleDayChange(-1)}>{'-'}</div>
+            <div style={plusStyles} onClick={() => handleDayChange(1)}>{'+'}</div>
             <h2 style={subHeaderStyles}>Day {selectedIndex}</h2>
-            <div>
-              <div style={minusStyles} onClick={() => handleDayChange(-1)}>{'-'}</div>
-              <div style={plusStyles} onClick={() => handleDayChange(1)}>{'+'}</div>
-            </div>
+            <button
+              style={revealButtonStyles}
+              onClick={handleRevealClick}
+              disabled={selectedIndex === day || isAnswerVisible}
+            >
+              Reveal
+            </button>
             {/* <h3 style={subHeaderStyles}>Guess the song</h3> */}
-            <TextBox />
+            <TextBox content={content} />
             {jsonData && (
               <p
                 style={releaseDateStyles}
@@ -509,9 +784,9 @@ const App = () => {
                 Year of release: {showReleaseDate ? jsonData.release_date.substring(0, 4) : "????"}
               </p>
             )}
-            <a href={spotifyLink} target="_blank" rel="noopener noreferrer">
+            {/* <a href={spotifyLink} target="_blank" rel="noopener noreferrer">
               <img style={spotifyLinkStyles} src="https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/8554553e351ae8c.png" alt="Spotify link"></img>
-            </a>
+            </a> */}
             {/* {showClueMessage && (
               <div style={pulsatingMessageStyles}>
                 <span>Click me for a clue!</span>
@@ -536,22 +811,26 @@ const App = () => {
             )}
           </div>
           <iframe src="https://giphy.com/embed/4oMoIbIQrvCjm" style={gifStyles} class="gifyEmbed"></iframe><p><a href="https://giphy.com/gifs/the-simpsons-bart-simpson-4oMoIbIQrvCjm"></a></p>
+          <iframe src="https://giphy.com/embed/DpPUDW4XTw4EM" style={gif2styles} class="giphyEmbed"></iframe><p><a href="https://giphy.com/gifs/reaction-a5viI92PAF89q"></a></p>
+          <iframe src="https://giphy.com/embed/a5viI92PAF89q" style={gif3styles} class="giphy-embed"></iframe><p><a href="https://giphy.com/gifs/lol-futurama-humor-cFgb5p5e1My3K"></a></p>
           <div>  <p style={progressMessageStyles}>{progressMessage}</p></div>
           <div style={bottomContainerStyles}>
             <form onSubmit={handleSubmit}>
-              <div id="input-container" style={{ ...inputContainerStyles, ...(isAnswerVisible ? {} : shakeAnimationStyles) }}>
-
+              <div id="input-container" style={inputContainerStyles}>
                 <input
+                  // disabled={isPreviousDay(selectedIndex, day)}
+                  disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)}
                   key={inputKey}
+                  class='form-control'
                   type="text"
                   value={inputValue}
                   onChange={handleInputChange}
                   style={inputStyles}
-                  placeholder="Enter album title / Spotify ID"
+                  placeholder="Enter album title/id OR artist"
                   autoFocus
                 />
-                <button type="submit" style={enterButtonStyles}>Go</button>
-
+                {/* <button disabled={isPreviousDay(selectedIndex, day)} type="submit" style={enterButtonStyles}>Go</button> */}
+                <button disabled={isDayGuessedCorrectly(selectedIndex)} type="submit" style={enterButtonStyles}>Go</button>
               </div>
             </form>
           </div>
