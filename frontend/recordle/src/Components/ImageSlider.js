@@ -23,7 +23,7 @@ const rightArrowStyles = {
     bottom: "45%",
     // right: "5vw",
     transform: isImageVisible ? 'translate(80vw,0)' : "translate(38vmin, 0)", // Shrink the container when the answer is correct
-    // right: "4vmin",
+    // right: isImageVisible ? "200px" : "250px",
     fontSize: "12vmin",
     color: "#181818",
     cursor: "pointer",
