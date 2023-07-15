@@ -6,7 +6,10 @@ import ImageSlider from "./Components/ImageSlider";
 import vinyl from './Images/vinyl.png';
 import './fonts.css';
 import './index.css';
+import Blink from 'react-blink-text';
 
+// import { text } from '@fortawesome/fontawesome-svg-core';
+// import styled, { keyframes } from 'styled-components';
 // TO DO 
 // Link to my GitHub
 // could have a message like - close! if the simiarity score is high, or close enough if its over the threshold etc.
@@ -27,7 +30,7 @@ const scrollToTop = () => {
 
 function getIndicesOf(searchStr, str, caseSensitive) {
   var searchStrLen = searchStr.length;
-  if (searchStrLen == 0) {
+  if (searchStrLen === 0) {
     return [];
   }
   var startIndex = 0, index, indices = [];
@@ -127,14 +130,14 @@ const App = () => {
     return revealedDays.includes(day);
   };
 
-  const isPreviousDay = (selectedIndex, day) => {
-    return selectedIndex !== day;
-  };
+  // const isPreviousDay = (selectedIndex, day) => {
+  //   return selectedIndex !== day;
+  // };
   const [showReleaseDate, setShowReleaseDate] = useState(isDayGuessedCorrectly(selectedIndex));
   const [isAnswerVisible, setIsAnswerVisible] = useState(isDayGuessedCorrectly(selectedIndex));
 
   const [progressMessage, setProgressMessage] = useState(`${storedDays.length} / ${day}`);
-  const [isArtistVisible, setIsArtistVisible] = useState(false);
+  // const [isArtistVisible, setIsArtistVisible] = useState(false);
   const [isArtistGifVisible, setIsArtistGifVisible] = useState(false);
   const [isReleaseDateGifVisible, setIsReleaseDateGifVisible] = useState(false);
   var [content, setContent] = useState("");
@@ -254,7 +257,7 @@ const App = () => {
       // setIsAnswerVisible(true); // Show the answer slide
     }
     setIsArtistGifVisible(false);
-    setIsArtistVisible(false);
+    // setIsArtistVisible(false);
     setIsReleaseDateGifVisible(false);
     // if (newIndex === day) {
     //   // console.log("hellooooo")
@@ -367,7 +370,7 @@ const App = () => {
           setContent(revealedContent);
         }
       }
-      setIsArtistVisible(true); // Show the artist
+      // setIsArtistVisible(true); // Show the artist
       setIsArtistGifVisible(true); // Show the gif
       setInputValue("");
     }
@@ -408,7 +411,7 @@ const App = () => {
         setIsReleaseDateGifVisible(false);
       }
       else if (contentSimilarityArtist > 0.99) {
-        setIsArtistVisible(true); // Show the artist
+        // setIsArtistVisible(true); // Show the artist
         setIsArtistGifVisible(true); // Show the gif
       }
       setInputKey((prevKey) => prevKey + 1); // Update the key to trigger re-render
@@ -691,9 +694,9 @@ const App = () => {
 
   const progressMessageStyles = {
     fontFamily: "CustomFont2",
-    fontSize: "3vmin",
-    fontWeight: "bold",
-    color: "black",
+    fontSize: "4vmin",
+    // fontWeight: "bold",
+    color: "#87469B",
     marginTop: "-3px",
     top: "1.5%",
     right: "2%",
@@ -772,12 +775,12 @@ const App = () => {
   // }
 
   const attemptsStyles = {
+    animation: "blink .75s linear infinite",
     fontFamily: "CustomFont2",
     fontSize: "3vmin",
     top: "-15px",
     left: "-15px",
     position: "absolute",
-    animation: isAnswerVisible ? "blinker .75s linear infinite" : null,
     // animation: `${blinkingEffect} 1s linear infinite;`
   }
 
@@ -791,8 +794,8 @@ const App = () => {
     transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
     // marginTop: "2vh",
     // marginBottom: "2vmax",
-    height: "5vmin",
-    width: "5vmin",
+    height: "10vmin",
+    width: "10vmin",
     position: "fixed",
     zIndex: 16777271,
     // top: "30px",
@@ -823,7 +826,9 @@ const App = () => {
               Reveal
             </button> */}
             <div style={attemptsStyles}>
-              {!isAnswerVisible ? `tries: ${attempts}` : isCorrectAnswer ? handleAttempts(attempts) : ""}
+              <Blink fontSize="4vmin" color="#87469B" blinkTime={isCorrectAnswer ? 1 : 0}
+                text={!isAnswerVisible ? `tries: ${attempts}` : isCorrectAnswer ? handleAttempts(attempts) : ""}>
+              </Blink>
             </div>
             {/* <h3 style={subHeaderStyles}>Guess the song</h3> */}
             <TextBox content={content} />
