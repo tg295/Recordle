@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import ScaleText from "react-scale-text";
+// import ScaleText from "react-scale-text";
 import { BrowserRouter as Router } from 'react-router-dom';
 import Footer from "./Components/Footer";
 import ImageSlider from "./Components/ImageSlider";
