@@ -6,7 +6,6 @@ import ImageSlider from "./Components/ImageSlider";
 import vinyl from './Images/vinyl.png';
 import './fonts.css';
 import './index.css';
-import { text } from '@fortawesome/fontawesome-svg-core';
 
 // TO DO 
 // Link to my GitHub
@@ -21,6 +20,10 @@ import { text } from '@fortawesome/fontawesome-svg-core';
 //   await delay(8000);
 //   console.log("Waited 5s");
 // };
+
+const scrollToTop = () => {
+  window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+};
 
 function getIndicesOf(searchStr, str, caseSensitive) {
   var searchStrLen = searchStr.length;
@@ -99,6 +102,7 @@ const App = () => {
 
   // const [showClueMessage, setShowClueMessage] = useState(true);
   // const [isLoading, setIsLoading] = useState(false);
+  const [attempts, setAttempts] = useState(0);
   const [textData, setTextData] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(day);
   const [slides, setSlides] = useState([]);
@@ -107,6 +111,7 @@ const App = () => {
   const [jsonData, setJsonData] = useState(null);
   const [inputValue, setInputValue] = useState("");
   const [inputKey, setInputKey] = useState(0);
+  const [isCorrectAnswer, setIsCorrectAnswer] = useState(false);
   const [isIncorrectAnswer, setIsIncorrectAnswer] = useState(false);
   const [isImageVisible, setIsImageVisible] = useState(false);
   const [isPlusGreyedOut, setIsPlusGreyedOut] = useState(selectedIndex === day);
@@ -157,8 +162,8 @@ const App = () => {
         if (textData.length > 0) {
           const albumId = textData[selectedIndex];
           const url = `${process.env.REACT_APP_BASE_URL}/data/${albumId}.json`;
-          // const response = await fetch(url);
-          const response = await fetch(url, { cache: "no-store" });
+          const response = await fetch(url);
+          // const response = await fetch(url, { cache: "no-store" });
           const jsonData = await response.json();
           const newSlides = [
             { url: `${process.env.REACT_APP_BASE_URL}/img/${jsonData.id}_${jsonData.formatted_title}_GEN_0.png`, title: "clue1" },
@@ -232,6 +237,8 @@ const App = () => {
   };
 
   const handleDayChange = (increment) => {
+    setAttempts(0);
+    setIsCorrectAnswer(false);
     // setIsLoading(true);
     // console.log(isLoading);
     const newIndex = selectedIndex + increment;
@@ -277,8 +284,36 @@ const App = () => {
   //     ? `${jsonData.artist} - ${jsonData.title.replace(/\S/g, '_')}`
   //     : `${jsonData.artist.replace(/\S/g, '_')} - ${jsonData.title.replace(/\S/g, '_')}`
 
+  const handleAttempts = (attempts) => {
+    if (attempts === 1) {
+      return "hole in one";
+    }
+    else if (attempts === 2) {
+      return "eagle";
+    }
+    else if (attempts === 3) {
+      return "birdie";
+    }
+    else if (attempts === 4) {
+      return "par";
+    }
+    else if (attempts === 5) {
+      return "bogey";
+    }
+    else if (attempts === 6) {
+      return "double bogey";
+    }
+    else if (attempts === 7) {
+      return "triple bogey";
+    }
+    else {
+      return `done in ${attempts} ...`;
+    }
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    setAttempts(attempts + 1);
     let textAnswerRevealed = `${jsonData.artist} - ${jsonData.title}`;
     let formattedTitle = answer.formatted_title.toLowerCase().replace(/_/g, " ");
     let formattedArtist = answer.artist.toLowerCase().replace(/_/g, " ");
@@ -301,6 +336,7 @@ const App = () => {
       setIsArtistGifVisible(false);
       setIsReleaseDateGifVisible(false);
       setInputValue("");
+      setIsCorrectAnswer(true);
     }
     else if (parsedInput && parsedInput[0] === jsonData.id) {
       setContent(textAnswerRevealed);
@@ -316,6 +352,7 @@ const App = () => {
       setInputValue("");
       setIsArtistGifVisible(false);
       setIsReleaseDateGifVisible(false);
+      setIsCorrectAnswer(true);
     }
     else if (inputSimilarityArtist > 0.9) {
       var revealedContent = content;
@@ -360,6 +397,7 @@ const App = () => {
         setIsAnswerVisible(true); // Show the answer slide
         setShowReleaseDate(true); // Show the release date
         setIsIncorrectAnswer(false); // Reset the incorrect answer state
+        setIsCorrectAnswer(true);
         const storedDays = JSON.parse(localStorage.getItem('guessedDays')) || [];
         if (!storedDays.includes(selectedIndex)) {
           storedDays.push(selectedIndex);
@@ -389,9 +427,9 @@ const App = () => {
 
     const textBoxParentStyles = {
       width: "100%",
-      marginTop: "0.5vh",
-      marginBottom: "0.2vh",
-      // height: "50px",
+      // marginTop: "0.1vh",
+      // marginBottom: "0.1vh",
+      height: "calc(60px - 2vw)",
       justifyContent: "center",
       textAlign: "center",
       display: "flex",
@@ -409,7 +447,7 @@ const App = () => {
       marginTop: "3vh",
       // marginBottom: "10px",
       // marginBottom: "calc(5% - 3vw)",
-      padding: "3px",
+      padding: "2px",
       // transform: "translateY(-70%)",
       // top: "50%",
       // maxHeight: "15px",
@@ -522,20 +560,20 @@ const App = () => {
     },
   };
 
-  const spotifyLinkStyles = {
-    transition: 'opacity 0.5s, transform 0.5s',
-    opacity: isAnswerVisible ? '1' : '0',
-    transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
-    marginTop: "2vh",
-    // marginBottom: "2vmax",
-    height: "5vmin",
-    width: "5vmin",
-    position: "absolute",
-    top: "30px",
-    left: "65%",
-    // transform: "translate(0%, -50%)",
-    animation: "spin 4s linear infinite",
-  }
+  // const spotifyLinkStyles = {
+  //   transition: 'opacity 0.5s, transform 0.5s',
+  //   opacity: isAnswerVisible ? '1' : '0',
+  //   transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
+  //   marginTop: "2vh",
+  //   // marginBottom: "2vmax",
+  //   height: "5vmin",
+  //   width: "5vmin",
+  //   position: "absolute",
+  //   top: "30px",
+  //   left: "65%",
+  //   // transform: "translate(0%, -50%)",
+  //   animation: "spin 4s linear infinite",
+  // }
 
 
   const releaseDateStyles = {
@@ -545,7 +583,7 @@ const App = () => {
     justifyContent: "center",
     alignItems: "center",
     marginBottom: "3vw",
-    marginTop: "0.5vw",
+    marginTop: "3vmin",
     // position: "relative"
     // maxBottom: "1000px",
   };
@@ -725,12 +763,22 @@ const App = () => {
     position: "absolute",
   }
 
-  const revealButtonStyles = {
+  // const revealButtonStyles = {
+  //   fontFamily: "CustomFont2",
+  //   fontSize: "3vmin",
+  //   top: "-15px",
+  //   left: "-15px",
+  //   position: "absolute",
+  // }
+
+  const attemptsStyles = {
     fontFamily: "CustomFont2",
     fontSize: "3vmin",
     top: "-15px",
     left: "-15px",
     position: "absolute",
+    animation: isAnswerVisible ? "blinker .75s linear infinite" : null,
+    // animation: `${blinkingEffect} 1s linear infinite;`
   }
 
   const handleInputChange = (event) => {
@@ -767,13 +815,16 @@ const App = () => {
             <div style={minusStyles} onClick={() => handleDayChange(-1)}>{'-'}</div>
             <div style={plusStyles} onClick={() => handleDayChange(1)}>{'+'}</div>
             <h2 style={subHeaderStyles}>Day {selectedIndex}</h2>
-            <button
+            {/* <button
               style={revealButtonStyles}
               onClick={handleRevealClick}
               disabled={selectedIndex === day || isAnswerVisible}
             >
               Reveal
-            </button>
+            </button> */}
+            <div style={attemptsStyles}>
+              {!isAnswerVisible ? `tries: ${attempts}` : isCorrectAnswer ? handleAttempts(attempts) : ""}
+            </div>
             {/* <h3 style={subHeaderStyles}>Guess the song</h3> */}
             <TextBox content={content} />
             {jsonData && (
@@ -830,7 +881,7 @@ const App = () => {
                   autoFocus
                 />
                 {/* <button disabled={isPreviousDay(selectedIndex, day)} type="submit" style={enterButtonStyles}>Go</button> */}
-                <button disabled={isDayGuessedCorrectly(selectedIndex)} type="submit" style={enterButtonStyles}>Go</button>
+                <button onClick={scrollToTop} disabled={isDayGuessedCorrectly(selectedIndex)} type="submit" style={enterButtonStyles}>Go</button>
               </div>
             </form>
           </div>
