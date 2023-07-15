@@ -555,7 +555,7 @@ const App = () => {
     opacity: isAnswerVisible ? '1' : '0',
     transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
     width: "60vmin",
-    height: "40vmin",
+    height: "39vmin",
     maxWidth: "500px",
     maxHeight: "340px",
     margin: "0 auto",

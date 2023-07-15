@@ -5,10 +5,10 @@ import isImageVisible from './../App.js';
 
 const slideStyles = {
     width: "70vmin",
-    maxWidth: "400px",
+    maxWidth: "550px",
     aspectRatio: "16/9",
     height: "70vmin",
-    maxHeight: "400px",
+    maxHeight: "550px",
     borderRadius: "5px",
     backgroundSize: "cover",
     backgroundPosition: "center",
@@ -21,20 +21,27 @@ const slideStyles = {
 const rightArrowStyles = {
     position: "absolute",
     bottom: "45%",
-    // right: "5vw",
-    transform: isImageVisible ? 'translate(80vw,0)' : "translate(38vmin, 0)", // Shrink the container when the answer is correct
+    // marginLeft: "38vw",
+    // maxLeft: "2vw",
+    transform: isImageVisible ? 'translate(35vw,0)' : "translate(37vmin, 0)", // Shrink the container when the answer is correct
     // right: isImageVisible ? "200px" : "250px",
     fontSize: "12vmin",
     color: "#181818",
     cursor: "pointer",
+    '@media (minWidth: 768px)': {
+        marginLeft: "17%"
+    },
 };
 
 const leftArrowStyles = {
     position: "absolute",
     bottom: "45%",
+    // right: "100vmin",
+    // marginLeft: "5vw",
     // left: "-46vmin"
-    transform: "translate(-47vmin, 0)",
+    transform: "translate(-45vmin, 0)",
     // left: "20px",
+    // marginLeft: "5vw",
     fontSize: "12vmin",
     color: "#181818",
     cursor: "pointer",
