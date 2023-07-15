@@ -118,9 +118,9 @@ const App = () => {
   const isDayGuessedCorrectly = (day) => {
     return storedDays.includes(day);
   };
-  // const isDayRevealed = (day) => {
-  //   return revealedDays.includes(day);
-  // };
+  const isDayRevealed = (day) => {
+    return revealedDays.includes(day);
+  };
 
   const isPreviousDay = (selectedIndex, day) => {
     return selectedIndex !== day;
@@ -171,19 +171,21 @@ const App = () => {
           setJsonData(jsonData);
           setSlides(newSlides);
           setAnswer(answer);
-          if (isDayGuessedCorrectly(selectedIndex)) {
+          if (isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)) {
             setContent(`${jsonData.artist} - ${jsonData.title}`)
+            setShowReleaseDate(true);
+            setIsAnswerVisible(true);
           }
           else {
             setContent(`${jsonData.artist.replace(/\S/g, '_')} - ${jsonData.title.replace(/\S/g, '_')}`);
+            setShowReleaseDate(false);
+            setIsAnswerVisible(false);
           }
           if (isPreviousDay(selectedIndex, day)) {
             setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
           } else {
             setSpotifyLink(null);
           }
-          setShowReleaseDate(isDayGuessedCorrectly(selectedIndex)); // Set showReleaseDate based on whether the day is correctly guessed
-          setIsAnswerVisible(isDayGuessedCorrectly(selectedIndex)); // Set isAnswerVisible based on whether the day is correctly guessed
           // if (isPreviousDay(selectedIndex, day)) {
           //   setShowReleaseDate(isPreviousDay(selectedIndex, day)); // Set showReleaseDate based on whether were on the latest day
           //   setIsAnswerVisible(isPreviousDay(selectedIndex, day)); // Set isAnswerVisible based on whether were on the latest day
@@ -209,6 +211,12 @@ const App = () => {
     setShowReleaseDate(true);
     setIsAnswerVisible(true);
     setIsImageVisible(true);
+    setContent(`${jsonData.artist} - ${jsonData.title}`)
+    const revealedDays = JSON.parse(localStorage.getItem('revealedDays')) || [];
+    if (!revealedDays.includes(selectedIndex)) {
+      revealedDays.push(selectedIndex);
+      localStorage.setItem('revealedDays', JSON.stringify(revealedDays));
+    }
 
   };
   const handleReleaseDateClick = () => {
@@ -792,7 +800,7 @@ const App = () => {
 
                 <input
                   // disabled={isPreviousDay(selectedIndex, day)}
-                  disabled={isDayGuessedCorrectly(selectedIndex)}
+                  disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)}
                   key={inputKey}
                   type="text"
                   value={inputValue}
