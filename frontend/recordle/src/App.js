@@ -175,17 +175,19 @@ const App = () => {
             setContent(`${jsonData.artist} - ${jsonData.title}`)
             setShowReleaseDate(true);
             setIsAnswerVisible(true);
+            setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
           }
           else {
             setContent(`${jsonData.artist.replace(/\S/g, '_')} - ${jsonData.title.replace(/\S/g, '_')}`);
             setShowReleaseDate(false);
             setIsAnswerVisible(false);
-          }
-          if (isPreviousDay(selectedIndex, day)) {
-            setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
-          } else {
             setSpotifyLink(null);
           }
+          // if (isPreviousDay(selectedIndex, day)) {
+          //   setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
+          // } else {
+          //   setSpotifyLink(null);
+          // }
           // if (isPreviousDay(selectedIndex, day)) {
           //   setShowReleaseDate(isPreviousDay(selectedIndex, day)); // Set showReleaseDate based on whether were on the latest day
           //   setIsAnswerVisible(isPreviousDay(selectedIndex, day)); // Set isAnswerVisible based on whether were on the latest day
@@ -374,6 +376,7 @@ const App = () => {
       setInputKey((prevKey) => prevKey + 1); // Update the key to trigger re-render
       setInputValue("");
     }
+    // console.log(content);
   };
 
   useEffect(() => {
@@ -385,8 +388,10 @@ const App = () => {
   const TextBox = ({ content }) => {
 
     const textBoxParentStyles = {
-      width: "100px",
-      height: "50px",
+      width: "100%",
+      marginTop: "0.5vh",
+      marginBottom: "0.2vh",
+      // height: "50px",
       justifyContent: "center",
       textAlign: "center",
       display: "flex",
@@ -401,14 +406,14 @@ const App = () => {
       // justifyContent: "center",
       // alignItems: "center",
       textAlign: "center",
-      marginTop: "25px",
-      marginBottom: "1px",
+      marginTop: "3vh",
+      // marginBottom: "10px",
       // marginBottom: "calc(5% - 3vw)",
-      padding: "5px",
+      padding: "3px",
       // transform: "translateY(-70%)",
       // top: "50%",
       // maxHeight: "15px",
-      // fontSize: "min(4vw, 35px)",
+      fontSize: "min(4vw, 35px)",
       position: "relative",
 
     };
@@ -416,23 +421,22 @@ const App = () => {
     if (!jsonData) {
       return null; // Return null if jsonData is not yet loaded
     }
-
-    // if (isAnswerVisible) {
-    //   setTextDisplayed(`${jsonData.artist} - ${jsonData.title}`);
-    // }
-    // else if (isArtistVisible) {
-    //   setTextDisplayed(`${jsonData.artist} - ${jsonData.title.replace(/\S/g, '_')}`);
-    // }
-    // else {
-    //   setTextDisplayed(`${jsonData.artist.replace(/\S/g, '_')} - ${jsonData.title.replace(/\S/g, '_')}`);
-    // }
-
+    return <div className="parent" style={textBoxParentStyles}>
+      <p style={textBoxStyles}>{content}</p>
+    </div>;
     // return <div className="parent" style={textBoxParentStyles}>
     //   <ScaleText style={{ alignItems: "center", justifyContent: "center", display: "flex", textAlign: "center", right: "50%" }}>
-    //     <p style={textBoxStyles} className="child">{textBoxContent}</p>
+    //     <p style={textBoxStyles} className="child">{content}</p>
     //   </ScaleText>
     // </div>;
-    return <div style={textBoxStyles}>{content}</div>;
+    // return <div className="parent" style={textBoxParentStyles}>
+    //   <div id="my-content">{content}</div>
+    //   <script src="fitty.min.js"></script>
+    //   <script>
+    //     fitty('#my-content', minSize=20, maxSize=200)
+    //   </script>
+    // </div>
+    // return <div style={textBoxStyles}>{content}</div>;
   };
 
   // useEffect(() => {
@@ -453,7 +457,7 @@ const App = () => {
     borderRadius: "5px",
     // display: "flex",
     padding: "24px",
-    position: "relative",
+    position: "fixed",
     overflowY: "scroll",
     flexDirection: "column",
     alignItems: "center",
@@ -470,13 +474,14 @@ const App = () => {
     height: "80%",
     // margin: "0 auto",
     position: "relative",
-    transform: isImageVisible ? 'scale(0.8)  translate(-2vw, -2vw)' : 'none', // Shrink the container when the answer is correct 
+    transform: isImageVisible ? 'scale(0.8)  translate(-2vw, -20%)' : 'none', // Shrink the container when the answer is correct 
     transition: 'transform 0.3s ease', // Add a smooth transition effect
   };
 
   const defaultImgStyles = {
 
     // bottom: "10px",
+    top: "50%",
     width: "80%",
     height: "80%",
     margin: "0 auto",
@@ -517,6 +522,22 @@ const App = () => {
     },
   };
 
+  const spotifyLinkStyles = {
+    transition: 'opacity 0.5s, transform 0.5s',
+    opacity: isAnswerVisible ? '1' : '0',
+    transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
+    marginTop: "2vh",
+    // marginBottom: "2vmax",
+    height: "5vmin",
+    width: "5vmin",
+    position: "absolute",
+    top: "30px",
+    left: "65%",
+    // transform: "translate(0%, -50%)",
+    animation: "spin 4s linear infinite",
+  }
+
+
   const releaseDateStyles = {
     fontFamily: "CustomFont2",
     fontSize: "min(3vmin, 30px)",
@@ -533,17 +554,18 @@ const App = () => {
     transition: 'opacity 0.5s, transform 0.5s',
     opacity: isAnswerVisible ? '1' : '0',
     transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
-    width: "55vmin",
-    height: "33vmin",
-    maxWidth: "400px",
-    maxHeight: "240px",
+    width: "60vmin",
+    height: "40vmin",
+    maxWidth: "500px",
+    maxHeight: "340px",
     margin: "0 auto",
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
     backgroundPosition: "center",
     right: "-30vmin",
-    bottom: "20vw",
+    bottom: "26vw",
+    // marginBottom: "200px",
   }
 
   const anwserStyles = {
@@ -561,93 +583,81 @@ const App = () => {
   };
 
   const plusStyles = {
-    position: "absolute",
-    top: "20%",
-    right: "10px", // Adjust as needed
+    position: "fixed",
+    top: "9%",
+    right: "40px", // Adjust as needed
     fontSize: "10vw",
     color: isPlusGreyedOut ? "#606060" : "#181818",
     zIndex: 1,
     cursor: "pointer",
-    transform: "translateY(-50%)", // Center vertically
+    transform: "translateY(-10%)", // Center vertically
   };
 
   const minusStyles = {
-    position: "absolute",
-    top: "20%",
-    left: "10px", // Adjust as needed
+    position: "fixed",
+    top: "9%",
+    left: "40px", // Adjust as needed
     fontSize: "10vw",
     color: isMinusGreyedOut ? "#606060" : "#181818",
     zIndex: 1,
     cursor: "pointer",
-    transform: "translateY(-50%)", // Center vertically
+    transform: "translateY(-10%)", // Center vertically
+  };
+
+  const bottomContainerStyles = {
+    position: "fixed",
+    width: "100%",
+    bottom: "calc(10vh - 80px)",
+    height: "140px", // Adjust the height as needed
+    left: "0%",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
   };
 
   const inputContainerStyles = {
     width: "100%",
-    // maxWidth: "900px",
     height: "100%",
-    // display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: "80px",
-    marginBottom: "5vh",
-    marginLeft: "-5px",
-  };
-
-  const bottomContainerStyles = {
-    position: "absolute",
-    // display: "flex",
-    width: "100%",
-    bottom: "5vh",
-    height: "140px", // Adjust the height as needed
+    position: "relative",
+    display: "flex",
     justifyContent: "center",
     alignItems: "center",
   };
 
   const inputStyles = {
     width: "65vw",
-    marginLeft: "5%",
-    height: "3vmin",
+    height: "5%",
     padding: "1vmin",
     fontSize: "3vmin",
     border: "1vmin solid #e66439",
     borderRadius: "5px",
-    position: "absolute",
-    bottom: "50px",
-    // overflow: "hidden",
+    position: "relative",
     fontFamily: "CustomFont2",
-    animation: isIncorrectAnswer ? 'shake 0.4s ease-in-out' : 'none',
-    // alignItems: "center",
-    // justifyContent: "center",
+    animation: isIncorrectAnswer ? "shake 0.4s ease-in-out" : "none",
   };
 
   const enterButtonStyles = {
-    // marginLeft: "0px",
-    // float: "left",
-    // display: "flex",
-    height: "8vmin",
-    padding: "1vmin",
-    fontSize: "5vmin",
+    height: "7%",
+    width: "10%",
+    padding: "2vmin",
+    fontSize: "3vmin",
     background: "#e66439",
     color: "white",
     border: "none",
     borderRadius: "5px",
     cursor: "pointer",
     fontFamily: "CustomFont2",
-    position: "absolute",
-    right: "-15px",
-    bottom: "5px",
-    // alignItems: "bottom",
-    // justifyContent: "bottom",
+    position: "relative",
+    marginLeft: "1vmin",
   };
 
   const progressMessageStyles = {
     fontFamily: "CustomFont2",
-    fontSize: "4vmin",
+    fontSize: "3vmin",
     fontWeight: "bold",
     color: "black",
-    marginTop: "-2px",
-    top: "1%",
+    marginTop: "-3px",
+    top: "1.5%",
     right: "2%",
     display: "flex",
     justifyContent: "center",
@@ -684,7 +694,7 @@ const App = () => {
     opacity: isDayGuessedCorrectly(selectedIndex) ? '0.6' : '0',
     transform: isDayGuessedCorrectly(selectedIndex) ? 'scale(1)' : 'scale(0.1)',
     border: "none",
-    width: "100px",
+    width: "15vmax",
     height: "200px",
     top: "60vh",
     left: "6vw",
@@ -696,7 +706,7 @@ const App = () => {
     opacity: isArtistGifVisible ? '0.6' : '0',
     transform: isArtistGifVisible ? 'scale(1)' : 'scale(0.1)',
     border: "none",
-    width: "100px",
+    width: "15vmax",
     height: "200px",
     top: "65vh",
     left: "6vw",
@@ -708,27 +718,16 @@ const App = () => {
     opacity: isReleaseDateGifVisible ? '0.6' : '0',
     transform: isReleaseDateGifVisible ? 'scale(1)' : 'scale(0.1)',
     border: "none",
-    width: "90px",
+    width: "15vmax",
     height: "120px",
     top: "70vh",
     right: "6vw",
     position: "absolute",
   }
 
-  const spotifyLinkStyles = {
-    transition: 'opacity 0.5s, transform 0.5s',
-    opacity: isAnswerVisible ? '1' : '0',
-    transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
-    height: "5vmin",
-    width: "5vmin",
-    position: "absolute",
-    top: "18vh",
-    left: "65vw",
-    animation: "spin 4s linear infinite",
-  }
-
   const revealButtonStyles = {
     fontFamily: "CustomFont2",
+    fontSize: "3vmin",
     top: "-15px",
     left: "-15px",
     position: "absolute",
@@ -738,8 +737,29 @@ const App = () => {
     setInputValue(event.target.value);
   };
 
+  const spotifyLogoStyles = {
+    transition: 'opacity 0.5s, transform 0.5s',
+    opacity: isAnswerVisible ? '1' : '0',
+    transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
+    // marginTop: "2vh",
+    // marginBottom: "2vmax",
+    height: "5vmin",
+    width: "5vmin",
+    position: "fixed",
+    zIndex: 16777271,
+    // top: "30px",
+    // left: "65%",
+    // transform: "translate(0%, -50%)",
+    animation: "spin 5000ms linear infinite, y 30s linear infinite alternate, x 12s linear infinite alternate",
+  }
+
   return (
     <div style={containerStyles}>
+      <div>
+        <a href={spotifyLink} target="_blank" rel="noopener noreferrer">
+          <img style={spotifyLogoStyles} src="https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/8554553e351ae8c.png" alt="Spotify logo"></img>
+        </a>
+      </div>
       <Router>
         <div>
           <div style={headerContainerStyles} >
@@ -764,9 +784,9 @@ const App = () => {
                 Year of release: {showReleaseDate ? jsonData.release_date.substring(0, 4) : "????"}
               </p>
             )}
-            <a href={spotifyLink} target="_blank" rel="noopener noreferrer">
+            {/* <a href={spotifyLink} target="_blank" rel="noopener noreferrer">
               <img style={spotifyLinkStyles} src="https://pixelartmaker-data-78746291193.nyc3.digitaloceanspaces.com/image/8554553e351ae8c.png" alt="Spotify link"></img>
-            </a>
+            </a> */}
             {/* {showClueMessage && (
               <div style={pulsatingMessageStyles}>
                 <span>Click me for a clue!</span>
@@ -797,11 +817,11 @@ const App = () => {
           <div style={bottomContainerStyles}>
             <form onSubmit={handleSubmit}>
               <div id="input-container" style={inputContainerStyles}>
-
                 <input
                   // disabled={isPreviousDay(selectedIndex, day)}
                   disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)}
                   key={inputKey}
+                  class='form-control'
                   type="text"
                   value={inputValue}
                   onChange={handleInputChange}
