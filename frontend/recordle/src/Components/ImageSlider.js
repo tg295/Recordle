@@ -1,10 +1,14 @@
 import { useState } from "react";
 import React from 'react';
+import isImageVisible from './../App.js';
+// import rightArrowStyles from './../App.js';
 
 const slideStyles = {
-    width: "70vw",
+    width: "70vmin",
+    maxWidth: "400px",
     aspectRatio: "16/9",
-    height: "70vw",
+    height: "70vmin",
+    maxHeight: "400px",
     borderRadius: "5px",
     backgroundSize: "cover",
     backgroundPosition: "center",
@@ -16,23 +20,23 @@ const slideStyles = {
 
 const rightArrowStyles = {
     position: "absolute",
-    top: "40%",
-    transform: "translate(180%, 0)",
-    right: "2%",
-    fontSize: "45px",
+    bottom: "45%",
+    // right: "5vw",
+    transform: isImageVisible ? 'translate(80vw,0)' : "translate(38vmin, 0)", // Shrink the container when the answer is correct
+    // right: "4vmin",
+    fontSize: "12vmin",
     color: "#181818",
-    zIndex: 1,
     cursor: "pointer",
 };
 
 const leftArrowStyles = {
     position: "absolute",
-    top: "40%",
-    transform: "translate(-180%, 0)",
+    bottom: "45%",
+    // left: "-46vmin"
+    transform: "translate(-47vmin, 0)",
     // left: "20px",
-    fontSize: "45px",
+    fontSize: "12vmin",
     color: "#181818",
-    zIndex: 1,
     cursor: "pointer",
 };
 
@@ -54,19 +58,6 @@ const sliderContainerStyles = {
     // objectFit: "cover",
 };
 
-// const dotsContainerStyles = {
-//     display: "flex",
-//     justifyContent: "center",
-//     position: "absolute",
-//     marginTop: "260px",
-// };
-
-// const dotStyle = {
-//     margin: "0 3px",
-//     cursor: "pointer",
-//     fontSize: "20px",
-// };
-
 const ImageSlider = ({ slides }) => {
     const [currentIndex, setCurrentIndex] = useState(0);
     const [isLoading, setIsLoading] = useState(false); // Added loading state
@@ -85,43 +76,14 @@ const ImageSlider = ({ slides }) => {
     const handleImageLoad = () => {
         setIsLoading(false);
     };
-    // const goToSlide = (slideIndex) => {
-    //     setCurrentIndex(slideIndex);
-    // };
-    // const slideStylesWidthBackground = {
-    //     ...slideStyles,
-    //     backgroundImage: `url(${slides[currentIndex].url})`,
-    // };
-
-    const calculateArrowLeftPosition = () => {
-        const screenWidth = window.innerWidth;
-        const maxContainerWidth = parseInt(slideStyles.width);
-        const maxArrowLeftPosition = (screenWidth - maxContainerWidth) / 2;
-
-        // Calculate arrow position based on the current container width
-        const currentContainerWidth = Math.min(maxContainerWidth, screenWidth);
-        const currentArrowLeftPosition = (screenWidth - currentContainerWidth) / 2;
-
-        // Scale the arrow position based on the maximum arrow left position
-        const scaledArrowLeftPosition =
-            (currentArrowLeftPosition / maxArrowLeftPosition) * 2;
-
-        // Adjust the scaling factor to control the speed of arrow movement
-        const adjustedArrowLeftPosition = scaledArrowLeftPosition * 0.001; // Adjust the factor (0.5) as per your preference
-
-        return `${adjustedArrowLeftPosition}%`;
-    };
-
-    const arrowLeftPosition = calculateArrowLeftPosition();
-
     return (
         <div style={sliderContainerStyles}>
             <div style={sliderStyles}>
                 <div>
-                    <div onClick={goToPrevious} style={{ ...leftArrowStyles, left: arrowLeftPosition }}>
+                    <div onClick={goToPrevious} style={{ ...leftArrowStyles }}>
                         {"<"}
                     </div>
-                    <div onClick={goToNext} style={{ ...rightArrowStyles, right: arrowLeftPosition }}>
+                    <div onClick={goToNext} style={{ ...rightArrowStyles }}>
                         {">"}
                     </div>
                 </div>
