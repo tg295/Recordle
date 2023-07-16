@@ -145,7 +145,7 @@ div {
 
 @keyframes y {
     100% {
-        transform: translateY(calc(200vh - 200px));
+        transform: translateY(calc(120vh - 100px));
     }
 }
 
