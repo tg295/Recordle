@@ -7,6 +7,8 @@ import vinyl from './Images/vinyl.png';
 import './fonts.css';
 import './index.css';
 import Blink from 'react-blink-text';
+import { ColorRing } from 'react-loader-spinner'
+
 
 // import { text } from '@fortawesome/fontawesome-svg-core';
 // import styled, { keyframes } from 'styled-components';
@@ -104,7 +106,7 @@ const App = () => {
   const day = Math.floor(diff / (1000 * 60 * 60 * 24));
 
   // const [showClueMessage, setShowClueMessage] = useState(true);
-  // const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [attempts, setAttempts] = useState(0);
   const [textData, setTextData] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(day);
@@ -145,10 +147,12 @@ const App = () => {
   useEffect(() => {
     const fetchTextData = async () => {
       try {
+        setIsLoading(true);
         const response = await fetch(`${process.env.REACT_APP_BASE_URL}/albums_filtered.txt`, { cache: "no-cache" });
         const data = await response.text();
         const dataArray = data.split('\n').filter(item => item.trim() !== '');
         setTextData(dataArray);
+        setIsLoading(false);
       } catch (error) {
         console.error('Error:', error);
       }
@@ -160,7 +164,7 @@ const App = () => {
   useEffect(() => {
     const fetchJsonData = async () => {
       try {
-        // setIsLoading(true);
+        setIsLoading(true);
         // console.log(isLoading);
         if (textData.length > 0) {
           const albumId = textData[selectedIndex];
@@ -207,7 +211,7 @@ const App = () => {
           setIsIncorrectAnswer(false); // Reset the incorrect answer state
           setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
         }
-        // setIsLoading(false);
+        setIsLoading(false);
         // console.log(isLoading);
       } catch (error) {
         console.error('Error:', error);
@@ -605,7 +609,7 @@ const App = () => {
     alignItems: "center",
     backgroundPosition: "center",
     right: "-30vmin",
-    bottom: "26vw",
+    bottom: "29vw",
     // marginBottom: "200px",
   }
 
@@ -667,7 +671,7 @@ const App = () => {
 
   const inputStyles = {
     width: "65vw",
-    height: "5%",
+    height: "3vh",
     padding: "1vmin",
     fontSize: "3vmin",
     border: "1vmin solid #e66439",
@@ -678,9 +682,9 @@ const App = () => {
   };
 
   const enterButtonStyles = {
-    height: "7%",
-    width: "10%",
-    padding: "2vmin",
+    height: "20%",
+    width: "10vmin",
+    padding: "3vmin",
     fontSize: "3vmin",
     background: "#e66439",
     color: "white",
@@ -749,7 +753,7 @@ const App = () => {
     border: "none",
     width: "15vmax",
     height: "200px",
-    top: "65vh",
+    top: "60vh",
     left: "6vw",
     position: "absolute",
   }
@@ -804,6 +808,17 @@ const App = () => {
     animation: "spin 5000ms linear infinite, y 30s linear infinite alternate, x 12s linear infinite alternate",
   }
 
+  const loadingStyles = {
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    position: "fixed",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1,
+  };
+
   return (
     <div style={containerStyles}>
       <div>
@@ -856,6 +871,17 @@ const App = () => {
             ) : (
               <p>Loading slides...</p>
             )}
+          </div>
+          <div style={loadingStyles}>
+            <ColorRing
+              visible={isLoading}
+              position="absolute"
+              height="100"
+              width="200"
+              ariaLabel="blocks-loading"
+              wrapperClass="blocks-wrapper"
+              colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
+            />
           </div>
           <div style={answerContainerStyles}>
             {answer && (
