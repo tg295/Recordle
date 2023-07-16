@@ -344,6 +344,8 @@ const App = () => {
       setIsReleaseDateGifVisible(false);
       setInputValue("");
       setIsCorrectAnswer(true);
+      setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
+
     }
     else if (parsedInput && parsedInput[0] === jsonData.id) {
       setContent(textAnswerRevealed);
@@ -360,6 +362,8 @@ const App = () => {
       setIsArtistGifVisible(false);
       setIsReleaseDateGifVisible(false);
       setIsCorrectAnswer(true);
+      setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
+
     }
     else if (inputSimilarityArtist > 0.9) {
       var revealedContent = content;
@@ -405,6 +409,7 @@ const App = () => {
         setShowReleaseDate(true); // Show the release date
         setIsIncorrectAnswer(false); // Reset the incorrect answer state
         setIsCorrectAnswer(true);
+        setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
         const storedDays = JSON.parse(localStorage.getItem('guessedDays')) || [];
         if (!storedDays.includes(selectedIndex)) {
           storedDays.push(selectedIndex);
