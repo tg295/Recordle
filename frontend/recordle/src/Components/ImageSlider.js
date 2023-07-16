@@ -1,7 +1,10 @@
 import { useState } from "react";
 import React from 'react';
 import isImageVisible from './../App.js';
+import { ColorRing } from 'react-loader-spinner'
+// import setIsLoading from './../App.js';
 // import rightArrowStyles from './../App.js';
+
 
 const slideStyles = {
     width: "70vmin",
@@ -65,16 +68,29 @@ const sliderContainerStyles = {
     // objectFit: "cover",
 };
 
+const loadingStyles = {
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    position: "fixed",
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1,
+};
+
 const ImageSlider = ({ slides }) => {
+    const [isLoading, setIsLoading] = useState(true);
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [isLoading, setIsLoading] = useState(false); // Added loading state
 
     const goToPrevious = () => {
+        setIsLoading(true);
         const isFirstSlide = currentIndex === 0;
         const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
         setCurrentIndex(newIndex);
     };
     const goToNext = () => {
+        setIsLoading(true);
         const isLastSlide = currentIndex === slides.length - 1;
         const newIndex = isLastSlide ? 0 : currentIndex + 1;
         setCurrentIndex(newIndex);
@@ -94,16 +110,23 @@ const ImageSlider = ({ slides }) => {
                         {">"}
                     </div>
                 </div>
-                {isLoading ? (
-                    <div style={slideStyles}>Loading...</div>
-                ) : (
-                    <img
-                        src={slides[currentIndex].url}
-                        style={{ ...slideStyles }}
-                        onLoad={handleImageLoad}
-                        alt="loading..."
+                <img
+                    src={slides[currentIndex].url}
+                    style={{ ...slideStyles }}
+                    onLoad={handleImageLoad}
+                    alt="loading..."
+                />
+                <div style={loadingStyles}>
+                    <ColorRing
+                        visible={isLoading}
+                        position="absolute"
+                        height="100"
+                        width="200"
+                        ariaLabel="blocks-loading"
+                        wrapperClass="blocks-wrapper"
+                        colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
                     />
-                )}
+                </div>
             </div>
         </div>
 
