@@ -8,6 +8,7 @@ import './fonts.css';
 import './index.css';
 import Blink from 'react-blink-text';
 import { ColorRing } from 'react-loader-spinner'
+import { text } from '@fortawesome/fontawesome-svg-core';
 
 
 // import { text } from '@fortawesome/fontawesome-svg-core';
@@ -25,6 +26,9 @@ import { ColorRing } from 'react-loader-spinner'
 //   await delay(8000);
 //   console.log("Waited 5s");
 // };
+
+const removeAccents = str =>
+  str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
 const scrollToTop = () => {
   window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
@@ -190,7 +194,7 @@ const App = () => {
             setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
           }
           else {
-            setContent(`${jsonData.artist.replace(/\S/g, '_')} - ${jsonData.title.replace(/\S/g, '_')}`);
+            setContent(`${jsonData.artist.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]/g, '_')} - ${jsonData.title.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]/g, '_')}`);
             setShowReleaseDate(false);
             setIsAnswerVisible(false);
             setSpotifyLink(null);
@@ -324,8 +328,8 @@ const App = () => {
     let textAnswerRevealed = `${jsonData.artist} - ${jsonData.title}`;
     let formattedTitle = answer.formatted_title.toLowerCase().replace(/_/g, " ");
     let formattedArtist = answer.artist.toLowerCase().replace(/_/g, " ");
-    let inputSimilarityTitle = similarity(formattedTitle, inputValue);
-    let inputSimilarityArtist = similarity(formattedArtist, inputValue);
+    let inputSimilarityTitle = similarity(removeAccents(formattedTitle), inputValue);
+    let inputSimilarityArtist = similarity(removeAccents(formattedArtist), inputValue);
     console.log(inputSimilarityTitle);
     const regex = /([a-zA-Z0-9]{22})/;
     let parsedInput = inputValue.match(regex);
@@ -369,7 +373,7 @@ const App = () => {
       var revealedContent = content;
       const words = formattedArtist.split(" ");
       for (var i = 0; i < words.length; i++) {
-        const idx = wordInThing(words[i], textAnswerRevealed)
+        const idx = wordInThing(words[i].toLowerCase(), textAnswerRevealed.toLowerCase())
         if (idx >= 0) {
           var word = words[i];
           for (var j = 0; j < word.length; j++) {
@@ -384,16 +388,25 @@ const App = () => {
     }
     else {
       var revealedContent = content;
-      const answerWords = textAnswerRevealed + " ";
+      // const answerWords = " " + textAnswerRevealed;
       const words = inputValue.split(" ");
       for (var i = 0; i < words.length; i++) {
-        var word = words[i] + " ";
-        var indices = getIndicesOf(word, answerWords);
+        var word = words[i].toLowerCase();
+        // const re = new RegExp(`/\b${word}\b/`);
+        const re = RegExp(`\\b${word}\\b`, 'g');
+        let allMatchItr = textAnswerRevealed.toLowerCase().matchAll(re);
+        var indices = [];
+        let m = null;
+        for (m of allMatchItr) {
+          indices.push(m.index);
+        }
+        // var indices = getIndicesOf(word, answerWords);
         if (indices) {
           for (var j = 0; j < indices.length; j++) {
             for (var k = 0; k < word.length; k++) {
               var revealedContent = setCharAt(revealedContent, indices[j] + k, word[k]);
             }
+
             setContent(revealedContent);
           }
         }
