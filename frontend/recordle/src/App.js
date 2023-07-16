@@ -404,7 +404,7 @@ const App = () => {
       let contentSimilarityArtist = similarity(formattedArtist, formattedRevealedArtist);
       let contentSimilarityTitle = similarity(formattedTitle, formattedRevealedTitle);
 
-      if (contentSimilarityTitle > 0.99) {
+      if (contentSimilarityTitle > 0.90) {
         setContent(textAnswerRevealed);
         setIsAnswerVisible(true); // Show the answer slide
         setShowReleaseDate(true); // Show the release date
