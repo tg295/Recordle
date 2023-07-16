@@ -384,10 +384,11 @@ const App = () => {
     }
     else {
       var revealedContent = content;
+      const answerWords = textAnswerRevealed + " ";
       const words = inputValue.split(" ");
       for (var i = 0; i < words.length; i++) {
-        var word = words[i];
-        var indices = getIndicesOf(word, textAnswerRevealed);
+        var word = words[i] + " ";
+        var indices = getIndicesOf(word, answerWords);
         if (indices) {
           for (var j = 0; j < indices.length; j++) {
             for (var k = 0; k < word.length; k++) {
