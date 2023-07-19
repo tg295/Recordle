@@ -148,7 +148,7 @@ def generate_covers(album_data, local, n=3):
     for x in range(n):
        url = replicate.run(
             MODEL,
-            input={"prompt": album_data['title']}
+            input={"prompt": album_data['title'], "negative_prompt":"typography, text, writing, titles"}
         )[0]
        r = requests.get(url)
 
