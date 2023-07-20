@@ -536,16 +536,18 @@ const App = () => {
     // bottom: "10px",
     width: "80%",
     height: "80%",
+    translate: "transformY(-100%)",
     // margin: "0 auto",
     position: "relative",
-    transform: isImageVisible ? 'scale(0.8)  translate(-2vw, -20%)' : 'none', // Shrink the container when the answer is correct 
+    bottom: "-1vh",
+    transform: isImageVisible ? 'scale(0.8)  translate(5vh, -15%)' : 'none', // Shrink the container when the answer is correct 
     transition: 'transform 0.3s ease', // Add a smooth transition effect
   };
 
   const defaultImgStyles = {
 
     // bottom: "10px",
-    top: "50%",
+    top: "20%",
     width: "80%",
     height: "80%",
     margin: "0 auto",
@@ -608,7 +610,7 @@ const App = () => {
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: "3vw",
+    marginBottom: "2vh",
     marginTop: "3vmin",
     // position: "relative"
     // maxBottom: "1000px",
@@ -617,18 +619,18 @@ const App = () => {
   const answerContainerStyles = {
     transition: 'opacity 0.5s, transform 0.5s',
     opacity: isAnswerVisible ? '1' : '0',
-    transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
-    width: "60vmin",
-    height: "39vmin",
-    maxWidth: "500px",
-    maxHeight: "340px",
+    transform: isAnswerVisible ? 'scale(1)' : 'scale(0.5)',
+    width: "60vw",
+    height: "35vw",
+    maxWidth: "550px",
+    maxHeight: "390px",
     margin: "0 auto",
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
     backgroundPosition: "center",
-    right: "-30vmin",
-    bottom: "29vw",
+    right: "calc(-13vw)",
+    bottom: "22vw",
     // marginBottom: "200px",
   }
 
@@ -673,7 +675,7 @@ const App = () => {
     width: "100%",
     bottom: "calc(10vh - 80px)",
     height: "140px", // Adjust the height as needed
-    left: "0%",
+    left: "3%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -692,7 +694,7 @@ const App = () => {
     width: "65vw",
     height: "3vh",
     padding: "1vmin",
-    fontSize: "3vmin",
+    fontSize: "2.5vmin",
     border: "1vmin solid #e66439",
     borderRadius: "5px",
     position: "relative",
@@ -927,7 +929,7 @@ const App = () => {
                   value={inputValue}
                   onChange={handleInputChange}
                   style={inputStyles}
-                  placeholder="Enter album title/id OR artist"
+                  placeholder="Enter album title/word/uri OR artist"
                   autoFocus
                 />
                 {/* <button disabled={isPreviousDay(selectedIndex, day)} type="submit" style={enterButtonStyles}>Go</button> */}
