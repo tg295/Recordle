@@ -534,21 +534,11 @@ const App = () => {
 
   const imgContainerStyles = {
     // bottom: "10px",
-<<<<<<< Updated upstream
-    width: "80%",
-    height: "80%",
-    translate: "transformY(-100%)",
-    // margin: "0 auto",
-    position: "relative",
-    bottom: "-1vh",
-    transform: isImageVisible ? 'scale(0.8)  translate(5vh, -15%)' : 'none', // Shrink the container when the answer is correct 
-=======
     width: "100%",
     height: "100%",
     // margin: "0 auto",
     position: "relative",
     transform: isImageVisible ? 'scale(0.8)  translate(-10vw, -20%)' : 'none', // Shrink the container when the answer is correct 
->>>>>>> Stashed changes
     transition: 'transform 0.3s ease', // Add a smooth transition effect
   };
 
@@ -618,13 +608,8 @@ const App = () => {
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
-<<<<<<< Updated upstream
-    marginBottom: "2vh",
-    marginTop: "3vmin",
-=======
     marginBottom: "3vw",
     marginTop: "4vmin",
->>>>>>> Stashed changes
     // position: "relative"
     // maxBottom: "1000px",
   };
@@ -632,31 +617,18 @@ const App = () => {
   const answerContainerStyles = {
     transition: 'opacity 0.5s, transform 0.5s',
     opacity: isAnswerVisible ? '1' : '0',
-<<<<<<< Updated upstream
-    transform: isAnswerVisible ? 'scale(1)' : 'scale(0.5)',
-    width: "60vw",
-    height: "35vw",
-    maxWidth: "550px",
-    maxHeight: "390px",
-=======
     transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
     width: "40vmin",
     height: "40vmin",
     // maxWidth: "550px",
     // maxHeight: "390px",
->>>>>>> Stashed changes
     margin: "0 auto",
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
     backgroundPosition: "center",
-<<<<<<< Updated upstream
-    right: "calc(-13vw)",
-    bottom: "22vw",
-=======
     right: "-13vw",
     bottom: "25vw",
->>>>>>> Stashed changes
     // marginBottom: "200px",
   }
 
