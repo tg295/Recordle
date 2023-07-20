@@ -538,7 +538,7 @@ const App = () => {
     height: "100%",
     // margin: "0 auto",
     position: "relative",
-    transform: isImageVisible ? 'scale(0.8)  translate(-10vw, -20%)' : 'none', // Shrink the container when the answer is correct 
+    transform: isImageVisible ? 'scale(0.8)  translate(-10vw, -15%)' : 'none', // Shrink the container when the answer is correct 
     transition: 'transform 0.3s ease', // Add a smooth transition effect
   };
 
@@ -608,7 +608,7 @@ const App = () => {
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: "3vw",
+    marginBottom: "3px",
     marginTop: "4vmin",
     // position: "relative"
     // maxBottom: "1000px",
@@ -628,7 +628,7 @@ const App = () => {
     alignItems: "center",
     backgroundPosition: "center",
     right: "-13vw",
-    bottom: "25vw",
+    bottom: "24vw",
     // marginBottom: "200px",
   }
 

@@ -8,10 +8,10 @@ import { ColorRing } from 'react-loader-spinner'
 
 const slideStyles = {
     width: "40vh",
-    maxWidth: "500px",
+    maxWidth: "900px",
     aspectRatio: "16/9",
     height: "40vh",
-    maxHeight: "500px",
+    maxHeight: "900px",
     borderRadius: "5px",
     backgroundSize: "cover",
     backgroundPosition: "center",
@@ -102,16 +102,17 @@ const ImageSlider = ({ slides }) => {
     return (
         <div style={sliderContainerStyles}>
             <div style={sliderStyles}>
-                <div>
+                {/* <div>
                     <div onClick={goToPrevious} style={{ ...leftArrowStyles }}>
                         {"<"}
                     </div>
                     <div onClick={goToNext} style={{ ...rightArrowStyles }}>
                         {">"}
                     </div>
-                </div>
+                </div> */}
                 <img
                     src={slides[currentIndex].url}
+                    onClick={goToNext}
                     style={{ ...slideStyles }}
                     onLoad={handleImageLoad}
                     alt="loading..."
