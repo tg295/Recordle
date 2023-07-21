@@ -538,7 +538,7 @@ const App = () => {
     height: "100%",
     // margin: "0 auto",
     position: "relative",
-    transform: isImageVisible ? 'scale(0.8)  translate(-10vw, -15%)' : 'none', // Shrink the container when the answer is correct 
+    transform: isImageVisible ? 'scale(0.85)  translate(-10vw, -6vh)' : 'none', // Shrink the container when the answer is correct 
     transition: 'transform 0.3s ease', // Add a smooth transition effect
   };
 
@@ -620,14 +620,14 @@ const App = () => {
     transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
     width: "40vmin",
     height: "40vmin",
-    // maxWidth: "550px",
-    // maxHeight: "390px",
+    maxWidth: "300px",
+    maxHeight: "300px",
     margin: "0 auto",
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
     backgroundPosition: "center",
-    right: "-13vw",
+    right: "-10vw",
     bottom: "24vw",
     // marginBottom: "200px",
   }
