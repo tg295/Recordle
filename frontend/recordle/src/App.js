@@ -924,7 +924,7 @@ const App = () => {
               Reveal
             </button> */}
             <div style={attemptsStyles}>
-              <Blink fontSize="4vmin" color="#b62c2c" blinkTime={isCorrectAnswer ? 1 : 0}
+              <Blink fontSize="3.5vmin" color="#b62c2c" blinkTime={isCorrectAnswer ? 1 : 0}
                 text={!isAnswerVisible ? `${loadLives(lives)}` : isCorrectAnswer ? loadLives(lives) : ""}>
               </Blink>
             </div>
