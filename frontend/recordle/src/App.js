@@ -258,25 +258,25 @@ const App = () => {
   };
 
   const handleDayChange = (increment) => {
-    if (attempts === 0) {
-      setLives(5);
-      setAttempts(0);
-      setIsCorrectAnswer(false);
-      // setIsLoading(true);
-      // console.log(isLoading);
-      const newIndex = selectedIndex + increment;
-      // console.log(newIndex);
-      // console.log(day);
-      if (newIndex >= 0 && newIndex < textData.length) {
-        setSelectedIndex(newIndex);
-        // setShowReleaseDate(true);
-        setIsPlusGreyedOut(newIndex === day); // Update the isPlusGreyedOut state based on the selectedIndex
-        setIsMinusGreyedOut(newIndex === 0); // Update the isMinusGreyedOut state based on the selectedIndex
-        // setIsArtistGifVisible(false);
-        // setIsReleaseDateGifVisible(false);
-        // setIsAnswerVisible(true); // Show the answer slide
-      }
+    // if (attempts === 0) {
+    setLives(5);
+    setAttempts(0);
+    setIsCorrectAnswer(false);
+    // setIsLoading(true);
+    // console.log(isLoading);
+    const newIndex = selectedIndex + increment;
+    // console.log(newIndex);
+    // console.log(day);
+    if (newIndex >= 0 && newIndex < textData.length) {
+      setSelectedIndex(newIndex);
+      // setShowReleaseDate(true);
+      setIsPlusGreyedOut(newIndex === day); // Update the isPlusGreyedOut state based on the selectedIndex
+      setIsMinusGreyedOut(newIndex === 0); // Update the isMinusGreyedOut state based on the selectedIndex
+      // setIsArtistGifVisible(false);
+      // setIsReleaseDateGifVisible(false);
+      // setIsAnswerVisible(true); // Show the answer slide
     }
+    // }
     // setIsArtistGifVisible(false);
     // setIsArtistVisible(false);
     // setIsReleaseDateGifVisible(false);
@@ -332,6 +332,24 @@ const App = () => {
     }
     else {
       return `done in ${attempts} ...`;
+    }
+  }
+
+  const handleLives = (lives) => {
+    if (lives === 5) {
+      return "hole in one"
+    }
+    else if (lives === 4) {
+      return "eagle"
+    }
+    else if (lives === 3) {
+      return "birdie"
+    }
+    else if (lives === 2) {
+      return "par"
+    }
+    else if (lives === 1) {
+      return "bogey"
     }
   }
 
@@ -419,7 +437,8 @@ const App = () => {
           indices.push(m.index);
         }
         // var indices = getIndicesOf(word, answerWords);
-        if (indices) {
+        console.log(indices)
+        if (indices.length > 0) {
           for (var j = 0; j < indices.length; j++) {
             for (var k = 0; k < word.length; k++) {
               var revealedContent = setCharAt(revealedContent, indices[j] + k, word[k]);
@@ -427,6 +446,7 @@ const App = () => {
 
             setContent(revealedContent);
           }
+          setIsIncorrectAnswer(false);
         }
         else {
           setIsIncorrectAnswer(true);
@@ -498,6 +518,7 @@ const App = () => {
       flexDirection: "row",
       // justifyContent: "center",
       // alignItems: "center",
+      color: "black",
       textAlign: "center",
       marginTop: "3vh",
       // marginBottom: "10px",
@@ -634,6 +655,7 @@ const App = () => {
   const releaseDateStyles = {
     fontFamily: "CustomFont2",
     fontSize: "min(3vmin, 30px)",
+    color: "black",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -641,8 +663,8 @@ const App = () => {
     marginTop: "4vmin",
     // position: "relative"
     // maxBottom: "1000px",
-    transition: 'opacity 0.5s, transform 0.5s',
-    opacity: showReleaseDate ? '1' : '0.5',
+    transition: 'opacity 0.2s, transform 0.5s',
+    opacity: showReleaseDate ? '1' : '0.2',
   };
 
   const answerContainerStyles = {
@@ -658,7 +680,7 @@ const App = () => {
     justifyContent: "center",
     alignItems: "center",
     backgroundPosition: "center",
-    right: "-10vw",
+    right: "-15vw",
     bottom: "24vw",
     // marginBottom: "200px",
   }
@@ -892,7 +914,7 @@ const App = () => {
             </button> */}
             <div style={attemptsStyles}>
               <Blink fontSize="4vmin" color="#87469B" blinkTime={isCorrectAnswer ? 1 : 0}
-                text={!isAnswerVisible ? `${loadLives(lives)}` : isCorrectAnswer ? handleAttempts(attempts) : ""}>
+                text={!isAnswerVisible ? `${loadLives(lives)}` : isCorrectAnswer ? loadLives(lives) : ""}>
               </Blink>
             </div>
             {/* <h3 style={subHeaderStyles}>Guess the song</h3> */}
