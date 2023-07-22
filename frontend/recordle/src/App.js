@@ -194,13 +194,13 @@ const App = () => {
           setSlides(newSlides);
           setAnswer(answer);
           if (isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)) {
-            setContent(`${jsonData.artist} - ${jsonData.title}`)
+            setContent(`${jsonData.artist} • ${jsonData.title}`)
             setShowReleaseDate(true);
             setIsAnswerVisible(true);
             setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
           }
           else {
-            setContent(`${jsonData.artist.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]/g, '_')} - ${jsonData.title.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]/g, '_')}`);
+            setContent(`${jsonData.artist.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]/g, '_')} • ${jsonData.title.replace(/[A-Za-zÀ-ÖØ-öø-ÿ]/g, '_')}`);
             setShowReleaseDate(false);
             setIsAnswerVisible(false);
             setSpotifyLink(null);
@@ -235,7 +235,7 @@ const App = () => {
     setShowReleaseDate(true);
     setIsAnswerVisible(true);
     setIsImageVisible(true);
-    setContent(`${jsonData.artist} - ${jsonData.title}`)
+    setContent(`${jsonData.artist} • ${jsonData.title}`)
     const revealedDays = JSON.parse(localStorage.getItem('revealedDays')) || [];
     if (!revealedDays.includes(selectedIndex)) {
       revealedDays.push(selectedIndex);
