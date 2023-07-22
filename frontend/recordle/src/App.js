@@ -624,7 +624,7 @@ const App = () => {
     fontSize: "7.5vmin",
     fontWeight: "bold",
     color: "black",
-    marginTop: "-2px",
+    marginTop: "2vh",
     marginBottom: "2vmax",
     textAlign: "center",
     '@media (maxWidth: 768px)': {
@@ -865,9 +865,9 @@ const App = () => {
     animation: "blink .75s linear infinite",
     fontFamily: "CustomFont2",
     fontSize: "3vmin",
-    top: "-15px",
-    left: "-15px",
-    position: "absolute",
+    top: "15px",
+    left: "15px",
+    position: "fixed",
     // animation: `${blinkingEffect} 1s linear infinite;`
   }
 
@@ -924,7 +924,7 @@ const App = () => {
               Reveal
             </button> */}
             <div style={attemptsStyles}>
-              <Blink fontSize="4vmin" color="#b62c2c" blinkTime={isCorrectAnswer ? 1 : 0}
+              <Blink fontSize="3.5vmin" color="#b62c2c" blinkTime={isCorrectAnswer ? 1 : 0}
                 text={!isAnswerVisible ? `${loadLives(lives)}` : isCorrectAnswer ? loadLives(lives) : ""}>
               </Blink>
             </div>
