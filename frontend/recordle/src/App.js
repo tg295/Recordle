@@ -14,11 +14,8 @@ import { text } from '@fortawesome/fontawesome-svg-core';
 // import { text } from '@fortawesome/fontawesome-svg-core';
 // import styled, { keyframes } from 'styled-components';
 // TO DO 
-// Link to my GitHub
-// could have a message like - close! if the simiarity score is high, or close enough if its over the threshold etc.
-// show words that are guessed correctly
-// fix layout better
-// get loading screen to work, unified
+// Store the one that the user is on in local storage - that way they can't leave until they've completed it
+// Else if they haven't started one, then it defaults to the most recent
 // edit list better
 
 // const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -58,6 +55,14 @@ function setCharAt(str, index, chr) {
 
 function wordInThing(word, thing) {
   return thing.toLowerCase().indexOf(word.toLowerCase());
+}
+
+function loadLives(lives) {
+  let livesString = "";
+  for (let i = 0; i < lives; i++) {
+    livesString += "❤";
+  }
+  return livesString;
 }
 
 function editDistance(s1, s2) {
@@ -115,6 +120,7 @@ const App = () => {
   const [textData, setTextData] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(day);
   const [slides, setSlides] = useState([]);
+  const [lives, setLives] = useState(5);
   const [answer, setAnswer] = useState(null);
   const [spotifyLink, setSpotifyLink] = useState(null);
   const [jsonData, setJsonData] = useState(null);
@@ -238,31 +244,38 @@ const App = () => {
 
   };
   const handleReleaseDateClick = () => {
+    setLives(lives - 1);
+    setAttempts(attempts + 1);
     setShowReleaseDate(true);
-    if (!isDayGuessedCorrectly(selectedIndex)) {
-      // setIsReleaseDateGifVisible(true);
-    }
+    // setIsMinusGreyedOut(true);
+    // setIsPlusGreyedOut(true);
+    // if (!isDayGuessedCorrectly(selectedIndex)) {
+    // setIsReleaseDateGifVisible(true);
+    // }
     // if (selectedIndex === day) {
     //   setIsReleaseDateGifVisible(true);
     // }
   };
 
   const handleDayChange = (increment) => {
-    setAttempts(0);
-    setIsCorrectAnswer(false);
-    // setIsLoading(true);
-    // console.log(isLoading);
-    const newIndex = selectedIndex + increment;
-    // console.log(newIndex);
-    // console.log(day);
-    if (newIndex >= 0 && newIndex < textData.length) {
-      setSelectedIndex(newIndex);
-      // setShowReleaseDate(true);
-      setIsPlusGreyedOut(newIndex === day); // Update the isPlusGreyedOut state based on the selectedIndex
-      setIsMinusGreyedOut(newIndex === 0); // Update the isMinusGreyedOut state based on the selectedIndex
-      // setIsArtistGifVisible(false);
-      // setIsReleaseDateGifVisible(false);
-      // setIsAnswerVisible(true); // Show the answer slide
+    if (attempts === 0) {
+      setLives(5);
+      setAttempts(0);
+      setIsCorrectAnswer(false);
+      // setIsLoading(true);
+      // console.log(isLoading);
+      const newIndex = selectedIndex + increment;
+      // console.log(newIndex);
+      // console.log(day);
+      if (newIndex >= 0 && newIndex < textData.length) {
+        setSelectedIndex(newIndex);
+        // setShowReleaseDate(true);
+        setIsPlusGreyedOut(newIndex === day); // Update the isPlusGreyedOut state based on the selectedIndex
+        setIsMinusGreyedOut(newIndex === 0); // Update the isMinusGreyedOut state based on the selectedIndex
+        // setIsArtistGifVisible(false);
+        // setIsReleaseDateGifVisible(false);
+        // setIsAnswerVisible(true); // Show the answer slide
+      }
     }
     // setIsArtistGifVisible(false);
     // setIsArtistVisible(false);
@@ -325,6 +338,11 @@ const App = () => {
   const handleSubmit = (event) => {
     event.preventDefault();
     setAttempts(attempts + 1);
+    console.log(attempts);
+    // if (attempts > 0) {
+    //   setIsMinusGreyedOut(true);
+    //   setIsPlusGreyedOut(true);
+    // }
     let textAnswerRevealed = `${jsonData.artist} - ${jsonData.title}`;
     let formattedTitle = answer.formatted_title.toLowerCase().replace(/_/g, " ");
     let formattedArtist = answer.artist.toLowerCase().replace(/_/g, " ");
@@ -349,7 +367,7 @@ const App = () => {
       setInputValue("");
       setIsCorrectAnswer(true);
       setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
-
+      // setAttempts(0);
     }
     else if (parsedInput && parsedInput[0] === jsonData.id) {
       setContent(textAnswerRevealed);
@@ -367,7 +385,7 @@ const App = () => {
       // setIsReleaseDateGifVisible(false);
       setIsCorrectAnswer(true);
       setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
-
+      // setAttempts(0);
     }
     else if (inputSimilarityArtist > 0.9) {
       var revealedContent = content;
@@ -410,11 +428,20 @@ const App = () => {
             setContent(revealedContent);
           }
         }
+        else {
+          setIsIncorrectAnswer(true);
+          setLives(lives - 1);
+          if (lives === 0) {
+            setIsAnswerVisible(true); // Show the answer slide
+            setShowReleaseDate(true); // Show the release date
+            setIsCorrectAnswer(false);
+          }
+        }
       }
-      const formattedRevealedArtist = revealedContent.split(" - ")[0].toLowerCase()
+      // const formattedRevealedArtist = revealedContent.split(" - ")[0].toLowerCase()
       const formattedRevealedTitle = revealedContent.split(" - ")[1].toLowerCase()
 
-      let contentSimilarityArtist = similarity(formattedArtist, formattedRevealedArtist);
+      // let contentSimilarityArtist = similarity(formattedArtist, formattedRevealedArtist);
       let contentSimilarityTitle = similarity(formattedTitle, formattedRevealedTitle);
 
       if (contentSimilarityTitle > 0.90) {
@@ -430,16 +457,18 @@ const App = () => {
           localStorage.setItem('guessedDays', JSON.stringify(storedDays));
           setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
         }
+        // setAttempts(0);
         // setIsArtistGifVisible(false);
         // setIsReleaseDateGifVisible(false);
       }
-      else if (contentSimilarityArtist > 0.99) {
-        // setIsArtistVisible(true); // Show the artist
-        // setIsArtistGifVisible(true); // Show the gif
-      }
+      // else if (contentSimilarityArtist > 0.99) {
+      // setIsArtistVisible(true); // Show the artist
+      // setIsArtistGifVisible(true); // Show the gif
+      // }
       setInputKey((prevKey) => prevKey + 1); // Update the key to trigger re-render
       setInputValue("");
     }
+    console.log(attempts);
     // console.log(content);
   };
 
@@ -612,6 +641,8 @@ const App = () => {
     marginTop: "4vmin",
     // position: "relative"
     // maxBottom: "1000px",
+    transition: 'opacity 0.5s, transform 0.5s',
+    opacity: showReleaseDate ? '1' : '0.5',
   };
 
   const answerContainerStyles = {
@@ -673,7 +704,7 @@ const App = () => {
     width: "100%",
     bottom: "calc(10vh - 80px)",
     height: "140px", // Adjust the height as needed
-    left: "3%",
+    left: "1%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -861,7 +892,7 @@ const App = () => {
             </button> */}
             <div style={attemptsStyles}>
               <Blink fontSize="4vmin" color="#87469B" blinkTime={isCorrectAnswer ? 1 : 0}
-                text={!isAnswerVisible ? `tries: ${attempts}` : isCorrectAnswer ? handleAttempts(attempts) : ""}>
+                text={!isAnswerVisible ? `${loadLives(lives)}` : isCorrectAnswer ? handleAttempts(attempts) : ""}>
               </Blink>
             </div>
             {/* <h3 style={subHeaderStyles}>Guess the song</h3> */}
@@ -927,7 +958,7 @@ const App = () => {
                   value={inputValue}
                   onChange={handleInputChange}
                   style={inputStyles}
-                  placeholder="Enter album title/word/uri OR artist"
+                  placeholder="feed me title OR  spotify link"
                   autoFocus
                 />
                 {/* <button disabled={isPreviousDay(selectedIndex, day)} type="submit" style={enterButtonStyles}>Go</button> */}
