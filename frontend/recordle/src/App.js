@@ -756,6 +756,7 @@ const App = () => {
     height: "3vh",
     padding: "1vmin",
     fontSize: "2.5vmin",
+    textAlign: "left",
     border: "1vmin solid #e66439",
     borderRadius: "5px",
     position: "relative",
@@ -990,7 +991,7 @@ const App = () => {
                   value={inputValue}
                   onChange={handleInputChange}
                   style={inputStyles}
-                  placeholder="feed me title OR  spotify link"
+                  placeholder="guess the title / spotify url"
                   autoFocus
                 />
                 {/* <button disabled={isPreviousDay(selectedIndex, day)} type="submit" style={enterButtonStyles}>Go</button> */}
