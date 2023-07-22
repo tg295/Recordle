@@ -1,6 +1,6 @@
 import { useState } from "react";
 import React from 'react';
-import isImageVisible from './../App.js';
+// import isImageVisible from './../App.js';
 import { ColorRing } from 'react-loader-spinner'
 // import setIsLoading from './../App.js';
 // import rightArrowStyles from './../App.js';
@@ -21,34 +21,34 @@ const slideStyles = {
     // objectFit: "cover",
 };
 
-const rightArrowStyles = {
-    position: "absolute",
-    bottom: "45%",
-    // marginLeft: "38vw",
-    // maxLeft: "2vw",
-    transform: isImageVisible ? 'translate(100vw,0)' : "translate(28vmin, 0)", // Shrink the container when the answer is correct
-    // right: isImageVisible ? "200px" : "250px",
-    fontSize: "12vmin",
-    color: "#181818",
-    cursor: "pointer",
-    '@media (minWidth: 768px)': {
-        marginLeft: "90%"
-    },
-};
+// const rightArrowStyles = {
+//     position: "absolute",
+//     bottom: "45%",
+//     // marginLeft: "38vw",
+//     // maxLeft: "2vw",
+//     transform: isImageVisible ? 'translate(100vw,0)' : "translate(28vmin, 0)", // Shrink the container when the answer is correct
+//     // right: isImageVisible ? "200px" : "250px",
+//     fontSize: "12vmin",
+//     color: "#181818",
+//     cursor: "pointer",
+//     '@media (minWidth: 768px)': {
+//         marginLeft: "90%"
+//     },
+// };
 
-const leftArrowStyles = {
-    position: "absolute",
-    bottom: "45%",
-    // right: "100vmin",
-    // marginLeft: "5vw",
-    // left: "-46vmin"
-    transform: "translate(-55vmin, 0)",
-    // left: "20px",
-    // marginLeft: "5vw",
-    fontSize: "12vmin",
-    color: "#181818",
-    cursor: "pointer",
-};
+// const leftArrowStyles = {
+//     position: "absolute",
+//     bottom: "45%",
+//     // right: "100vmin",
+//     // marginLeft: "5vw",
+//     // left: "-46vmin"
+//     transform: "translate(-55vmin, 0)",
+//     // left: "20px",
+//     // marginLeft: "5vw",
+//     fontSize: "12vmin",
+//     color: "#181818",
+//     cursor: "pointer",
+// };
 
 const sliderStyles = {
     alignItems: "center",
@@ -83,12 +83,12 @@ const ImageSlider = ({ slides }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [currentIndex, setCurrentIndex] = useState(0);
 
-    const goToPrevious = () => {
-        setIsLoading(true);
-        const isFirstSlide = currentIndex === 0;
-        const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
-        setCurrentIndex(newIndex);
-    };
+    // const goToPrevious = () => {
+    //     setIsLoading(true);
+    //     const isFirstSlide = currentIndex === 0;
+    //     const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
+    //     setCurrentIndex(newIndex);
+    // };
     const goToNext = () => {
         setIsLoading(true);
         const isLastSlide = currentIndex === slides.length - 1;
