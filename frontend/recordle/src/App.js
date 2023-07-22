@@ -14,11 +14,8 @@ import { text } from '@fortawesome/fontawesome-svg-core';
 // import { text } from '@fortawesome/fontawesome-svg-core';
 // import styled, { keyframes } from 'styled-components';
 // TO DO 
-// Link to my GitHub
-// could have a message like - close! if the simiarity score is high, or close enough if its over the threshold etc.
-// show words that are guessed correctly
-// fix layout better
-// get loading screen to work, unified
+// Store the one that the user is on in local storage - that way they can't leave until they've completed it
+// Else if they haven't started one, then it defaults to the most recent
 // edit list better
 
 // const delay = ms => new Promise(res => setTimeout(res, ms));
@@ -58,6 +55,14 @@ function setCharAt(str, index, chr) {
 
 function wordInThing(word, thing) {
   return thing.toLowerCase().indexOf(word.toLowerCase());
+}
+
+function loadLives(lives) {
+  let livesString = "";
+  for (let i = 0; i < lives; i++) {
+    livesString += "❤";
+  }
+  return livesString;
 }
 
 function editDistance(s1, s2) {
@@ -115,6 +120,7 @@ const App = () => {
   const [textData, setTextData] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(day);
   const [slides, setSlides] = useState([]);
+  const [lives, setLives] = useState(5);
   const [answer, setAnswer] = useState(null);
   const [spotifyLink, setSpotifyLink] = useState(null);
   const [jsonData, setJsonData] = useState(null);
@@ -238,16 +244,22 @@ const App = () => {
 
   };
   const handleReleaseDateClick = () => {
+    setLives(lives - 1);
+    setAttempts(attempts + 1);
     setShowReleaseDate(true);
-    if (!isDayGuessedCorrectly(selectedIndex)) {
-      // setIsReleaseDateGifVisible(true);
-    }
+    // setIsMinusGreyedOut(true);
+    // setIsPlusGreyedOut(true);
+    // if (!isDayGuessedCorrectly(selectedIndex)) {
+    // setIsReleaseDateGifVisible(true);
+    // }
     // if (selectedIndex === day) {
     //   setIsReleaseDateGifVisible(true);
     // }
   };
 
   const handleDayChange = (increment) => {
+    // if (attempts === 0) {
+    setLives(5);
     setAttempts(0);
     setIsCorrectAnswer(false);
     // setIsLoading(true);
@@ -264,6 +276,7 @@ const App = () => {
       // setIsReleaseDateGifVisible(false);
       // setIsAnswerVisible(true); // Show the answer slide
     }
+    // }
     // setIsArtistGifVisible(false);
     // setIsArtistVisible(false);
     // setIsReleaseDateGifVisible(false);
@@ -322,9 +335,32 @@ const App = () => {
     }
   }
 
+  const handleLives = (lives) => {
+    if (lives === 5) {
+      return "hole in one"
+    }
+    else if (lives === 4) {
+      return "eagle"
+    }
+    else if (lives === 3) {
+      return "birdie"
+    }
+    else if (lives === 2) {
+      return "par"
+    }
+    else if (lives === 1) {
+      return "bogey"
+    }
+  }
+
   const handleSubmit = (event) => {
     event.preventDefault();
     setAttempts(attempts + 1);
+    console.log(attempts);
+    // if (attempts > 0) {
+    //   setIsMinusGreyedOut(true);
+    //   setIsPlusGreyedOut(true);
+    // }
     let textAnswerRevealed = `${jsonData.artist} - ${jsonData.title}`;
     let formattedTitle = answer.formatted_title.toLowerCase().replace(/_/g, " ");
     let formattedArtist = answer.artist.toLowerCase().replace(/_/g, " ");
@@ -349,7 +385,7 @@ const App = () => {
       setInputValue("");
       setIsCorrectAnswer(true);
       setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
-
+      // setAttempts(0);
     }
     else if (parsedInput && parsedInput[0] === jsonData.id) {
       setContent(textAnswerRevealed);
@@ -367,7 +403,7 @@ const App = () => {
       // setIsReleaseDateGifVisible(false);
       setIsCorrectAnswer(true);
       setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
-
+      // setAttempts(0);
     }
     else if (inputSimilarityArtist > 0.9) {
       var revealedContent = content;
@@ -401,7 +437,8 @@ const App = () => {
           indices.push(m.index);
         }
         // var indices = getIndicesOf(word, answerWords);
-        if (indices) {
+        console.log(indices)
+        if (indices.length > 0) {
           for (var j = 0; j < indices.length; j++) {
             for (var k = 0; k < word.length; k++) {
               var revealedContent = setCharAt(revealedContent, indices[j] + k, word[k]);
@@ -409,12 +446,22 @@ const App = () => {
 
             setContent(revealedContent);
           }
+          setIsIncorrectAnswer(false);
+        }
+        else {
+          setIsIncorrectAnswer(true);
+          setLives(lives - 1);
+          if (lives === 0) {
+            setIsAnswerVisible(true); // Show the answer slide
+            setShowReleaseDate(true); // Show the release date
+            setIsCorrectAnswer(false);
+          }
         }
       }
-      const formattedRevealedArtist = revealedContent.split(" - ")[0].toLowerCase()
+      // const formattedRevealedArtist = revealedContent.split(" - ")[0].toLowerCase()
       const formattedRevealedTitle = revealedContent.split(" - ")[1].toLowerCase()
 
-      let contentSimilarityArtist = similarity(formattedArtist, formattedRevealedArtist);
+      // let contentSimilarityArtist = similarity(formattedArtist, formattedRevealedArtist);
       let contentSimilarityTitle = similarity(formattedTitle, formattedRevealedTitle);
 
       if (contentSimilarityTitle > 0.90) {
@@ -430,16 +477,18 @@ const App = () => {
           localStorage.setItem('guessedDays', JSON.stringify(storedDays));
           setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
         }
+        // setAttempts(0);
         // setIsArtistGifVisible(false);
         // setIsReleaseDateGifVisible(false);
       }
-      else if (contentSimilarityArtist > 0.99) {
-        // setIsArtistVisible(true); // Show the artist
-        // setIsArtistGifVisible(true); // Show the gif
-      }
+      // else if (contentSimilarityArtist > 0.99) {
+      // setIsArtistVisible(true); // Show the artist
+      // setIsArtistGifVisible(true); // Show the gif
+      // }
       setInputKey((prevKey) => prevKey + 1); // Update the key to trigger re-render
       setInputValue("");
     }
+    console.log(attempts);
     // console.log(content);
   };
 
@@ -469,6 +518,7 @@ const App = () => {
       flexDirection: "row",
       // justifyContent: "center",
       // alignItems: "center",
+      color: "black",
       textAlign: "center",
       marginTop: "3vh",
       // marginBottom: "10px",
@@ -477,7 +527,7 @@ const App = () => {
       // transform: "translateY(-70%)",
       // top: "50%",
       // maxHeight: "15px",
-      fontSize: "min(4vw, 35px)",
+      fontSize: "min(4vw, 40px)",
       position: "relative",
 
     };
@@ -534,18 +584,18 @@ const App = () => {
 
   const imgContainerStyles = {
     // bottom: "10px",
-    width: "80%",
-    height: "80%",
+    width: "100%",
+    height: "100%",
     // margin: "0 auto",
     position: "relative",
-    transform: isImageVisible ? 'scale(0.8)  translate(-2vw, -20%)' : 'none', // Shrink the container when the answer is correct 
+    transform: isImageVisible ? 'scale(0.85)  translate(-10vw, -6vh)' : 'none', // Shrink the container when the answer is correct 
     transition: 'transform 0.3s ease', // Add a smooth transition effect
   };
 
   const defaultImgStyles = {
 
     // bottom: "10px",
-    top: "50%",
+    top: "20%",
     width: "80%",
     height: "80%",
     margin: "0 auto",
@@ -605,35 +655,38 @@ const App = () => {
   const releaseDateStyles = {
     fontFamily: "CustomFont2",
     fontSize: "min(3vmin, 30px)",
+    color: "black",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: "3vw",
-    marginTop: "3vmin",
+    marginBottom: "3px",
+    marginTop: "4vmin",
     // position: "relative"
     // maxBottom: "1000px",
+    transition: 'opacity 0.2s, transform 0.5s',
+    opacity: showReleaseDate ? '1' : '0.2',
   };
 
   const answerContainerStyles = {
     transition: 'opacity 0.5s, transform 0.5s',
     opacity: isAnswerVisible ? '1' : '0',
     transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
-    width: "60vmin",
-    height: "39vmin",
-    maxWidth: "500px",
-    maxHeight: "340px",
+    width: "40vmin",
+    height: "40vmin",
+    maxWidth: "300px",
+    maxHeight: "300px",
     margin: "0 auto",
     position: "relative",
     justifyContent: "center",
     alignItems: "center",
     backgroundPosition: "center",
-    right: "-30vmin",
-    bottom: "29vw",
+    right: "-15vw",
+    bottom: "24vw",
     // marginBottom: "200px",
   }
 
   const anwserStyles = {
-    width: "65%",
+    width: "100%",
     height: "100%",
     border: "3px solid #e66439",
     borderRadius: "5px",
@@ -673,7 +726,7 @@ const App = () => {
     width: "100%",
     bottom: "calc(10vh - 80px)",
     height: "140px", // Adjust the height as needed
-    left: "0%",
+    left: "1%",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
@@ -692,7 +745,7 @@ const App = () => {
     width: "65vw",
     height: "3vh",
     padding: "1vmin",
-    fontSize: "3vmin",
+    fontSize: "2.5vmin",
     border: "1vmin solid #e66439",
     borderRadius: "5px",
     position: "relative",
@@ -861,7 +914,7 @@ const App = () => {
             </button> */}
             <div style={attemptsStyles}>
               <Blink fontSize="4vmin" color="#87469B" blinkTime={isCorrectAnswer ? 1 : 0}
-                text={!isAnswerVisible ? `tries: ${attempts}` : isCorrectAnswer ? handleAttempts(attempts) : ""}>
+                text={!isAnswerVisible ? `${loadLives(lives)}` : isCorrectAnswer ? loadLives(lives) : ""}>
               </Blink>
             </div>
             {/* <h3 style={subHeaderStyles}>Guess the song</h3> */}
@@ -927,7 +980,7 @@ const App = () => {
                   value={inputValue}
                   onChange={handleInputChange}
                   style={inputStyles}
-                  placeholder="Enter album title/id OR artist"
+                  placeholder="feed me title OR  spotify link"
                   autoFocus
                 />
                 {/* <button disabled={isPreviousDay(selectedIndex, day)} type="submit" style={enterButtonStyles}>Go</button> */}

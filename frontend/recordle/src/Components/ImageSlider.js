@@ -7,11 +7,11 @@ import { ColorRing } from 'react-loader-spinner'
 
 
 const slideStyles = {
-    width: "70vmin",
-    maxWidth: "500px",
+    width: "40vh",
+    maxWidth: "900px",
     aspectRatio: "16/9",
-    height: "70vmin",
-    maxHeight: "500px",
+    height: "40vh",
+    maxHeight: "900px",
     borderRadius: "5px",
     backgroundSize: "cover",
     backgroundPosition: "center",
@@ -26,13 +26,13 @@ const rightArrowStyles = {
     bottom: "45%",
     // marginLeft: "38vw",
     // maxLeft: "2vw",
-    transform: isImageVisible ? 'translate(35vw,0)' : "translate(37vmin, 0)", // Shrink the container when the answer is correct
+    transform: isImageVisible ? 'translate(100vw,0)' : "translate(28vmin, 0)", // Shrink the container when the answer is correct
     // right: isImageVisible ? "200px" : "250px",
     fontSize: "12vmin",
     color: "#181818",
     cursor: "pointer",
     '@media (minWidth: 768px)': {
-        marginLeft: "17%"
+        marginLeft: "90%"
     },
 };
 
@@ -42,7 +42,7 @@ const leftArrowStyles = {
     // right: "100vmin",
     // marginLeft: "5vw",
     // left: "-46vmin"
-    transform: "translate(-45vmin, 0)",
+    transform: "translate(-55vmin, 0)",
     // left: "20px",
     // marginLeft: "5vw",
     fontSize: "12vmin",
@@ -102,16 +102,17 @@ const ImageSlider = ({ slides }) => {
     return (
         <div style={sliderContainerStyles}>
             <div style={sliderStyles}>
-                <div>
+                {/* <div>
                     <div onClick={goToPrevious} style={{ ...leftArrowStyles }}>
                         {"<"}
                     </div>
                     <div onClick={goToNext} style={{ ...rightArrowStyles }}>
                         {">"}
                     </div>
-                </div>
+                </div> */}
                 <img
                     src={slides[currentIndex].url}
+                    onClick={goToNext}
                     style={{ ...slideStyles }}
                     onLoad={handleImageLoad}
                     alt="loading..."
