@@ -756,6 +756,7 @@ const App = () => {
     height: "3vh",
     padding: "1vmin",
     fontSize: "2.5vmin",
+    textAlign: "left",
     border: "1vmin solid #e66439",
     borderRadius: "5px",
     position: "relative",
@@ -782,7 +783,7 @@ const App = () => {
     fontFamily: "CustomFont2",
     fontSize: "4vmin",
     // fontWeight: "bold",
-    color: "#87469B",
+    color: "#b62c2c",
     marginTop: "-3px",
     top: "1.5%",
     right: "2%",
@@ -923,7 +924,7 @@ const App = () => {
               Reveal
             </button> */}
             <div style={attemptsStyles}>
-              <Blink fontSize="4vmin" color="#87469B" blinkTime={isCorrectAnswer ? 1 : 0}
+              <Blink fontSize="4vmin" color="#b62c2c" blinkTime={isCorrectAnswer ? 1 : 0}
                 text={!isAnswerVisible ? `${loadLives(lives)}` : isCorrectAnswer ? loadLives(lives) : ""}>
               </Blink>
             </div>
@@ -990,7 +991,7 @@ const App = () => {
                   value={inputValue}
                   onChange={handleInputChange}
                   style={inputStyles}
-                  placeholder="feed me title OR  spotify link"
+                  placeholder="guess the title / spotify url"
                   autoFocus
                 />
                 {/* <button disabled={isPreviousDay(selectedIndex, day)} type="submit" style={enterButtonStyles}>Go</button> */}
