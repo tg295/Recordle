@@ -530,7 +530,7 @@ const App = () => {
       // alignItems: "center",
       color: "black",
       textAlign: "center",
-      marginTop: "3vh",
+      marginTop: "3vmin",
       // marginBottom: "10px",
       // marginBottom: "calc(5% - 3vw)",
       padding: "2px",
@@ -606,8 +606,8 @@ const App = () => {
 
     // bottom: "10px",
     top: "20%",
-    width: "80%",
-    height: "80%",
+    width: "100%",
+    height: "100%",
     margin: "0 auto",
     position: "relative",
     transition: 'transform 0.3s ease', // Add a smooth transition effect
@@ -669,7 +669,7 @@ const App = () => {
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: "3px",
+    marginBottom: "-10px",
     marginTop: "4vmin",
     // position: "relative"
     // maxBottom: "1000px",
@@ -691,7 +691,7 @@ const App = () => {
     alignItems: "center",
     backgroundPosition: "center",
     right: "-15vw",
-    bottom: "24vw",
+    bottom: "26vw",
     // marginBottom: "200px",
   }
 
