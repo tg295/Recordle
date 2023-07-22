@@ -783,7 +783,7 @@ const App = () => {
     fontFamily: "CustomFont2",
     fontSize: "4vmin",
     // fontWeight: "bold",
-    color: "#87469B",
+    color: "#b62c2c",
     marginTop: "-3px",
     top: "1.5%",
     right: "2%",
@@ -924,7 +924,7 @@ const App = () => {
               Reveal
             </button> */}
             <div style={attemptsStyles}>
-              <Blink fontSize="4vmin" color="#87469B" blinkTime={isCorrectAnswer ? 1 : 0}
+              <Blink fontSize="4vmin" color="#b62c2c" blinkTime={isCorrectAnswer ? 1 : 0}
                 text={!isAnswerVisible ? `${loadLives(lives)}` : isCorrectAnswer ? loadLives(lives) : ""}>
               </Blink>
             </div>
