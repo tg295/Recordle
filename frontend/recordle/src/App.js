@@ -58,6 +58,9 @@ function wordInThing(word, thing) {
 }
 
 function loadLives(lives) {
+  // if (lives === 0) {
+  //   return ":("
+  // }
   let livesString = "";
   for (let i = 0; i < lives; i++) {
     livesString += "❤";
@@ -231,18 +234,19 @@ const App = () => {
     fetchJsonData();
   }, [selectedIndex, textData]);
 
-  const handleRevealClick = () => {
-    setShowReleaseDate(true);
-    setIsAnswerVisible(true);
-    setIsImageVisible(true);
-    setContent(`${jsonData.artist} • ${jsonData.title}`)
-    const revealedDays = JSON.parse(localStorage.getItem('revealedDays')) || [];
-    if (!revealedDays.includes(selectedIndex)) {
-      revealedDays.push(selectedIndex);
-      localStorage.setItem('revealedDays', JSON.stringify(revealedDays));
-    }
+  // const handleRevealClick = () => {
+  //   setShowReleaseDate(true);
+  //   setIsAnswerVisible(true);
+  //   setIsImageVisible(true);
+  //   setContent(`${jsonData.artist} • ${jsonData.title}`)
+  //   const revealedDays = JSON.parse(localStorage.getItem('revealedDays')) || [];
+  //   if (!revealedDays.includes(selectedIndex)) {
+  //     revealedDays.push(selectedIndex);
+  //     localStorage.setItem('revealedDays', JSON.stringify(revealedDays));
+  //   }
 
-  };
+  // };
+
   const handleReleaseDateClick = () => {
     setLives(lives - 1);
     setAttempts(attempts + 1);
@@ -308,65 +312,65 @@ const App = () => {
   //     ? `${jsonData.artist} - ${jsonData.title.replace(/\S/g, '_')}`
   //     : `${jsonData.artist.replace(/\S/g, '_')} - ${jsonData.title.replace(/\S/g, '_')}`
 
-  const handleAttempts = (attempts) => {
-    if (attempts === 1) {
-      return "hole in one";
-    }
-    else if (attempts === 2) {
-      return "eagle";
-    }
-    else if (attempts === 3) {
-      return "birdie";
-    }
-    else if (attempts === 4) {
-      return "par";
-    }
-    else if (attempts === 5) {
-      return "bogey";
-    }
-    else if (attempts === 6) {
-      return "double bogey";
-    }
-    else if (attempts === 7) {
-      return "triple bogey";
-    }
-    else {
-      return `done in ${attempts} ...`;
-    }
-  }
+  // const handleAttempts = (attempts) => {
+  //   if (attempts === 1) {
+  //     return "hole in one";
+  //   }
+  //   else if (attempts === 2) {
+  //     return "eagle";
+  //   }
+  //   else if (attempts === 3) {
+  //     return "birdie";
+  //   }
+  //   else if (attempts === 4) {
+  //     return "par";
+  //   }
+  //   else if (attempts === 5) {
+  //     return "bogey";
+  //   }
+  //   else if (attempts === 6) {
+  //     return "double bogey";
+  //   }
+  //   else if (attempts === 7) {
+  //     return "triple bogey";
+  //   }
+  //   else {
+  //     return `done in ${attempts} ...`;
+  //   }
+  // }
 
-  const handleLives = (lives) => {
-    if (lives === 5) {
-      return "hole in one"
-    }
-    else if (lives === 4) {
-      return "eagle"
-    }
-    else if (lives === 3) {
-      return "birdie"
-    }
-    else if (lives === 2) {
-      return "par"
-    }
-    else if (lives === 1) {
-      return "bogey"
-    }
-  }
+  // const handleLives = (lives) => {
+  //   if (lives === 5) {
+  //     return "hole in one"
+  //   }
+  //   else if (lives === 4) {
+  //     return "eagle"
+  //   }
+  //   else if (lives === 3) {
+  //     return "birdie"
+  //   }
+  //   else if (lives === 2) {
+  //     return "par"
+  //   }
+  //   else if (lives === 1) {
+  //     return "bogey"
+  //   }
+  // }
 
   const handleSubmit = (event) => {
     event.preventDefault();
     setAttempts(attempts + 1);
-    console.log(attempts);
+    console.log(`attempts: ${attempts}`);
     // if (attempts > 0) {
     //   setIsMinusGreyedOut(true);
     //   setIsPlusGreyedOut(true);
     // }
-    let textAnswerRevealed = `${jsonData.artist} - ${jsonData.title}`;
+    let textAnswerRevealed = `${jsonData.artist} • ${jsonData.title}`;
     let formattedTitle = answer.formatted_title.toLowerCase().replace(/_/g, " ");
     let formattedArtist = answer.artist.toLowerCase().replace(/_/g, " ");
     let inputSimilarityTitle = similarity(removeAccents(formattedTitle), inputValue);
     let inputSimilarityArtist = similarity(removeAccents(formattedArtist), inputValue);
-    console.log(inputSimilarityTitle);
+    console.log(`input similarity: ${inputSimilarityTitle}`);
     const regex = /([a-zA-Z0-9]{22})/;
     let parsedInput = inputValue.match(regex);
     if (inputSimilarityTitle > 0.8) {
@@ -437,7 +441,6 @@ const App = () => {
           indices.push(m.index);
         }
         // var indices = getIndicesOf(word, answerWords);
-        console.log(indices)
         if (indices.length > 0) {
           for (var j = 0; j < indices.length; j++) {
             for (var k = 0; k < word.length; k++) {
@@ -447,39 +450,46 @@ const App = () => {
             setContent(revealedContent);
           }
           setIsIncorrectAnswer(false);
+          // const formattedRevealedArtist = revealedContent.split(" • ")[0].toLowerCase()
+          const formattedRevealedTitle = revealedContent.split(" • ")[1].toLowerCase()
+
+          // let contentSimilarityArtist = similarity(formattedArtist, formattedRevealedArtist);
+          let contentSimilarityTitle = similarity(formattedTitle, formattedRevealedTitle);
+
+          if (contentSimilarityTitle > 0.90) {
+            setContent(textAnswerRevealed);
+            setIsAnswerVisible(true); // Show the answer slide
+            setShowReleaseDate(true); // Show the release date
+            setIsIncorrectAnswer(false); // Reset the incorrect answer state
+            setIsCorrectAnswer(true);
+            setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
+            const storedDays = JSON.parse(localStorage.getItem('guessedDays')) || [];
+            if (!storedDays.includes(selectedIndex)) {
+              storedDays.push(selectedIndex);
+              localStorage.setItem('guessedDays', JSON.stringify(storedDays));
+              setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
+            }
+            // setAttempts(0);
+            // setIsArtistGifVisible(false);
+            // setIsReleaseDateGifVisible(false);
+          }
         }
         else {
-          setIsIncorrectAnswer(true);
           setLives(lives - 1);
-          if (lives === 0) {
+          console.log(`lives: ${lives}`);
+          if (lives === 1) {
+            setContent(textAnswerRevealed);
             setIsAnswerVisible(true); // Show the answer slide
             setShowReleaseDate(true); // Show the release date
             setIsCorrectAnswer(false);
+            const revealedDays = JSON.parse(localStorage.getItem('revealedDays')) || [];
+            if (!revealedDays.includes(selectedIndex)) {
+              revealedDays.push(selectedIndex);
+              localStorage.setItem('revealedDays', JSON.stringify(revealedDays));
+            }
           }
+          setIsIncorrectAnswer(true);
         }
-      }
-      // const formattedRevealedArtist = revealedContent.split(" - ")[0].toLowerCase()
-      const formattedRevealedTitle = revealedContent.split(" - ")[1].toLowerCase()
-
-      // let contentSimilarityArtist = similarity(formattedArtist, formattedRevealedArtist);
-      let contentSimilarityTitle = similarity(formattedTitle, formattedRevealedTitle);
-
-      if (contentSimilarityTitle > 0.90) {
-        setContent(textAnswerRevealed);
-        setIsAnswerVisible(true); // Show the answer slide
-        setShowReleaseDate(true); // Show the release date
-        setIsIncorrectAnswer(false); // Reset the incorrect answer state
-        setIsCorrectAnswer(true);
-        setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
-        const storedDays = JSON.parse(localStorage.getItem('guessedDays')) || [];
-        if (!storedDays.includes(selectedIndex)) {
-          storedDays.push(selectedIndex);
-          localStorage.setItem('guessedDays', JSON.stringify(storedDays));
-          setProgressMessage(`${storedDays.length} / ${day}`); // Update the progress message
-        }
-        // setAttempts(0);
-        // setIsArtistGifVisible(false);
-        // setIsReleaseDateGifVisible(false);
       }
       // else if (contentSimilarityArtist > 0.99) {
       // setIsArtistVisible(true); // Show the artist
@@ -488,7 +498,7 @@ const App = () => {
       setInputKey((prevKey) => prevKey + 1); // Update the key to trigger re-render
       setInputValue("");
     }
-    console.log(attempts);
+    console.log(`attempts: ${attempts}`);
     // console.log(content);
   };
 
