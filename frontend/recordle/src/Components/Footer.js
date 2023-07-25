@@ -33,7 +33,7 @@ const footerStyle = {
 
 const beerContainerStyles = {
     height: "10px",
-    left: "80vw",
+    right: "40px",
     position: "absolute"
 }
 
