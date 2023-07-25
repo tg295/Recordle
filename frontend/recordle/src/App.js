@@ -57,6 +57,11 @@ function wordInThing(word, thing) {
   return thing.toLowerCase().indexOf(word.toLowerCase());
 }
 
+function bringAnswerToFront() {
+  document.getElementById('answer').style.zIndex = 3;
+  document.getElementById('clues').style.zIndex = 2;
+}
+
 function loadLives(lives) {
   // if (lives === 0) {
   //   return ":("
@@ -528,8 +533,9 @@ const App = () => {
       flexDirection: "row",
       // justifyContent: "center",
       // alignItems: "center",
-      color: "black",
+      color: "#5F0443",
       textAlign: "center",
+      // textShadow: "-1px 0 pink, 0 1px pink, 1px 0 pink, 0 -1px pink",
       marginTop: "3vmin",
       // marginBottom: "10px",
       // marginBottom: "calc(5% - 3vw)",
@@ -537,7 +543,7 @@ const App = () => {
       // transform: "translateY(-70%)",
       // top: "50%",
       // maxHeight: "15px",
-      fontSize: "min(4vw, 40px)",
+      fontSize: "min(4vmin, 20px)",
       position: "relative",
 
     };
@@ -573,10 +579,11 @@ const App = () => {
 
   const containerStyles = {
     width: "100%",
+    // height: "100%",
     // height: "100vh", // Set height to 100vh for full-screen
     margin: "0",
     boxSizing: "border-box",
-    border: "8px double #e66439",
+    border: "8px double #b90a85da",
     // borderStyle: "double", //triple
     borderRadius: "5px",
     // display: "flex",
@@ -596,20 +603,23 @@ const App = () => {
     // bottom: "10px",
     width: "100%",
     height: "100%",
+    bottom: "1vh",
     // margin: "0 auto",
     position: "relative",
-    transform: isImageVisible ? 'scale(0.85)  translate(-10vw, -6vh)' : 'none', // Shrink the container when the answer is correct 
+    transform: isImageVisible ? 'scale(0.85)  translate(max(-10vw, -200px), -2vh)' : 'none', // Shrink the container when the answer is correct 
     transition: 'transform 0.3s ease', // Add a smooth transition effect
+    // zIndex: 1
   };
 
   const defaultImgStyles = {
 
     // bottom: "10px",
     top: "20%",
-    width: "100%",
-    height: "100%",
+    width: "85%",
+    height: "50vh",
     margin: "0 auto",
     position: "relative",
+    bottom: "10px",
     transition: 'transform 0.3s ease', // Add a smooth transition effect
   };
 
@@ -621,10 +631,15 @@ const App = () => {
 
   const headerStyles = {
     fontFamily: "CustomFont",
-    fontSize: "7.5vmin",
+    fontSize: "5vh",
     fontWeight: "bold",
     color: "black",
-    marginTop: "2vh",
+    // textShadowColor: "white",
+    // textShadowColor: '#585858',
+    // textShadowOffset: { width: 5, height: 5 },
+    // textShadowRadius: 10,
+    textShadow: "-5px 0 #b90a85da, 0 2px #b90a85da, 1px 0 #b90a85da, 0 -1px #b90a85da",
+    marginTop: "1vh",
     marginBottom: "2vmax",
     textAlign: "center",
     '@media (maxWidth: 768px)': {
@@ -634,12 +649,13 @@ const App = () => {
 
   const subHeaderStyles = {
     fontFamily: "CustomFont",
-    fontSize: "5vmin",
+    fontSize: "3vh",
     fontWeight: "bold",
     color: "black",
     order: "-1",
     marginTop: "-1vh",
-    marginBottom: "2vmax",
+    marginBottom: "0.5vmax",
+    textShadow: "-2px 0 #b90a85da, 0 1px #b90a85da, 0.5px 0 #b90a85da, 0 -0.5px #b90a85da",
     textAlign: "center",
     '@media (maxWidth: 768px)': {
       fontSize: "24px",
@@ -664,17 +680,27 @@ const App = () => {
 
   const releaseDateStyles = {
     fontFamily: "CustomFont2",
-    fontSize: "min(3vmin, 30px)",
-    color: "black",
+    fontSize: "min(3vmin, 15px)",
+    color: "#5F0443",
+    padding: "0.5px",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: "-10px",
-    marginTop: "4vmin",
-    // position: "relative"
+    // textShadow: "-0.5px 0 #e66439, 0 0.5px #e66439, 0.5px 0 #e66439, 0 -0.5px #e66439",
+    marginBottom: "-200px",
+    // left: "15%",
+    width: "100%",
+    // height: "120%",
+    marginTop: "2vmin",
+    position: "absolute",
     // maxBottom: "1000px",
     transition: 'opacity 0.2s, transform 0.5s',
     opacity: showReleaseDate ? '1' : '0.2',
+    // borderRadius: "20px",
+    // border: "1px solid #e66439",
+    // borderRadius: "5px",
+    // backgroundColor: "#b90a85da"
+    zIndex: 5
   };
 
   const answerContainerStyles = {
@@ -683,22 +709,22 @@ const App = () => {
     transform: isAnswerVisible ? 'scale(1)' : 'scale(0.1)',
     width: "40vmin",
     height: "40vmin",
-    maxWidth: "300px",
-    maxHeight: "300px",
+    maxWidth: "250px",
+    maxHeight: "250px",
     margin: "0 auto",
-    position: "relative",
+    position: "fixed",
     justifyContent: "center",
     alignItems: "center",
     backgroundPosition: "center",
-    right: "-15vw",
-    bottom: "26vw",
+    left: "max(52vw, 150px)",
+    bottom: "max(32vh, 41vmin)",
     // marginBottom: "200px",
   }
 
   const anwserStyles = {
     width: "100%",
     height: "100%",
-    border: "3px solid #e66439",
+    border: "3px solid #b90a85da",
     borderRadius: "5px",
     justifyContent: "center",
     alignItems: "center",
@@ -712,9 +738,10 @@ const App = () => {
   const plusStyles = {
     position: "fixed",
     top: "9%",
-    right: "40px", // Adjust as needed
-    fontSize: "10vw",
+    right: "30px", // Adjust as needed
+    fontSize: "min(10vw, 100px)",
     color: isPlusGreyedOut ? "#606060" : "#181818",
+    textShadow: "-1px 0 #b90a85da, 0 1px #b90a85da, 1px 0 #b90a85da, 0 -1px #b90a85da",
     zIndex: 1,
     cursor: "pointer",
     transform: "translateY(-10%)", // Center vertically
@@ -723,8 +750,9 @@ const App = () => {
   const minusStyles = {
     position: "fixed",
     top: "9%",
-    left: "40px", // Adjust as needed
-    fontSize: "10vw",
+    left: "30px", // Adjust as needed
+    fontSize: "min(10vw, 100px)",
+    textShadow: "-1px 0 #b90a85da, 0 1px #b90a85da, 1px 0 #b90a85da, 0 -1px #b90a85da",
     color: isMinusGreyedOut ? "#606060" : "#181818",
     zIndex: 1,
     cursor: "pointer",
@@ -745,6 +773,7 @@ const App = () => {
   const inputContainerStyles = {
     width: "100%",
     height: "100%",
+    bottom: "min(35vmin, 18vh)",
     position: "relative",
     display: "flex",
     justifyContent: "center",
@@ -752,12 +781,12 @@ const App = () => {
   };
 
   const inputStyles = {
-    width: "65vw",
-    height: "3vh",
-    padding: "1vmin",
+    width: "min(80vmin, 450px)",
+    height: "min(3vh, 18px)",
+    padding: "min(1vmin, 5px)",
     fontSize: "2.5vmin",
     textAlign: "left",
-    border: "1vmin solid #e66439",
+    border: "0.5vmin solid #b90a85da",
     borderRadius: "5px",
     position: "relative",
     fontFamily: "CustomFont2",
@@ -783,7 +812,7 @@ const App = () => {
     fontFamily: "CustomFont2",
     fontSize: "4vmin",
     // fontWeight: "bold",
-    color: "#b62c2c",
+    color: "#590760d9",
     marginTop: "-3px",
     top: "1.5%",
     right: "2%",
@@ -902,6 +931,22 @@ const App = () => {
     zIndex: 1,
   };
 
+  const keyboardStyles = {
+    bottom: "4vh",
+    position: "fixed",
+    fontSize: "0.3vmin",
+    // padding: "0.5rem",
+    display: "flex",
+    margin: "1rem 0",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
+  }
+
+  const spaceBarStyles = {
+    width: "50vmin",
+  }
+
   return (
     <div style={containerStyles}>
       <div>
@@ -948,7 +993,7 @@ const App = () => {
               </div>
             )} */}
           </div>
-          <div style={isAnswerVisible ? imgContainerStyles : defaultImgStyles}>
+          <div id="clues" style={isAnswerVisible ? imgContainerStyles : defaultImgStyles}>
             {slides.length > 0 && jsonData ? (
               <ImageSlider slides={slides} />
             ) : (
@@ -966,7 +1011,7 @@ const App = () => {
               colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
             />
           </div>
-          <div style={answerContainerStyles}>
+          <div id="answer" onClick={bringAnswerToFront} style={answerContainerStyles}>
             {answer && (
               <div style={anwserStyles}>
                 {isAnswerVisible ? (
@@ -980,6 +1025,45 @@ const App = () => {
           <iframe src="https://giphy.com/embed/a5viI92PAF89q" style={gif3styles} class="giphy-embed"></iframe><p><a href="https://giphy.com/gifs/lol-futurama-humor-cFgb5p5e1My3K"></a></p> */}
           <div>  <p style={progressMessageStyles}>{progressMessage}</p></div>
           <div style={bottomContainerStyles}>
+            <div style={keyboardStyles} id="keyboard-cont">
+              <div class="first-row">
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "q")} class="keyboard-button">q</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "w")} class="keyboard-button">w</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "e")} class="keyboard-button">e</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "r")} class="keyboard-button">r</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "t")} class="keyboard-button">t</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "y")} class="keyboard-button">y</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "u")} class="keyboard-button">u</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "i")} class="keyboard-button">i</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "o")} class="keyboard-button">o</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "p")} class="keyboard-button">p</button>
+              </div>
+              <div class="second-row">
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "a")} class="keyboard-button">a</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "s")} class="keyboard-button">s</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "d")} class="keyboard-button">d</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "f")} class="keyboard-button">f</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "g")} class="keyboard-button">g</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "h")} class="keyboard-button">h</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "j")} class="keyboard-button">j</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "k")} class="keyboard-button">k</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "l")} class="keyboard-button">l</button>
+              </div>
+              <div class="third-row">
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "z")} class="keyboard-button">z</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "x")} class="keyboard-button">x</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "c")} class="keyboard-button">c</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "v")} class="keyboard-button">v</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "b")} class="keyboard-button">b</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "n")} class="keyboard-button">n</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "m")} class="keyboard-button">m</button>
+              </div>
+              <div class="fourth-row">
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue.slice(0, -1))} class="keyboard-button">Del</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + " ")} style={spaceBarStyles} class="keyboard-button">space</button>
+                <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={handleSubmit} type="submit" class="keyboard-button">Enter</button>
+              </div>
+            </div>
             <form onSubmit={handleSubmit}>
               <div id="input-container" style={inputContainerStyles}>
                 <input
@@ -995,7 +1079,7 @@ const App = () => {
                   autoFocus
                 />
                 {/* <button disabled={isPreviousDay(selectedIndex, day)} type="submit" style={enterButtonStyles}>Go</button> */}
-                <button onClick={scrollToTop} disabled={isDayGuessedCorrectly(selectedIndex)} type="submit" style={enterButtonStyles}>Go</button>
+                {/* <button onClick={scrollToTop} disabled={isDayGuessedCorrectly(selectedIndex)} type="submit" style={enterButtonStyles}>Go</button> */}
               </div>
             </form>
           </div>

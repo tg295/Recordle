@@ -8,14 +8,15 @@ import { ColorRing } from 'react-loader-spinner'
 
 const slideStyles = {
     width: "40vh",
-    maxWidth: "900px",
+    maxWidth: "300px",
     aspectRatio: "16/9",
     height: "40vh",
-    maxHeight: "900px",
+    maxHeight: "300px",
     borderRadius: "5px",
     backgroundSize: "cover",
     backgroundPosition: "center",
-    border: "3px solid #e66439",
+    border: "3px solid #b90a85da",
+    boxShadow: "5px 10px",
     position: "absolute",
     // padding: "0 10px",
     // objectFit: "cover",
@@ -90,6 +91,8 @@ const ImageSlider = ({ slides }) => {
     //     setCurrentIndex(newIndex);
     // };
     const goToNext = () => {
+        document.getElementById('clues').style.zIndex = 3;
+        document.getElementById('answer').style.zIndex = 2;
         setIsLoading(true);
         const isLastSlide = currentIndex === slides.length - 1;
         const newIndex = isLastSlide ? 0 : currentIndex + 1;
@@ -100,7 +103,7 @@ const ImageSlider = ({ slides }) => {
         setIsLoading(false);
     };
     return (
-        <div style={sliderContainerStyles}>
+        <div id="slider" style={sliderContainerStyles}>
             <div style={sliderStyles}>
                 {/* <div>
                     <div onClick={goToPrevious} style={{ ...leftArrowStyles }}>
