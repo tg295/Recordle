@@ -502,7 +502,7 @@ const App = () => {
       // setIsArtistVisible(true); // Show the artist
       // setIsArtistGifVisible(true); // Show the gif
       // }
-      setInputKey((prevKey) => prevKey + 1); // Update the key to trigger re-render
+      // setInputKey((prevKey) => prevKey + 1); // Update the key to trigger re-render
       setInputValue("");
     }
     console.log(`attempts: ${attempts}`);
@@ -545,6 +545,7 @@ const App = () => {
       // marginBottom: "calc(5% - 3vw)",
       padding: "1px",
       backgroundColor: "#d3ebd8",
+      // border: "1px dotted #b90a85da",
       borderRadius: "5px",
       padding: "5px",
       // transform: "translateY(-70%)",
