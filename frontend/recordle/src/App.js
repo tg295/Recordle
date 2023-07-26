@@ -551,7 +551,7 @@ const App = () => {
       // transform: "translateY(-70%)",
       // top: "50%",
       // maxHeight: "15px",
-      fontSize: "min(4vmin, 30px)",
+      fontSize: "min(3.5vmin, 25px)",
       position: "relative",
 
     };
