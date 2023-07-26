@@ -540,7 +540,7 @@ const App = () => {
       textAlign: "center",
       opacity: 0.9,
       // textShadow: "-1px 0 pink, 0 1px pink, 1px 0 pink, 0 -1px pink",
-      marginTop: "5vmin",
+      marginTop: "5vh",
       // marginBottom: "10px",
       // marginBottom: "calc(5% - 3vw)",
       padding: "1px",
