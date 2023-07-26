@@ -8,15 +8,15 @@ import { ColorRing } from 'react-loader-spinner'
 
 const slideStyles = {
     width: "40vh",
-    maxWidth: "300px",
+    maxWidth: "250px",
     aspectRatio: "16/9",
     height: "40vh",
-    maxHeight: "300px",
+    maxHeight: "250px",
     borderRadius: "5px",
     backgroundSize: "cover",
     backgroundPosition: "center",
     border: "3px solid #b90a85da",
-    boxShadow: "5px 10px",
+    boxShadow: "5px 10px #5F0443",
     position: "absolute",
     // padding: "0 10px",
     // objectFit: "cover",
