@@ -40,7 +40,7 @@ const beerContainerStyles = {
 function Footer() {
     return (
         <footer style={footerStyle} className="text-center text-xs m-auto">
-            &copy; Gurt Data 2023
+            &copy; Gurt Data
             <a style={beerContainerStyles} href="https://www.buymeacoffee.com/thebacongardner">
                 buy me beer
             </a>

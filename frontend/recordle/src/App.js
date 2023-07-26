@@ -537,10 +537,10 @@ const App = () => {
       color: "#5F0443",
       textAlign: "center",
       // textShadow: "-1px 0 pink, 0 1px pink, 1px 0 pink, 0 -1px pink",
-      marginTop: "10vmin",
+      marginTop: "5vmin",
       // marginBottom: "10px",
       // marginBottom: "calc(5% - 3vw)",
-      padding: "2px",
+      padding: "1px",
       // transform: "translateY(-70%)",
       // top: "50%",
       // maxHeight: "15px",
@@ -603,10 +603,10 @@ const App = () => {
     // bottom: "10px",
     width: "100%",
     height: "100%",
-    bottom: "3.5vh",
+    bottom: "7vh",
     // margin: "0 auto",
     position: "relative",
-    transform: isImageVisible ? 'scale(0.85)  translate(max(-10vw, -200px), -4vh)' : 'none', // Shrink the container when the answer is correct 
+    transform: isImageVisible ? 'scale(0.85)  translate(max(-10vw, -200px), -3vh)' : 'none', // Shrink the container when the answer is correct 
     transition: 'transform 0.3s ease', // Add a smooth transition effect
     // zIndex: 1
   };
@@ -619,7 +619,7 @@ const App = () => {
     height: "50vh",
     margin: "0 auto",
     position: "relative",
-    bottom: "4vh",
+    bottom: "7vh",
     transition: 'transform 0.3s ease', // Add a smooth transition effect
   };
 
@@ -720,7 +720,7 @@ const App = () => {
     alignItems: "center",
     backgroundPosition: "center",
     left: "max(52vw, 150px)",
-    bottom: "max(32vh, 37vmin)",
+    bottom: "max(35vh, 37vmin)",
     // marginBottom: "200px",
   }
 
@@ -785,9 +785,9 @@ const App = () => {
 
   const inputStyles = {
     width: "min(80vmin, 450px)",
-    height: "min(2vh, 15px)",
+    height: "min(2vh, 10px)",
     padding: "min(1vmin, 5px)",
-    fontSize: "2.5vmin",
+    fontSize: "2vmin",
     textAlign: "center",
     border: "0.5vmin solid #b90a85da",
     borderRadius: "5px",
