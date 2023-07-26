@@ -505,6 +505,7 @@ const App = () => {
       setInputValue("");
     }
     console.log(`attempts: ${attempts}`);
+    bringAnswerToFront();
     // console.log(content);
   };
 
@@ -776,7 +777,7 @@ const App = () => {
   const inputContainerStyles = {
     width: "100%",
     height: "100%",
-    bottom: "max(22vmin, 20vh)",
+    bottom: "max(22vmin, 21vh)",
     position: "relative",
     display: "flex",
     justifyContent: "center",
@@ -785,7 +786,7 @@ const App = () => {
 
   const inputStyles = {
     width: "min(80vmin, 450px)",
-    height: "min(2vh, 10px)",
+    height: "min(2vh, 15px)",
     padding: "min(1vmin, 5px)",
     fontSize: "2vmin",
     textAlign: "center",
