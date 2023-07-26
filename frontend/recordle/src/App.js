@@ -544,6 +544,8 @@ const App = () => {
       // marginBottom: "10px",
       // marginBottom: "calc(5% - 3vw)",
       padding: "1px",
+      // height: "50%",
+      width: "100%",
       backgroundColor: "#d3ebd8",
       border: "2px solid pink",
       borderRadius: "5px",
