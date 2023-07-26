@@ -780,6 +780,8 @@ const App = () => {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#d3ebd8",
+    background: "linear-gradient(0deg, rgba(211,235,216,1) 10%, rgba(211,235,216,1) 10%, rgba(211,235,216,0) 100%)",
   };
 
   const inputContainerStyles = {
