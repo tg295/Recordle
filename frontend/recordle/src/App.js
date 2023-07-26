@@ -502,7 +502,7 @@ const App = () => {
       // setIsArtistVisible(true); // Show the artist
       // setIsArtistGifVisible(true); // Show the gif
       // }
-      // setInputKey((prevKey) => prevKey + 1); // Update the key to trigger re-render
+      setInputKey((prevKey) => prevKey + 1); // Update the key to trigger re-render
       setInputValue("");
     }
     console.log(`attempts: ${attempts}`);
@@ -804,7 +804,7 @@ const App = () => {
     position: "relative",
     fontFamily: "CustomFont2",
     animation: isIncorrectAnswer ? "shake 0.4s ease-in-out" : "none",
-    opacity: isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex) ? "0.1" : "0.7",
+    opacity: isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex) ? "0.1" : "1",
     transition: 'opacity 0.2s, transform 0.5s',
   };
 
