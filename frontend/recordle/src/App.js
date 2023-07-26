@@ -776,7 +776,7 @@ const App = () => {
   const inputContainerStyles = {
     width: "100%",
     height: "100%",
-    bottom: "max(22vmin, 22vh)",
+    bottom: "max(22vmin, 20vh)",
     position: "relative",
     display: "flex",
     justifyContent: "center",
@@ -785,7 +785,7 @@ const App = () => {
 
   const inputStyles = {
     width: "min(80vmin, 450px)",
-    height: "min(3vh, 18px)",
+    height: "min(2vh, 15px)",
     padding: "min(1vmin, 5px)",
     fontSize: "2.5vmin",
     textAlign: "center",
@@ -794,7 +794,7 @@ const App = () => {
     position: "relative",
     fontFamily: "CustomFont2",
     animation: isIncorrectAnswer ? "shake 0.4s ease-in-out" : "none",
-    opacity: isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex) ? "0" : "0.7",
+    opacity: isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex) ? "0.1" : "0.7",
     transition: 'opacity 0.2s, transform 0.5s',
   };
 
@@ -952,6 +952,11 @@ const App = () => {
     width: "50vmin",
   }
 
+  const formStyles = {
+    // marginBottom: "1px",
+    position: "relative"
+  }
+
   return (
     <div style={containerStyles}>
       <div>
@@ -1030,6 +1035,24 @@ const App = () => {
           <iframe src="https://giphy.com/embed/a5viI92PAF89q" style={gif3styles} class="giphy-embed"></iframe><p><a href="https://giphy.com/gifs/lol-futurama-humor-cFgb5p5e1My3K"></a></p> */}
           <div>  <p style={progressMessageStyles}>{progressMessage}</p></div>
           <div style={bottomContainerStyles}>
+            <form onSubmit={handleSubmit} style={formStyles}>
+              <div id="input-container" style={inputContainerStyles}>
+                <input
+                  // disabled={isPreviousDay(selectedIndex, day)}
+                  disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)}
+                  key={inputKey}
+                  class='form-control'
+                  type="text"
+                  value={inputValue}
+                  onChange={handleInputChange}
+                  style={inputStyles}
+                  placeholder="feed me album titles"
+                  autoFocus
+                />
+                {/* <button disabled={isPreviousDay(selectedIndex, day)} type="submit" style={enterButtonStyles}>Go</button> */}
+                {/* <button onClick={scrollToTop} disabled={isDayGuessedCorrectly(selectedIndex)} type="submit" style={enterButtonStyles}>Go</button> */}
+              </div>
+            </form>
             <div style={keyboardStyles} id="keyboard-cont">
               <div class="first-row">
                 <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "q")} class="keyboard-button">q</button>
@@ -1069,24 +1092,6 @@ const App = () => {
                 <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={handleSubmit} type="submit" class="keyboard-button">Enter</button>
               </div>
             </div>
-            <form onSubmit={handleSubmit}>
-              <div id="input-container" style={inputContainerStyles}>
-                <input
-                  // disabled={isPreviousDay(selectedIndex, day)}
-                  disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)}
-                  key={inputKey}
-                  class='form-control'
-                  type="text"
-                  value={inputValue}
-                  onChange={handleInputChange}
-                  style={inputStyles}
-                  placeholder="feed me album titles"
-                  autoFocus
-                />
-                {/* <button disabled={isPreviousDay(selectedIndex, day)} type="submit" style={enterButtonStyles}>Go</button> */}
-                {/* <button onClick={scrollToTop} disabled={isDayGuessedCorrectly(selectedIndex)} type="submit" style={enterButtonStyles}>Go</button> */}
-              </div>
-            </form>
           </div>
         </div>
         <Footer />
