@@ -269,6 +269,7 @@ const App = () => {
   const handleDayChange = (increment) => {
     // if (attempts === 0) {
     bringAnswerToFront();
+    setInputValue("");
     setLives(5);
     setAttempts(0);
     setIsCorrectAnswer(false);
