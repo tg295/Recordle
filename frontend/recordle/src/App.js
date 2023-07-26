@@ -1057,6 +1057,7 @@ const App = () => {
                   onChange={handleInputChange}
                   style={inputStyles}
                   placeholder="feed me album titles"
+                  inputMode='none'
                   autoFocus
                 />
                 {/* <button disabled={isPreviousDay(selectedIndex, day)} type="submit" style={enterButtonStyles}>Go</button> */}
