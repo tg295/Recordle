@@ -13,6 +13,8 @@ import json
 import requests
 import random
 
+from src.ig import post_to_instagram
+
 import boto3
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.utilities.typing import LambdaContext
@@ -21,6 +23,9 @@ from aws_lambda_powertools.utilities import parameters
 from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 import replicate
+
+start = datetime(2023, 6, 5)
+DAY = (datetime.now() - start).days
 
 ACCESS_KEY = parameters.get_parameter("/recordle/s3_access_key", decrypt=True)
 SECRET_KEY = parameters.get_parameter("/recordle/s3_secret_key", decrypt=True)
@@ -48,9 +53,10 @@ def run(n=3, remove=True, local=False):
     album_list = get_album_list(local)
     album_id = album_list[0]
     logger.info('===== {} ===='.format(album_id))
-    create_and_upload_images(album_id, local, n)
+    album_data = create_and_upload_images(album_id, local, n)
     update_list(album_list, album_id, remove, local)
     update_done(album_id, local)
+    post_to_instagram(album_data, BUCKET, DAY)
 
 
 def get_album_list(local):
@@ -71,6 +77,7 @@ def get_album_list(local):
 def create_and_upload_images(album_id, local, n=3):
     album_data = get_album_data(album_id, local)
     generate_covers(album_data, local, n)
+    return album_data
 
 
 def get_album_data(album_id, local):
