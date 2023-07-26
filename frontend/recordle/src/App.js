@@ -606,7 +606,7 @@ const App = () => {
     bottom: "7vh",
     // margin: "0 auto",
     position: "relative",
-    transform: isImageVisible ? 'scale(0.85)  translate(max(-10vw, -200px), -3vh)' : 'none', // Shrink the container when the answer is correct 
+    transform: isImageVisible ? 'scale(0.85)  translate(max(-10vw, -200px), -1vh)' : 'none', // Shrink the container when the answer is correct 
     transition: 'transform 0.3s ease', // Add a smooth transition effect
     // zIndex: 1
   };
