@@ -68,7 +68,7 @@ function loadLives(lives) {
   // }
   let livesString = "";
   for (let i = 0; i < lives; i++) {
-    livesString += "❤";
+    livesString += "♥";
   }
   return livesString;
 }
@@ -268,6 +268,7 @@ const App = () => {
 
   const handleDayChange = (increment) => {
     // if (attempts === 0) {
+    bringAnswerToFront();
     setLives(5);
     setAttempts(0);
     setIsCorrectAnswer(false);
@@ -536,14 +537,14 @@ const App = () => {
       color: "#5F0443",
       textAlign: "center",
       // textShadow: "-1px 0 pink, 0 1px pink, 1px 0 pink, 0 -1px pink",
-      marginTop: "3vmin",
+      marginTop: "10vmin",
       // marginBottom: "10px",
       // marginBottom: "calc(5% - 3vw)",
       padding: "2px",
       // transform: "translateY(-70%)",
       // top: "50%",
       // maxHeight: "15px",
-      fontSize: "min(4vmin, 20px)",
+      fontSize: "min(4vmin, 30px)",
       position: "relative",
 
     };
@@ -589,7 +590,6 @@ const App = () => {
     // display: "flex",
     padding: "24px",
     position: "fixed",
-    overflowY: "scroll",
     flexDirection: "column",
     alignItems: "center",
     minHeight: "100vh",
@@ -603,10 +603,10 @@ const App = () => {
     // bottom: "10px",
     width: "100%",
     height: "100%",
-    bottom: "1vh",
+    bottom: "3.5vh",
     // margin: "0 auto",
     position: "relative",
-    transform: isImageVisible ? 'scale(0.85)  translate(max(-10vw, -200px), -2vh)' : 'none', // Shrink the container when the answer is correct 
+    transform: isImageVisible ? 'scale(0.85)  translate(max(-10vw, -200px), -4vh)' : 'none', // Shrink the container when the answer is correct 
     transition: 'transform 0.3s ease', // Add a smooth transition effect
     // zIndex: 1
   };
@@ -619,7 +619,7 @@ const App = () => {
     height: "50vh",
     margin: "0 auto",
     position: "relative",
-    bottom: "10px",
+    bottom: "4vh",
     transition: 'transform 0.3s ease', // Add a smooth transition effect
   };
 
@@ -631,7 +631,7 @@ const App = () => {
 
   const headerStyles = {
     fontFamily: "CustomFont",
-    fontSize: "5vh",
+    fontSize: "5vmax",
     fontWeight: "bold",
     color: "black",
     // textShadowColor: "white",
@@ -649,7 +649,7 @@ const App = () => {
 
   const subHeaderStyles = {
     fontFamily: "CustomFont",
-    fontSize: "3vh",
+    fontSize: "3vmax",
     fontWeight: "bold",
     color: "black",
     order: "-1",
@@ -680,21 +680,24 @@ const App = () => {
 
   const releaseDateStyles = {
     fontFamily: "CustomFont2",
-    fontSize: "min(3vmin, 15px)",
+    fontSize: "min(3vmin, 20px)",
     color: "#5F0443",
     padding: "0.5px",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
     // textShadow: "-0.5px 0 #e66439, 0 0.5px #e66439, 0.5px 0 #e66439, 0 -0.5px #e66439",
-    marginBottom: "-200px",
+    marginBottom: "-100px",
     // left: "15%",
     width: "100%",
+    left: "30vw",
+    top: "8vh",
     // height: "120%",
-    marginTop: "2vmin",
+    marginTop: "3vw",
     position: "absolute",
     // maxBottom: "1000px",
     transition: 'opacity 0.2s, transform 0.5s',
+    transform: "rotate(20deg)",
     opacity: showReleaseDate ? '1' : '0.2',
     // borderRadius: "20px",
     // border: "1px solid #e66439",
@@ -717,7 +720,7 @@ const App = () => {
     alignItems: "center",
     backgroundPosition: "center",
     left: "max(52vw, 150px)",
-    bottom: "max(32vh, 41vmin)",
+    bottom: "max(32vh, 37vmin)",
     // marginBottom: "200px",
   }
 
@@ -773,7 +776,7 @@ const App = () => {
   const inputContainerStyles = {
     width: "100%",
     height: "100%",
-    bottom: "min(35vmin, 18vh)",
+    bottom: "max(22vmin, 22vh)",
     position: "relative",
     display: "flex",
     justifyContent: "center",
@@ -791,6 +794,8 @@ const App = () => {
     position: "relative",
     fontFamily: "CustomFont2",
     animation: isIncorrectAnswer ? "shake 0.4s ease-in-out" : "none",
+    opacity: isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex) ? "0" : "0.7",
+    transition: 'opacity 0.2s, transform 0.5s',
   };
 
   const enterButtonStyles = {
@@ -812,7 +817,7 @@ const App = () => {
     fontFamily: "CustomFont2",
     fontSize: "4vmin",
     // fontWeight: "bold",
-    color: "#590760d9",
+    color: "#5F0443",
     marginTop: "-3px",
     top: "1.5%",
     right: "2%",
@@ -980,7 +985,7 @@ const App = () => {
                 style={releaseDateStyles}
                 onClick={handleReleaseDateClick}
               >
-                Year of release: {showReleaseDate ? jsonData.release_date.substring(0, 4) : "????"}
+                {showReleaseDate ? `[ ${jsonData.release_date.substring(0, 4)} ]` : "[ ???? ]"}
               </p>
             )}
             {/* <a href={spotifyLink} target="_blank" rel="noopener noreferrer">

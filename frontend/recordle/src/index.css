@@ -157,7 +157,7 @@ blink {
 }
 
 .keyboard-button {
-    font-size: min(2.5vh, 15px);
+    font-size: min(3vh, 30px);
     font-weight: 700;
     padding: min(1vmin, 6px);
     color: white;
