@@ -789,7 +789,7 @@ const App = () => {
     width: "min(80vmin, 450px)",
     height: "min(2vh, 15px)",
     padding: "min(1vmin, 5px)",
-    fontSize: "2vmin",
+    fontSize: "2.5vmin",
     textAlign: "center",
     border: "0.5vmin solid #b90a85da",
     borderRadius: "5px",
