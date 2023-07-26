@@ -698,7 +698,7 @@ const App = () => {
     // left: "15%",
     width: "100%",
     left: "30vw",
-    top: "8vh",
+    top: "7vh",
     // height: "120%",
     marginTop: "3vw",
     position: "absolute",
