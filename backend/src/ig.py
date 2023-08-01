@@ -68,7 +68,7 @@ def publish_container(creation_id = '',instagram_account_id='',access_token=''):
     return response
 
 def post_to_instagram(album_data, bucket, day):
-    caption = f"Day {day}: {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['artist'])} • {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['title'])}"
+    caption = f"Day {day}: {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['artist'])} • {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['title'])} ({album_data['release_date'][:4]}) \n𝒂𝒏𝒔𝒘𝒆𝒓 𝒃𝒆𝒍𝒐𝒘...\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n{album_data['artist']} • {album_data['title']} ({album_data['release_date'][:4]})"
     # r = get_long_lived_access_token()
     # print(r.json())
     img_urls = [f"https://{bucket}.s3.eu-west-2.amazonaws.com/img/{album_data['id']}_{album_data['formatted_title']}_GEN_{i}.png" for i in range(3)]
@@ -78,12 +78,48 @@ def post_to_instagram(album_data, bucket, day):
 
 if __name__ == "__main__":
 
-    album_id = '2tukc7pH4qTuXcfaHjLIBc'
-    url = 'https://alt-covers-bucket.s3.eu-west-2.amazonaws.com'
-    r = requests.get(f"{url}/data/{album_id}.json")
-    album_data = r.json()
-    print(album_data)
-    post_to_instagram(album_data, 'alt-covers-bucket', 50)
+    import os
+    import sys
+    import time
+
+    sys.path.append(os.path.join(os.getcwd()))
+
+    n = 5
+    m = 0
+    i = 0
+    j = 36
+
+    from src.handlers.main import download_from_aws
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    prefix = root+'/data'
+
+    filepath = download_from_aws('albums_filtered.txt', '{}/albums_filtered.txt'.format(prefix))
+
+    # j += 1 # account for 0 index
+
+    for album_id in open(filepath, 'r').readlines():
+
+        if i < j:
+            i += 1
+            continue
+        album_id = album_id.strip('\n')
+
+        print('------ {} ------'.format(j))
+
+        url = 'https://alt-covers-bucket.s3.eu-west-2.amazonaws.com'
+        r = requests.get(f"{url}/data/{album_id}.json")
+        album_data = r.json()
+        print(album_data)
+        post_to_instagram(album_data, 'alt-covers-bucket', j)
+
+        j += 1
+        m += 1
+        i += 1
+
+        if m == n:
+            break
+
+        time.sleep(5)
 
     # # r = get_long_lived_access_token()
     # # print(r.text)
