@@ -87,7 +87,7 @@ if __name__ == "__main__":
     n = 5
     m = 0
     i = 0
-    j = 36
+    j = 38
 
     from src.handlers.main import download_from_aws
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

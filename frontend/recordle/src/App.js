@@ -557,6 +557,12 @@ const App = () => {
     // console.log(content);
   };
 
+  // document.addEventListener('keypress', function (e) {
+  //   if (e.key === 'Enter') {
+  //     handleSubmit(e);
+  //   }
+  // });
+
   useEffect(() => {
     if (isAnswerVisible) {
       setIsImageVisible(true);
@@ -655,8 +661,7 @@ const App = () => {
       borderRadius: "10px",
       opacity: "0.7",
     }
-
-    const closeKeyboardButtonStyles = { top: "1%", left: "-40%", position: "relative", backgroundColor: "transparent", fontFamily: "CustomFont", borderRadius: "0px", }
+    // const closeKeyboardButtonStyles = { top: "1%", left: "-40%", position: "relative", backgroundColor: "transparent", fontFamily: "CustomFont", borderRadius: "0px", }
 
     return (
       <div style={keyboardStyles} id="keyboard-cont">
@@ -674,40 +679,40 @@ const App = () => {
           autoFocus
         />
         <div class="first-row">
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "q")} class="keyboard-button">q</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "w")} class="keyboard-button">w</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "e")} class="keyboard-button">e</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "r")} class="keyboard-button">r</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "t")} class="keyboard-button">t</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "y")} class="keyboard-button">y</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "u")} class="keyboard-button">u</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "i")} class="keyboard-button">i</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "o")} class="keyboard-button">o</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "p")} class="keyboard-button">p</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "q") & setIsIncorrectAnswer(false)} class="keyboard-button">q</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "w") & setIsIncorrectAnswer(false)} class="keyboard-button">w</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "e") & setIsIncorrectAnswer(false)} class="keyboard-button">e</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "r") & setIsIncorrectAnswer(false)} class="keyboard-button">r</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "t") & setIsIncorrectAnswer(false)} class="keyboard-button">t</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "y") & setIsIncorrectAnswer(false)} class="keyboard-button">y</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "u") & setIsIncorrectAnswer(false)} class="keyboard-button">u</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "i") & setIsIncorrectAnswer(false)} class="keyboard-button">i</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "o") & setIsIncorrectAnswer(false)} class="keyboard-button">o</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "p") & setIsIncorrectAnswer(false)} class="keyboard-button">p</button>
         </div>
         <div class="second-row">
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "a")} class="keyboard-button">a</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "s")} class="keyboard-button">s</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "d")} class="keyboard-button">d</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "f")} class="keyboard-button">f</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "g")} class="keyboard-button">g</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "h")} class="keyboard-button">h</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "j")} class="keyboard-button">j</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "k")} class="keyboard-button">k</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "l")} class="keyboard-button">l</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "a") & setIsIncorrectAnswer(false)} class="keyboard-button">a</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "s") & setIsIncorrectAnswer(false)} class="keyboard-button">s</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "d") & setIsIncorrectAnswer(false)} class="keyboard-button">d</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "f") & setIsIncorrectAnswer(false)} class="keyboard-button">f</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "g") & setIsIncorrectAnswer(false)} class="keyboard-button">g</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "h") & setIsIncorrectAnswer(false)} class="keyboard-button">h</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "j") & setIsIncorrectAnswer(false)} class="keyboard-button">j</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "k") & setIsIncorrectAnswer(false)} class="keyboard-button">k</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "l") & setIsIncorrectAnswer(false)} class="keyboard-button">l</button>
         </div>
         <div class="third-row">
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "z")} class="keyboard-button">z</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "x")} class="keyboard-button">x</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "c")} class="keyboard-button">c</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "v")} class="keyboard-button">v</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "b")} class="keyboard-button">b</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "n")} class="keyboard-button">n</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "m")} class="keyboard-button">m</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "z") & setIsIncorrectAnswer(false)} class="keyboard-button">z</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "x") & setIsIncorrectAnswer(false)} class="keyboard-button">x</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "c") & setIsIncorrectAnswer(false)} class="keyboard-button">c</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "v") & setIsIncorrectAnswer(false)} class="keyboard-button">v</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "b") & setIsIncorrectAnswer(false)} class="keyboard-button">b</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "n") & setIsIncorrectAnswer(false)} class="keyboard-button">n</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "m") & setIsIncorrectAnswer(false)} class="keyboard-button">m</button>
         </div>
         <div class="fourth-row">
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue.slice(0, -1))} class="keyboard-button">Del</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + " ")} style={spaceBarStyles} class="keyboard-button">space</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue.slice(0, -1)) & setIsIncorrectAnswer(false)} class="keyboard-button">Del</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + " ") & setIsIncorrectAnswer(false)} style={spaceBarStyles} class="keyboard-button">space</button>
           <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={handleSubmit} type="submit" class="keyboard-button">Enter</button>
         </div>
       </div>
@@ -1051,6 +1056,7 @@ const App = () => {
 
   const handleInputChange = (event) => {
     setInputValue(event.target.value);
+    setIsIncorrectAnswer(false);
   };
 
   const spotifyLogoStyles = {
@@ -1171,12 +1177,12 @@ const App = () => {
           <iframe src="https://giphy.com/embed/a5viI92PAF89q" style={gif3styles} class="giphy-embed"></iframe><p><a href="https://giphy.com/gifs/lol-futurama-humor-cFgb5p5e1My3K"></a></p> */}
           <div>  <p style={progressMessageStyles}>{progressMessage}</p></div>
           <div style={bottomContainerStyles}>
-            <form onSubmit={handleSubmit} style={formStyles}>
+            {/* <form onSubmit={handleSubmit} style={formStyles}>
               <div id="input-container" style={inputContainerStyles}>
-                {/* <button disabled={isPreviousDay(selectedIndex, day)} type="submit" style={enterButtonStyles}>Go</button> */}
-                {/* <button onClick={scrollToTop} disabled={isDayGuessedCorrectly(selectedIndex)} type="submit" style={enterButtonStyles}>Go</button> */}
+                <button disabled={isPreviousDay(selectedIndex, day)} type="submit" style={enterButtonStyles}>Go</button>
+                <button onClick={scrollToTop} disabled={isDayGuessedCorrectly(selectedIndex)} type="submit" style={enterButtonStyles}>Go</button>
               </div>
-            </form>
+            </form> */}
             <Keyboard show={showKeyboard} />
           </div>
         </div>
