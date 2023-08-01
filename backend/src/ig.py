@@ -1,35 +1,37 @@
+import os
 import requests
+import re
 
-APP_ID = 2519453651549511
-APP_SECRET = '2f85771b26e4b506540aedef21f4e8ca'
-ACCESS_TOKEN = "EAAjzbgPtvUcBABHNpiGfp05wm4a4mstUBdgPV1iZCODntqZA1X2Purh7creun9jbZA6Gz8TfOdYOYgkXcPfei45tlzy3RLw8rNl8UlNZBFxByBZBXNs2K8a8ziprgTZC5Kc0QUm19rH380e2JoGsYMTAhiyQPSLdLfl5kgMcUNXWhpvc4IMvWp9mWhriWaB2LOGVXpXbeOj4PWbaJTuQqjUf2DZC0op2JoZD"
-LL_ACCESS_TOKEN = {"access_token":"EAAjzbgPtvUcBAKJQhX6nps8EOFntLFvUepAevg5GpwvHrT0zyFb2kZB4b7C8UsLKNHrmWGVEVZAEBCb1c9215t9tNDVzBDw99HI6eIwXibFxxngspy3pOzYZAhAVXTxuqEy0tNjM5Gtw3pS5M8dt6sjhajLZAwb5B2rgj2Haum6axUL5vDpJ","token_type":"bearer","expires_in":5182639}
+from aws_lambda_powertools.utilities import parameters
 
-client_id = '2519453651549511'
-client_secret = '2f85771b26e4b506540aedef21f4e8ca'
-redirect_url = 'localhost'
-access_url = 'https://www.facebook.com/v13.0/dialog/oauth?response_type=token&display=popup&client_id=your_client_id&redirect_uri=your_redirect_uri&auth_type=rerequest&scope=user_location%2Cuser_photos%2Cuser_friends%2Cuser_gender%2Cpages_show_list%2Cinstagram_basic%2Cinstagram_manage_comments%2Cinstagram_manage_insights%2Cpages_read_engagement%2Cpublic_profile'
-graph_url = 'https://graph.facebook.com/v15.0/'
+IG_GRAPH_URL = 'https://graph.facebook.com/v15.0/'
+IG_ACCESS_URL = 'https://www.facebook.com/v13.0/dialog/oauth?response_type=token&display=popup&client_id=your_client_id&redirect_uri=your_redirect_uri&auth_type=rerequest&scope=user_location%2Cuser_photos%2Cuser_friends%2Cuser_gender%2Cpages_show_list%2Cinstagram_basic%2Cinstagram_manage_comments%2Cinstagram_manage_insights%2Cpages_read_engagement%2Cpublic_profile'
+IG_ACCOUNT_ID = parameters.get_parameter("/recordle/ig_account_id", decrypt=True)
+IG_REDIRECT_URL = parameters.get_parameter("/recordle/ig_redirect_url", decrypt=True)
+IG_ACCESS_TOKEN = parameters.get_parameter("/recordle/ig_access_token", decrypt=True)
+IG_LL_ACCESS_TOKEN = parameters.get_parameter("/recordle/ig_ll_access_token", decrypt=True)
+IG_CLIENT_ID = parameters.get_parameter("/recordle/ig_client_id", decrypt=True)
+IG_CLIENT_SECRET = parameters.get_parameter("/recordle/ig_client_secret", decrypt=True)
 
 def func_get_url():
-    print('\n access code url',access_url)
+    print('\n access code url',IG_ACCESS_URL)
     code = input("\n enter the url")
     code = code.rsplit('access_token=')[1]
     code = code.rsplit('&data_access_expiration')[0]
     return code
 
-def func_get_long_lived_access_token(access_token = ACCESS_TOKEN):
-    url = graph_url + 'oauth/access_token'
+def get_long_lived_access_token(access_token = IG_ACCESS_TOKEN):
+    url = IG_GRAPH_URL + 'oauth/access_token'
     param = dict()
     param['grant_type'] = 'fb_exchange_token'
-    param['client_id'] = client_id
-    param['client_secret'] = client_secret
+    param['client_id'] = IG_CLIENT_ID
+    param['client_secret'] = IG_CLIENT_SECRET
     param['fb_exchange_token'] = access_token
     response = requests.get(url = url,params=param)
     return response
 
 def post_carousel(caption = '',media_url = [],instagram_account_id='',access_token=''):
-    url = graph_url + instagram_account_id + '/media'
+    url = IG_GRAPH_URL + instagram_account_id + '/media'
     param = dict()
     param['access_token'] = access_token
     param['is_carousel_item'] = 'true'
@@ -44,7 +46,7 @@ def post_carousel(caption = '',media_url = [],instagram_account_id='',access_tok
     return carousel_container_id
 
 def make_carousel_container(container_id='',caption='',access_token='',instagram_account_id=''):
-    url = graph_url + instagram_account_id + '/media'
+    url = IG_GRAPH_URL + instagram_account_id + '/media'
     container_id = ','.join(container_id)
     param = dict()
     param['access_token'] = access_token
@@ -57,7 +59,7 @@ def make_carousel_container(container_id='',caption='',access_token='',instagram
 
 # creation_id is container_id
 def publish_container(creation_id = '',instagram_account_id='',access_token=''):
-    url = graph_url + instagram_account_id + '/media_publish'
+    url = IG_GRAPH_URL + instagram_account_id + '/media_publish'
     param = dict()
     param['access_token'] = access_token
     param['creation_id'] = creation_id
@@ -65,17 +67,68 @@ def publish_container(creation_id = '',instagram_account_id='',access_token=''):
     response = response.json()
     return response
 
+def post_to_instagram(album_data, bucket, day):
+    caption = f"Day {day}: {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['artist'])} • {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['title'])} ({album_data['release_date'][:4]}) \n𝒂𝒏𝒔𝒘𝒆𝒓 𝒃𝒆𝒍𝒐𝒘...\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n{album_data['artist']} • {album_data['title']} ({album_data['release_date'][:4]})"
+    # r = get_long_lived_access_token()
+    # print(r.json())
+    img_urls = [f"https://{bucket}.s3.eu-west-2.amazonaws.com/img/{album_data['id']}_{album_data['formatted_title']}_GEN_{i}.png" for i in range(3)]
+    creation_id = post_carousel(caption=caption, media_url=img_urls, instagram_account_id=IG_ACCOUNT_ID, access_token=IG_LL_ACCESS_TOKEN)
+    publish_container(creation_id=creation_id,instagram_account_id=IG_ACCOUNT_ID,access_token=IG_LL_ACCESS_TOKEN)
+
 
 if __name__ == "__main__":
 
-    # r = func_get_long_lived_access_token()
-    # print(r.text)
-    # print(r.json())
-    img_urls = [
-        "https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/7nXJ5k4XgRj5OLg9m8V3zc_purple_rain_GEN_0.png",
-        "https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/7nXJ5k4XgRj5OLg9m8V3zc_purple_rain_GEN_1.png",
-        "https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/7nXJ5k4XgRj5OLg9m8V3zc_purple_rain_GEN_2.png"
-    ]
-    creation_id = post_carousel(caption="Day 1", media_url=img_urls, instagram_account_id='17841460755599884', access_token=LL_ACCESS_TOKEN['access_token'])
-    # print(creation_id)
-    publish_container(creation_id=creation_id,instagram_account_id='17841460755599884',access_token=LL_ACCESS_TOKEN['access_token'])
+    import os
+    import sys
+    import time
+
+    sys.path.append(os.path.join(os.getcwd()))
+
+    n = 5
+    m = 0
+    i = 0
+    j = 36
+
+    from src.handlers.main import download_from_aws
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    prefix = root+'/data'
+
+    filepath = download_from_aws('albums_filtered.txt', '{}/albums_filtered.txt'.format(prefix))
+
+    # j += 1 # account for 0 index
+
+    for album_id in open(filepath, 'r').readlines():
+
+        if i < j:
+            i += 1
+            continue
+        album_id = album_id.strip('\n')
+
+        print('------ {} ------'.format(j))
+
+        url = 'https://alt-covers-bucket.s3.eu-west-2.amazonaws.com'
+        r = requests.get(f"{url}/data/{album_id}.json")
+        album_data = r.json()
+        print(album_data)
+        post_to_instagram(album_data, 'alt-covers-bucket', j)
+
+        j += 1
+        m += 1
+        i += 1
+
+        if m == n:
+            break
+
+        time.sleep(5)
+
+    # # r = get_long_lived_access_token()
+    # # print(r.text)
+    # # print(r.json())
+    # img_urls = [
+    #     "https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/7nXJ5k4XgRj5OLg9m8V3zc_purple_rain_GEN_0.png",
+    #     "https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/7nXJ5k4XgRj5OLg9m8V3zc_purple_rain_GEN_1.png",
+    #     "https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/7nXJ5k4XgRj5OLg9m8V3zc_purple_rain_GEN_2.png"
+    # ]
+    # creation_id = post_carousel(caption="Day 1", media_url=img_urls, instagram_account_id='17841460755599884', access_token=IG_LL_ACCESS_TOKEN['access_token'])
+    # # print(creation_id)
+    # publish_container(creation_id=creation_id,instagram_account_id='17841460755599884',access_token=IG_LL_ACCESS_TOKEN['access_token'])

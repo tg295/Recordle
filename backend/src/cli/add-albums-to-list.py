@@ -33,6 +33,25 @@ def add_album_todo(album_ids):
     logger.info("total albums in list: {}".format(len(albums)))
 
 # @click.command()
+# @click.argument('album_ids', type=str)
+def add_album_todo_immediately(album_ids):
+    """ Add album(s) to the list of albums to download """
+    albums_new = album_ids.split(',')
+    albums_old = get_album_list(local=True)
+    logger.info("total albums in list: {}".format(len(albums_old)))
+    
+    albums_new.extend(albums_old)
+    albums = list(set(albums_new))
+    
+    prefix = root+'/data'
+
+    with open('{}/albums_todo.txt'.format(prefix), 'w') as f:
+        f.write('\n'.join(albums))
+    upload_to_aws('{}/albums_todo.txt'.format(prefix), 'albums_todo.txt')
+    logger.info('albums added: {}'.format(', '.join(album_ids)))
+    logger.info("total albums in list: {}".format(len(albums)))
+
+# @click.command()
 # @click.argument('album_id', type=str)
 def add_album_complete(album_id):
     """ Add album to the list of albums that have been downloaded """
@@ -45,4 +64,5 @@ def add_album_complete(album_id):
 
 
 if __name__ == "__main__":
-    add_album_todo("5m1RkwKeU7MV0Ni6PH2lPy")
+    # add_album_todo_immediately("2aGFVLz0oQPa3uxCfq9lcU")
+    add_album_todo("0L7mC9kTa31p3cEaFwHIgD")

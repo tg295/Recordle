@@ -1,18 +1,4 @@
-import React from 'react'
-
-// const footerStyle = {
-//     fontFamily: "VT323, monospace",
-//     backgroundPosition: "left",
-//     justifyContent: "left",
-//     // display: "flex",
-//     marginRight: "auto",
-//     postition: "fixed",
-//     left: "0",
-//     bottom: "0",
-//     right: "0",
-//     fontSize: "8px",
-//     flexDirection: "column"
-// };
+import React from 'react';
 
 const footerStyle = {
     fontFamily: "CustomFont2",
@@ -37,10 +23,38 @@ const beerContainerStyles = {
     position: "absolute"
 }
 
-function Footer() {
+const instructionsButtonStyes = {
+    backgroundColor: "rgba(52, 52, 52, 0)",
+    color: "white",
+    padding: "5px 10px",
+    fontFamily: "CustomFont2",
+    fontSize: "1vh",
+    borderRadius: "5px",
+    position: "absolute",
+    alignItems: "center",
+    textAlign: "center",
+    right: "62%"
+}
+
+const keyboardButtonStyles = {
+    backgroundColor: "rgba(52, 52, 52, 0)",
+    color: "white",
+    padding: "5px 10px",
+    fontFamily: "CustomFont2",
+    fontSize: "1vh",
+    borderRadius: "5px",
+    position: "absolute",
+    alignItems: "center",
+    textAlign: "center",
+    right: "35%"
+}
+
+function Footer({ setShowModal, setShowKeyboard, showKeyboard }) {
     return (
         <footer style={footerStyle} className="text-center text-xs m-auto">
             &copy; Gurt Data
+            <button style={instructionsButtonStyes} onClick={() => setShowModal(true)}>help</button>
+            <button style={keyboardButtonStyles} onClick={() => setShowKeyboard(!showKeyboard)}>toggle keyboard</button>
             <a style={beerContainerStyles} href="https://www.buymeacoffee.com/thebacongardner">
                 buy me beer
             </a>

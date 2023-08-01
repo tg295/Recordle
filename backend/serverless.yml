@@ -27,6 +27,13 @@ provider:
     SPOTIPY_REDIRECT_URI: ${ssm:/recordle/spotify_redirect_uri}
     # Replicate
     REPLICATE_API_TOKEN: ${ssm:/recordle/replicate_api_token}
+    # Instagram
+    IG_ACCOUNT_ID: ${ssm:/recordle/ig_account_id}
+    IG_REDIRECT_URL: ${ssm:/recordle/ig_redirect_url}
+    IG_ACCESS_TOKEN: ${ssm:/recordle/ig_access_token}
+    IG_LL_ACCESS_TOKEN: ${ssm:/recordle/ig_ll_access_token}
+    IG_CLIENT_ID: ${ssm:/recordle/ig_client_id}
+    IG_CLIENT_SECRET: ${ssm:/recordle/ig_client_secret}
   memorySize: 128
   timeout: 5
   iamRoleStatements:
