@@ -680,7 +680,7 @@ const App = () => {
           style={inputStyles}
           placeholder="enter album title"
           // onSubmit={handleSubmit}
-          // inputMode='text'
+          inputMode='none'
           autoFocus
         />
       </div>);
