@@ -8,7 +8,7 @@ import './fonts.css';
 import './index.css';
 import Blink from 'react-blink-text';
 import { ColorRing } from 'react-loader-spinner'
-import Draggable, { DraggableCore } from "react-draggable";
+// import Draggable, { DraggableCore } from "react-draggable";
 
 // import { text } from '@fortawesome/fontawesome-svg-core';
 // import InstructionsModal from "./Components/InstructionsModal";
@@ -708,7 +708,7 @@ const App = () => {
           style={inputStyles}
           placeholder="enter album title"
           // onSubmit={handleSubmit}
-          // inputMode='text'
+          inputMode='none'
           autoFocus
         />
         <div class="first-row">
@@ -1196,18 +1196,18 @@ const App = () => {
               colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
             />
           </div>
-          <Draggable>
-            <div id="answer" style={answerContainerStyles}>
-              {/* <div id="answer" onClick={bringAnswerToFront} style={answerContainerStyles}> */}
-              {answer && (
-                <div style={anwserStyles}>
-                  {isAnswerVisible ? (
-                    <img src={answer.url} alt={answer.title} style={answerImageStyles} />
-                  ) : (<img src={placeholderImage} alt="Placeholder" style={answerImageStyles} />)}
-                </div>
-              )}
-            </div>
-          </Draggable>
+          {/* <Draggable> */}
+          <div id="answer" style={answerContainerStyles}>
+            {/* <div id="answer" onClick={bringAnswerToFront} style={answerContainerStyles}> */}
+            {answer && (
+              <div style={anwserStyles}>
+                {isAnswerVisible ? (
+                  <img src={answer.url} alt={answer.title} style={answerImageStyles} />
+                ) : (<img src={placeholderImage} alt="Placeholder" style={answerImageStyles} />)}
+              </div>
+            )}
+          </div>
+          {/* </Draggable> */}
           {/* <iframe src="https://giphy.com/embed/4oMoIbIQrvCjm" style={gifStyles} class="gifyEmbed"></iframe><p><a href="https://giphy.com/gifs/the-simpsons-bart-simpson-4oMoIbIQrvCjm"></a></p>
           <iframe src="https://giphy.com/embed/DpPUDW4XTw4EM" style={gif2styles} class="giphyEmbed"></iframe><p><a href="https://giphy.com/gifs/reaction-a5viI92PAF89q"></a></p>
           <iframe src="https://giphy.com/embed/a5viI92PAF89q" style={gif3styles} class="giphy-embed"></iframe><p><a href="https://giphy.com/gifs/lol-futurama-humor-cFgb5p5e1My3K"></a></p> */}
