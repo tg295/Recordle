@@ -8,6 +8,8 @@ import './fonts.css';
 import './index.css';
 import Blink from 'react-blink-text';
 import { ColorRing } from 'react-loader-spinner'
+import Draggable, { DraggableCore } from "react-draggable";
+
 // import { text } from '@fortawesome/fontawesome-svg-core';
 // import InstructionsModal from "./Components/InstructionsModal";
 
@@ -52,10 +54,10 @@ function wordInThing(word, thing) {
   return thing.toLowerCase().indexOf(word.toLowerCase());
 }
 
-function bringAnswerToFront() {
-  document.getElementById('answer').style.zIndex = 1;
-  document.getElementById('clues').style.zIndex = 0;
-}
+// function bringAnswerToFront() {
+//   document.getElementById('answer').style.zIndex = 1;
+//   document.getElementById('clues').style.zIndex = 0;
+// }
 
 function loadLives(lives) {
   // if (lives === 0) {
@@ -251,6 +253,7 @@ const App = () => {
     fetchJsonData();
   }, [selectedIndex, textData]);
 
+
   // const handleRevealClick = () => {
   //   setShowReleaseDate(true);
   //   setIsAnswerVisible(true);
@@ -315,7 +318,7 @@ const App = () => {
 
   const handleDayChange = (increment) => {
     // if (attempts === 0) {
-    bringAnswerToFront();
+    // bringAnswerToFront();
     setInputValue("");
     setLives(5);
     setAttempts(0);
@@ -553,15 +556,9 @@ const App = () => {
       setInputValue("");
     }
     console.log(`attempts: ${attempts}`);
-    bringAnswerToFront();
+    // bringAnswerToFront();
     // console.log(content);
   };
-
-  // document.addEventListener('keypress', function (e) {
-  //   if (e.key === 'Enter') {
-  //     handleSubmit(e);
-  //   }
-  // });
 
   useEffect(() => {
     if (isAnswerVisible) {
@@ -641,7 +638,13 @@ const App = () => {
   // }, []);
 
   const Keyboard = ({ show }) => {
-    if (!show) return null;
+
+    const handleKeyDown = (event) => {
+      if (event.keyCode === 13) {
+        // Step 3: Check if the Enter key is pressed (key code 13)
+        handleSubmit(event);
+      }
+    };
 
     const keyboardStyles = {
       bottom: "3vh",
@@ -660,8 +663,36 @@ const App = () => {
       backgroundColor: "rgba(226, 135, 10, 0.953)",
       borderRadius: "10px",
       opacity: "0.7",
-    }
+    };
+
+    if (!show) return (
+      <div style={keyboardStyles} id="keyboard-cont">
+        <input
+          // disabled={isPreviousDay(selectedIndex, day)}
+          disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)}
+          key={inputKey}
+          id='input-box'
+          class='form-control'
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
+          style={inputStyles}
+          placeholder="enter album title"
+          // onSubmit={handleSubmit}
+          // inputMode='text'
+          autoFocus
+        />
+      </div>);
+
     // const closeKeyboardButtonStyles = { top: "1%", left: "-40%", position: "relative", backgroundColor: "transparent", fontFamily: "CustomFont", borderRadius: "0px", }
+
+    // document.addEventListener('keypress', function (e) {
+    //   if (e.key === 'Enter') {
+    //     console.log('enter')
+
+    //   }
+    // });
 
     return (
       <div style={keyboardStyles} id="keyboard-cont">
@@ -673,9 +704,11 @@ const App = () => {
           type="text"
           value={inputValue}
           onChange={handleInputChange}
+          onKeyDown={handleKeyDown}
           style={inputStyles}
           placeholder="enter album title"
-          inputMode='none'
+          // onSubmit={handleSubmit}
+          // inputMode='text'
           autoFocus
         />
         <div class="first-row">
@@ -713,7 +746,7 @@ const App = () => {
         <div class="fourth-row">
           <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue.slice(0, -1)) & setIsIncorrectAnswer(false)} class="keyboard-button">Del</button>
           <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + " ") & setIsIncorrectAnswer(false)} style={spaceBarStyles} class="keyboard-button">space</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={handleSubmit} type="submit" class="keyboard-button">Enter</button>
+          <button id="enter-button" disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={handleSubmit} type="submit" class="keyboard-button">Enter</button>
         </div>
       </div>
     );
@@ -1163,15 +1196,18 @@ const App = () => {
               colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
             />
           </div>
-          <div id="answer" onClick={bringAnswerToFront} style={answerContainerStyles}>
-            {answer && (
-              <div style={anwserStyles}>
-                {isAnswerVisible ? (
-                  <img src={answer.url} alt={answer.title} style={answerImageStyles} />
-                ) : (<img src={placeholderImage} alt="Placeholder" style={answerImageStyles} />)}
-              </div>
-            )}
-          </div>
+          <Draggable>
+            <div id="answer" style={answerContainerStyles}>
+              {/* <div id="answer" onClick={bringAnswerToFront} style={answerContainerStyles}> */}
+              {answer && (
+                <div style={anwserStyles}>
+                  {isAnswerVisible ? (
+                    <img src={answer.url} alt={answer.title} style={answerImageStyles} />
+                  ) : (<img src={placeholderImage} alt="Placeholder" style={answerImageStyles} />)}
+                </div>
+              )}
+            </div>
+          </Draggable>
           {/* <iframe src="https://giphy.com/embed/4oMoIbIQrvCjm" style={gifStyles} class="gifyEmbed"></iframe><p><a href="https://giphy.com/gifs/the-simpsons-bart-simpson-4oMoIbIQrvCjm"></a></p>
           <iframe src="https://giphy.com/embed/DpPUDW4XTw4EM" style={gif2styles} class="giphyEmbed"></iframe><p><a href="https://giphy.com/gifs/reaction-a5viI92PAF89q"></a></p>
           <iframe src="https://giphy.com/embed/a5viI92PAF89q" style={gif3styles} class="giphy-embed"></iframe><p><a href="https://giphy.com/gifs/lol-futurama-humor-cFgb5p5e1My3K"></a></p> */}
@@ -1186,7 +1222,7 @@ const App = () => {
             <Keyboard show={showKeyboard} />
           </div>
         </div>
-        <Footer setShowModal={setShowModal} setShowKeyboard={setShowKeyboard} showKeyboard={showKeyboard} />
+        <Footer setShowModal={setShowModal} setShowKeyboard={setShowKeyboard} showKeyboard={showKeyboard} setIsIncorrectAnswer={setIsIncorrectAnswer} />
       </Router >
     </div >
   );

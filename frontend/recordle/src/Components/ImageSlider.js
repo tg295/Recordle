@@ -92,7 +92,7 @@ const ImageSlider = ({ slides }) => {
     // };
     const goToNext = () => {
         // document.getElementById('clues').style.zIndex = 0;
-        document.getElementById('answer').style.zIndex = -1;
+        // document.getElementById('answer').style.zIndex = -1;
         setIsLoading(true);
         const isLastSlide = currentIndex === slides.length - 1;
         const newIndex = isLastSlide ? 0 : currentIndex + 1;

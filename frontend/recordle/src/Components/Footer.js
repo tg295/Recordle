@@ -1,5 +1,6 @@
 import React from 'react';
 
+
 const footerStyle = {
     fontFamily: "CustomFont2",
     color: "white",
@@ -49,12 +50,12 @@ const keyboardButtonStyles = {
     right: "35%"
 }
 
-function Footer({ setShowModal, setShowKeyboard, showKeyboard }) {
+function Footer({ setShowModal, setShowKeyboard, showKeyboard, setIsIncorrectAnswer }) {
     return (
         <footer style={footerStyle} className="text-center text-xs m-auto">
             &copy; Gurt Data
-            <button style={instructionsButtonStyes} onClick={() => setShowModal(true)}>help</button>
-            <button style={keyboardButtonStyles} onClick={() => setShowKeyboard(!showKeyboard)}>toggle keyboard</button>
+            <button style={instructionsButtonStyes} onClick={() => setShowModal(true) & setIsIncorrectAnswer(false)}>help</button>
+            <button style={keyboardButtonStyles} onClick={() => setShowKeyboard(!showKeyboard) & setIsIncorrectAnswer(false)}>toggle keyboard</button>
             <a style={beerContainerStyles} href="https://www.buymeacoffee.com/thebacongardner">
                 buy me beer
             </a>
