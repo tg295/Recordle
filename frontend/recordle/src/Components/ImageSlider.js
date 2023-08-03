@@ -93,8 +93,9 @@ const dotsContainerStyles = {
 const dotStyle = {
     margin: "0 3px",
     cursor: "pointer",
-    fontSize: "3vh",
+    fontSize: "4vh",
     color: "#8a192f",
+    frontFamily: "CustomFont"
 };
 
 
@@ -149,7 +150,7 @@ const ImageSlider = ({ slides }) => {
                             key={slideIndex}
                             onClick={() => goToSlide(slideIndex)}
                         >
-                            {slideIndex === currentIndex ? "●" : "○"}
+                            {slideIndex === currentIndex ? "▪" : "▫"}
                         </div>
                     ))}
                 </div>
