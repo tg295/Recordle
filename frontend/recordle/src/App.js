@@ -9,6 +9,7 @@ import './index.css';
 import Blink from 'react-blink-text';
 import { ColorRing } from 'react-loader-spinner'
 import Draggable, { DraggableCore } from "react-draggable";
+// import { useLongPress } from 'use-long-press';
 
 // import { text } from '@fortawesome/fontawesome-svg-core';
 // import InstructionsModal from "./Components/InstructionsModal";
@@ -20,6 +21,10 @@ import Draggable, { DraggableCore } from "react-draggable";
 // Store the one that the user is on in local storage - that way they can't leave until they've completed it
 // Else if they haven't started one, then it defaults to the most recent
 // edit list better
+
+// const bind = useLongPress(() => {
+//   console.log('Long pressed!');
+// });
 
 const removeAccents = str =>
   str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -125,7 +130,7 @@ const App = () => {
 
   const doNotShowAgain = localStorage.getItem("doNotShowAgain");
   const [showModal, setShowModal] = useState(!doNotShowAgain ? true : false);
-  const [showKeyboard, setShowKeyboard] = useState(true);
+  const [showKeyboard, setShowKeyboard] = useState(false);
 
   // console.log(doNotShowAgain)
   // if (doNotShowAgain) {
@@ -215,6 +220,7 @@ const App = () => {
           setJsonData(jsonData);
           setSlides(newSlides);
           setAnswer(answer);
+
           if (isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)) {
             setContent(`${jsonData.artist} • ${jsonData.title}`)
             setShowReleaseDate(true);
@@ -339,7 +345,6 @@ const App = () => {
       // setIsAnswerVisible(true); // Show the answer slide
 
       if (isDayGuessedCorrectly(newIndex)) {
-        console.log("hi")
         setShowKeyboard(false);
       }
     }
@@ -750,9 +755,9 @@ const App = () => {
           <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "m") & setIsIncorrectAnswer(false)} class="keyboard-button">m</button>
         </div>
         <div class="fourth-row">
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue.slice(0, -1)) & setIsIncorrectAnswer(false)} class="keyboard-button">Del</button>
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + " ") & setIsIncorrectAnswer(false)} style={spaceBarStyles} class="keyboard-button">space</button>
-          <button id="enter-button" disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={handleSubmit} type="submit" class="keyboard-button">Enter</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue.slice(0, -1)) & setIsIncorrectAnswer(false)} class="keyboard-button-special">Del</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + " ") & setIsIncorrectAnswer(false)} style={spaceBarStyles} class="keyboard-button-special">space</button>
+          <button id="enter-button" disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={handleSubmit} type="submit" class="keyboard-button-special">Enter</button>
         </div>
       </div>
     );
@@ -1202,18 +1207,20 @@ const App = () => {
               colors={['#e15b64', '#f47e60', '#f8b26a', '#abbd81', '#849b87']}
             />
           </div>
-          <Draggable>
-            <div id="answer" style={answerContainerStyles}>
-              {/* <div id="answer" onClick={bringAnswerToFront} style={answerContainerStyles}> */}
-              {answer && (
+          <div id="answer" style={answerContainerStyles}>
+            {/* <div id="answer" onClick={bringAnswerToFront} style={answerContainerStyles}> */}
+            {answer && (
+              <Draggable>
+
                 <div style={anwserStyles}>
                   {isAnswerVisible ? (
                     <img src={answer.url} alt={answer.title} style={answerImageStyles} />
                   ) : (<img src={placeholderImage} alt="Placeholder" style={answerImageStyles} />)}
                 </div>
-              )}
-            </div>
-          </Draggable>
+              </Draggable>
+            )}
+          </div>
+
           {/* <iframe src="https://giphy.com/embed/4oMoIbIQrvCjm" style={gifStyles} class="gifyEmbed"></iframe><p><a href="https://giphy.com/gifs/the-simpsons-bart-simpson-4oMoIbIQrvCjm"></a></p>
           <iframe src="https://giphy.com/embed/DpPUDW4XTw4EM" style={gif2styles} class="giphyEmbed"></iframe><p><a href="https://giphy.com/gifs/reaction-a5viI92PAF89q"></a></p>
           <iframe src="https://giphy.com/embed/a5viI92PAF89q" style={gif3styles} class="giphy-embed"></iframe><p><a href="https://giphy.com/gifs/lol-futurama-humor-cFgb5p5e1My3K"></a></p> */}

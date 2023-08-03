@@ -80,6 +80,24 @@ const loadingStyles = {
     zIndex: 1,
 };
 
+const dotsContainerStyles = {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    position: "relative",
+    marginTop: "47vh",
+    // top: "30%"
+    // zIndex: 1000000
+};
+
+const dotStyle = {
+    margin: "0 3px",
+    cursor: "pointer",
+    fontSize: "3vh",
+    color: "#8a192f",
+};
+
+
 const ImageSlider = ({ slides }) => {
     const [isLoading, setIsLoading] = useState(true);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -97,6 +115,10 @@ const ImageSlider = ({ slides }) => {
         const isLastSlide = currentIndex === slides.length - 1;
         const newIndex = isLastSlide ? 0 : currentIndex + 1;
         setCurrentIndex(newIndex);
+    };
+
+    const goToSlide = (slideIndex) => {
+        setCurrentIndex(slideIndex);
     };
 
     const handleImageLoad = () => {
@@ -120,6 +142,17 @@ const ImageSlider = ({ slides }) => {
                     onLoad={handleImageLoad}
                     alt="loading..."
                 />
+                <div style={dotsContainerStyles}>
+                    {slides.map((slide, slideIndex) => (
+                        <div
+                            style={dotStyle}
+                            key={slideIndex}
+                            onClick={() => goToSlide(slideIndex)}
+                        >
+                            {slideIndex === currentIndex ? "●" : "○"}
+                        </div>
+                    ))}
+                </div>
                 <div style={loadingStyles}>
                     <ColorRing
                         visible={isLoading}

@@ -157,6 +157,20 @@ blink {
 }
 
 .keyboard-button {
+    width: min(8vw, 60px);
+    font-size: min(3vh, 30px);
+    font-weight: 700;
+    padding: min(1vmin, 6px);
+    color: white;
+    background-color: rgba(185, 10, 133, 0.853);
+    border-radius: 0.5rem;
+    font-family: 'CustomFont2';
+    margin: 0.3vmin 0.5vmin;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+.keyboard-button-special {
     font-size: min(3vh, 30px);
     font-weight: 700;
     padding: min(1vmin, 6px);

@@ -32,6 +32,9 @@ def add_album_todo(album_ids):
     logger.info('albums added: {}'.format(', '.join(album_ids)))
     logger.info("total albums in list: {}".format(len(albums)))
 
+def remove_album_todo():
+    pass
+
 # @click.command()
 # @click.argument('album_ids', type=str)
 def add_album_todo_immediately(album_ids):
@@ -65,4 +68,4 @@ def add_album_complete(album_id):
 
 if __name__ == "__main__":
     # add_album_todo_immediately("2aGFVLz0oQPa3uxCfq9lcU")
-    add_album_todo("4K8bxkPDa5HENw0TK7WxJh")
+    add_album_todo("1xiefq6yW6cxQFO2Dki2az")

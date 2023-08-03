@@ -27,9 +27,9 @@ const beerContainerStyles = {
 const instructionsButtonStyes = {
     backgroundColor: "rgba(52, 52, 52, 0)",
     color: "white",
-    padding: "5px 10px",
+    padding: "2px 10px",
     fontFamily: "CustomFont2",
-    fontSize: "1vh",
+    fontSize: "1.5vh",
     borderRadius: "5px",
     position: "absolute",
     alignItems: "center",
@@ -40,9 +40,9 @@ const instructionsButtonStyes = {
 const keyboardButtonStyles = {
     backgroundColor: "rgba(52, 52, 52, 0)",
     color: "white",
-    padding: "5px 10px",
+    padding: "2px 10px",
     fontFamily: "CustomFont2",
-    fontSize: "1vh",
+    fontSize: "1.5vh",
     borderRadius: "5px",
     position: "absolute",
     alignItems: "center",
@@ -55,7 +55,7 @@ function Footer({ setShowModal, setShowKeyboard, showKeyboard, setIsIncorrectAns
         <footer style={footerStyle} className="text-center text-xs m-auto">
             &copy; Gurt Data
             <button style={instructionsButtonStyes} onClick={() => setShowModal(true) & setIsIncorrectAnswer(false)}>help</button>
-            <button style={keyboardButtonStyles} onClick={() => setShowKeyboard(!showKeyboard) & setIsIncorrectAnswer(false)}>toggle keyboard</button>
+            <button style={keyboardButtonStyles} onClick={() => setShowKeyboard(!showKeyboard) & setIsIncorrectAnswer(false)}>keyboard</button>
             <a style={beerContainerStyles} href="https://www.buymeacoffee.com/thebacongardner">
                 buy me beer
             </a>
