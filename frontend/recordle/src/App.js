@@ -438,6 +438,7 @@ const App = () => {
     let parsedInput = inputValue.match(regex);
     if (inputSimilarityTitle > 0.8) {
       setContent(textAnswerRevealed);
+      setShowKeyboard(false);
       setIsAnswerVisible(true); // Show the answer slide
       setShowReleaseDate(true); // Show the release date
       setIsIncorrectAnswer(false); // Reset the incorrect answer state
@@ -456,6 +457,7 @@ const App = () => {
     }
     else if (parsedInput && parsedInput[0] === jsonData.id) {
       setContent(textAnswerRevealed);
+      setShowKeyboard(false);
       setIsAnswerVisible(true); // Show the answer slide
       setShowReleaseDate(true); // Show the release date
       setIsIncorrectAnswer(false); // Reset the incorrect answer state
@@ -521,6 +523,7 @@ const App = () => {
 
           if (contentSimilarityTitle > 0.90) {
             setContent(textAnswerRevealed);
+            setShowKeyboard(false);
             setIsAnswerVisible(true); // Show the answer slide
             setShowReleaseDate(true); // Show the release date
             setIsIncorrectAnswer(false); // Reset the incorrect answer state
@@ -542,6 +545,7 @@ const App = () => {
           console.log(`lives: ${lives}`);
           if (lives === 1) {
             setContent(textAnswerRevealed);
+            setShowKeyboard(false);
             setIsAnswerVisible(true); // Show the answer slide
             setShowReleaseDate(true); // Show the release date
             setIsCorrectAnswer(false);
