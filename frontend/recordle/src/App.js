@@ -9,7 +9,6 @@ import './index.css';
 import Blink from 'react-blink-text';
 import { ColorRing } from 'react-loader-spinner'
 import Draggable, { DraggableCore } from "react-draggable";
-// import { useLongPress } from 'use-long-press';
 
 // import { text } from '@fortawesome/fontawesome-svg-core';
 // import InstructionsModal from "./Components/InstructionsModal";
@@ -21,10 +20,6 @@ import Draggable, { DraggableCore } from "react-draggable";
 // Store the one that the user is on in local storage - that way they can't leave until they've completed it
 // Else if they haven't started one, then it defaults to the most recent
 // edit list better
-
-// const bind = useLongPress(() => {
-//   console.log('Long pressed!');
-// });
 
 const removeAccents = str =>
   str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -614,7 +609,7 @@ const App = () => {
       // transform: "translateY(-70%)",
       // top: "50%",
       // maxHeight: "15px",
-      fontSize: "min(3.5vmin, 25px)",
+      fontSize: "min(4vmin, 25px)",
       position: "relative",
 
     };
@@ -673,7 +668,7 @@ const App = () => {
       border: "2px solid #b90a85da",
       backgroundColor: "rgba(226, 135, 10, 0.953)",
       borderRadius: "10px",
-      opacity: "0.7",
+      opacity: "0.9",
     };
 
     if (!show) return (
@@ -753,11 +748,14 @@ const App = () => {
           <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "b") & setIsIncorrectAnswer(false)} class="keyboard-button">b</button>
           <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "n") & setIsIncorrectAnswer(false)} class="keyboard-button">n</button>
           <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + "m") & setIsIncorrectAnswer(false)} class="keyboard-button">m</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue.slice(0, -1)) & setIsIncorrectAnswer(false)} class="keyboard-button-special">del</button>
+
         </div>
         <div class="fourth-row">
-          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue.slice(0, -1)) & setIsIncorrectAnswer(false)} class="keyboard-button-special">Del</button>
+          <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue("") & setIsIncorrectAnswer(false)} class="keyboard-button-special">clr</button>
+
           <button disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={() => setInputValue(inputValue + " ") & setIsIncorrectAnswer(false)} style={spaceBarStyles} class="keyboard-button-special">space</button>
-          <button id="enter-button" disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={handleSubmit} type="submit" class="keyboard-button-special">Enter</button>
+          <button id="enter-button" disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)} onClick={handleSubmit} type="submit" class="keyboard-button-special">enter</button>
         </div>
       </div>
     );
