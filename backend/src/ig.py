@@ -87,7 +87,7 @@ if __name__ == "__main__":
     n = 5
     m = 0
     i = 0
-    j = 38
+    j = 43
 
     from src.handlers.main import download_from_aws
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -121,9 +121,10 @@ if __name__ == "__main__":
 
         time.sleep(5)
 
-    # # r = get_long_lived_access_token()
-    # # print(r.text)
-    # # print(r.json())
+    # r = requests.get('https://graph.facebook.com/oauth/access_token?client_id={}&client_secret={}&grant_type=client_credentials'.format(IG_CLIENT_ID, IG_CLIENT_SECRET))
+    # r = get_long_lived_access_token('k0kfknDtgl9ndb0CXaiau3UfVJo')
+    # print(r.text)
+    # print(r.json())
     # img_urls = [
     #     "https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/7nXJ5k4XgRj5OLg9m8V3zc_purple_rain_GEN_0.png",
     #     "https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/7nXJ5k4XgRj5OLg9m8V3zc_purple_rain_GEN_1.png",
