@@ -84,10 +84,10 @@ if __name__ == "__main__":
 
     sys.path.append(os.path.join(os.getcwd()))
 
-    n = 5
+    n = 2
     m = 0
     i = 0
-    j = 43
+    j = 58
 
     from src.handlers.main import download_from_aws
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

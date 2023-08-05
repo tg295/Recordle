@@ -51,7 +51,7 @@ def add_album_todo_immediately(album_ids):
     with open('{}/albums_todo.txt'.format(prefix), 'w') as f:
         f.write('\n'.join(albums))
     upload_to_aws('{}/albums_todo.txt'.format(prefix), 'albums_todo.txt')
-    logger.info('albums added: {}'.format(', '.join(album_ids)))
+    logger.info('albums added: {}'.format(album_ids))
     logger.info("total albums in list: {}".format(len(albums)))
 
 # @click.command()
@@ -68,4 +68,4 @@ def add_album_complete(album_id):
 
 if __name__ == "__main__":
     # add_album_todo_immediately("2aGFVLz0oQPa3uxCfq9lcU")
-    add_album_todo("1xiefq6yW6cxQFO2Dki2az")
+    add_album_todo("2tMQ2DeB9RydEFl1gcRkHb")
