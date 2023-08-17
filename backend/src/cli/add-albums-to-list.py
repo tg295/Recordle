@@ -13,11 +13,21 @@ root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 
 logger = Logger(service=None, xray_trace_id=None, timestamp=None)
 
+def _format_spotify_url(url):
+    if 'https://open.spotify.com/album/' in url:
+        album_id = url.split('https://open.spotify.com/album/')[1].split('?')[0]
+    elif 'spotify:album:' in url:
+        album_id = url.split('spotify:album:')[1]
+    else:
+        album_id = url
+    return album_id
+
 # @click.command()
 # @click.argument('album_ids', type=str)
 def add_album_todo(album_ids):
     """ Add album(s) to the list of albums to download """
     album_ids = album_ids.split(',')
+    album_ids = [_format_spotify_url(a) for a in album_ids]
     albums = get_album_list(local=True)
     logger.info("total albums in list: {}".format(len(albums)))
     
@@ -40,6 +50,8 @@ def remove_album_todo():
 def add_album_todo_immediately(album_ids):
     """ Add album(s) to the list of albums to download """
     albums_new = album_ids.split(',')
+    album_new = [_format_spotify_url(a) for a in album_new]
+
     albums_old = get_album_list(local=True)
     logger.info("total albums in list: {}".format(len(albums_old)))
     
@@ -67,5 +79,4 @@ def add_album_complete(album_id):
 
 
 if __name__ == "__main__":
-    # add_album_todo_immediately("2aGFVLz0oQPa3uxCfq9lcU")
-    add_album_todo("2tMQ2DeB9RydEFl1gcRkHb")
+    add_album_todo("https://open.spotify.com/album/1WwZwdTICfaZI51BIIEN9z?si=wI94cVyiRfCr_fH3wyAUqA")
