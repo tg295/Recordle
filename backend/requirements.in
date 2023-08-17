@@ -3,3 +3,4 @@ boto3
 replicate
 aws_lambda_powertools
 click
+pydantic==1.10.12
