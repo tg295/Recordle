@@ -30,7 +30,8 @@ DAY = (datetime.now() - start).days
 ACCESS_KEY = parameters.get_parameter("/recordle/s3_access_key", decrypt=True)
 SECRET_KEY = parameters.get_parameter("/recordle/s3_secret_key", decrypt=True)
 BUCKET = 'alt-covers-bucket'
-MODEL = "stability-ai/stable-diffusion:27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478"
+MODEL = "ai-forever/kandinsky-2.2:ea1addaab376f4dc227f5368bbd8eff901820fd1cc14ed8cad63b29249e9d463"
+# MODEL = "stability-ai/stable-diffusion:27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478"
 
 os.environ['SPOTIPY_CLIENT_ID'] = parameters.get_parameter("/recordle/spotify_client_id", decrypt=True)
 os.environ['SPOTIPY_CLIENT_SECRET'] = parameters.get_parameter("/recordle/spotify_client_secret", decrypt=True)
@@ -40,6 +41,13 @@ os.environ['REPLICATE_API_TOKEN'] = parameters.get_parameter("/recordle/replicat
 logger = Logger(service=None, xray_trace_id=None, timestamp=None)
 
 root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+PROMPTS = {
+    0: "{}",
+    1: "A picture or scene that encapsulates the phrase \"{}\"",
+    2: "A pictorial representation of \"{}\"",
+}
+
 
 def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
     # crude handling of different event types
@@ -56,6 +64,13 @@ def run(n=3, remove=True, local=False):
     album_data = create_and_upload_images(album_id, local, n)
     update_list(album_list, album_id, remove, local)
     update_done(album_id, local)
+    post_to_instagram(album_data, BUCKET, DAY)
+
+
+def run_again(album_id, n=3, local=False):
+    """ re-run an already generated album"""
+    logger.info('===== {} ===='.format(album_id))
+    album_data = create_and_upload_images(album_id, local, n)
     post_to_instagram(album_data, BUCKET, DAY)
 
 
@@ -93,7 +108,7 @@ def get_album_data(album_id, local):
     formatted_title = _format_title(title)
     album_data = {
         "id": album['id'],
-        'artist': album['artists'][0]['name'],
+        'artist': ', '.join([artist['name'] for artist in album['artists']]),
         "label": album['label'],
         "title": title,
         "formatted_title": formatted_title,
@@ -155,7 +170,7 @@ def generate_covers(album_data, local, n=3):
     for x in range(n):
        url = replicate.run(
             MODEL,
-            input={"prompt": 'A picture or scene that encapsulates the phrase "{}"'.format(album_data['title']), "negative_prompt":"typography, text, writing, titles"}
+            input={"prompt": PROMPTS[x].format(album_data['title']), "negative_prompt":"typography, text, writing, titles"}
         )[0]
        r = requests.get(url)
 
@@ -218,4 +233,6 @@ def download_from_aws(s3_file, local_file, bucket=BUCKET):
 def get_boto3_client():
     return boto3.client('s3', aws_access_key_id=ACCESS_KEY,
                       aws_secret_access_key=SECRET_KEY)
+
+
 
