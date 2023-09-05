@@ -24,7 +24,7 @@ from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 import replicate
 
-start = datetime(2023, 6, 5)
+start = datetime(2023, 6, 12)
 DAY = (datetime.now() - start).days
 
 ACCESS_KEY = parameters.get_parameter("/recordle/s3_access_key", decrypt=True)
