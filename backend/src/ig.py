@@ -68,7 +68,7 @@ def publish_container(creation_id = '',instagram_account_id='',access_token=''):
     return response
 
 def post_to_instagram(album_data, bucket, day):
-    caption = f"Day {day}: {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['artist'])} • {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['title'])} ({album_data['release_date'][:4]}) \n𝒂𝒏𝒔𝒘𝒆𝒓 𝒃𝒆𝒍𝒐𝒘...\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n{album_data['artist']} • {album_data['title']} ({album_data['release_date'][:4]})"
+    caption = f"Day {day}: {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['artist'])} • {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['title'])} ({album_data['release_date'][:4]}) \n𝒂𝒏𝒔𝒘𝒆𝒓 𝒃𝒆𝒍𝒐𝒘...\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n{album_data['artist']} • {album_data['title']} ({album_data['release_date'][:4]})\n #aiart #albumcovers #albumart #records #musicartist #musicart #artsciencetechnology #art #digitalart #artificialintelligence #musiclovers #music #fantano @afantano"
     # r = get_long_lived_access_token()
     # print(r.json())
     img_urls = [f"https://{bucket}.s3.eu-west-2.amazonaws.com/img/{album_data['id']}_{album_data['formatted_title']}_GEN_{i}.png" for i in range(3)]
