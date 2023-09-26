@@ -119,7 +119,7 @@ const App = () => {
 
   const placeholderImage = vinyl; // Replace with your desired placeholder image URL
   const now = new Date();
-  const start = new Date(2023, 5, 12);
+  const start = new Date(2023, 5, 8);
   const diff = now.getTime() - start.getTime();
   const day = Math.floor(diff / (1000 * 60 * 60 * 24));
 
