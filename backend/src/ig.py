@@ -68,7 +68,9 @@ def publish_container(creation_id = '',instagram_account_id='',access_token=''):
     return response
 
 def post_to_instagram(album_data, bucket, day):
-    caption = f"Day {day}: {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['artist'])} • {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['title'])} ({album_data['release_date'][:4]}) \n𝒂𝒏𝒔𝒘𝒆𝒓 𝒃𝒆𝒍𝒐𝒘...\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n{album_data['artist']} • {album_data['title']} ({album_data['release_date'][:4]})\n#aiart #albumcovers #albumart #records #musicartist #musicart #artsciencetechnology #art #digitalart #artificialintelligence #musiclovers #music #fantano @afantano"
+    artist_hashtags = " ".join(["#{}".format(artist_name.replace(" ", "").lower()) for artist_name in album_data['artist'].split(', ')])
+    # caption = f"Day {day}: {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['artist'])} • {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['title'])} ({album_data['release_date'][:4]}) \n𝒂𝒏𝒔𝒘𝒆𝒓 𝒃𝒆𝒍𝒐𝒘...\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n{album_data['artist']} • {album_data['title']} ({album_data['release_date'][:4]})\n{artist_hashtags} #aiart #albumcovers #albumart #records #musicartist #musicart #artsciencetechnology #art #digitalart #artificialintelligence #musiclovers #music #fantano @afantano"
+    caption = f"Day {day}: {album_data['artist']} • {album_data['title']} ({album_data['release_date'][:4]})\n{artist_hashtags} #aiart #albumcovers #albumart #records #musicartist #musicart #artsciencetechnology #art #digitalart #artificialintelligence #musiclovers #music #fantano @afantano"
     # r = get_long_lived_access_token()
     # print(r.json())
     img_urls = [f"https://{bucket}.s3.eu-west-2.amazonaws.com/img/{album_data['id']}_{album_data['formatted_title']}_GEN_{i}.png" for i in range(3)]
@@ -84,10 +86,10 @@ if __name__ == "__main__":
 
     sys.path.append(os.path.join(os.getcwd()))
 
-    n = 2
+    n = 4
     m = 0
     i = 0
-    j = 58
+    j = 103
 
     from src.handlers.main import download_from_aws
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -119,10 +121,13 @@ if __name__ == "__main__":
         if m == n:
             break
 
-        time.sleep(5)
-
+    #     time.sleep(5)
+    # print(IG_CLIENT_ID)
+    # print(IG_CLIENT_SECRET)
     # r = requests.get('https://graph.facebook.com/oauth/access_token?client_id={}&client_secret={}&grant_type=client_credentials'.format(IG_CLIENT_ID, IG_CLIENT_SECRET))
-    # r = get_long_lived_access_token('k0kfknDtgl9ndb0CXaiau3UfVJo')
+    # r = get_long_lived_access_token(access_token='EAAjzbgPtvUcBOwhgyAm0tnqvhJJGQsjdsZCvOoXHV9jxV4Rtp1jyyjXpfJGL0ehOcOU5G1xkYOIZC2hluROqERKfwmzmRyKm6PAqqyaYCzMzhXOw5ISP7ig8AaISXcXGhD3ODyilxdG4NEzmYBZAMQyaZBRJULpIkVL8CNwgCXxYCkQCSujk2BMFZCu6CohHCYTygk7B40ZBxgoAYGXPZBumZCZBx0mdOZAJgpfAmO6mwQbjd3VzucWEzH1uCezsTIIuq4m9JrrAZDZD')
+    # print(r.json())
+    # print(r.json())
     # print(r.text)
     # print(r.json())
     # img_urls = [
