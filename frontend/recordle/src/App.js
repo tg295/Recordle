@@ -549,6 +549,7 @@ const App = () => {
             setIsAnswerVisible(true); // Show the answer slide
             setShowReleaseDate(true); // Show the release date
             setIsCorrectAnswer(false);
+            setSpotifyLink(`https://open.spotify.com/album/${jsonData.id}`);
             const revealedDays = JSON.parse(localStorage.getItem('revealedDays')) || [];
             if (!revealedDays.includes(selectedIndex)) {
               revealedDays.push(selectedIndex);
