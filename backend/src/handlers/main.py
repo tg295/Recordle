@@ -3,7 +3,6 @@ import sys
 
 sys.path.append(os.path.join(os.getcwd()))
 
-
 """Track parser handler"""
 import re
 
@@ -24,15 +23,14 @@ from spotipy import Spotify
 from spotipy.oauth2 import SpotifyClientCredentials
 import replicate
 
-start = datetime(2023, 6, 12)
+start = datetime(2023, 6, 8)
 DAY = (datetime.now() - start).days
 
 ACCESS_KEY = parameters.get_parameter("/recordle/s3_access_key", decrypt=True)
 SECRET_KEY = parameters.get_parameter("/recordle/s3_secret_key", decrypt=True)
 BUCKET = 'alt-covers-bucket'
 MODEL = "stability-ai/sdxl:da77bc59ee60423279fd632efb4795ab731d9e3ca9705ef3341091fb989b7eaf"
-MODEL2 = "ai-forever/kandinsky-2.2:ea1addaab376f4dc227f5368bbd8eff901820fd1cc14ed8cad63b29249e9d463"
-
+# MODEL2 = "ai-forever/kandinsky-2.2:ea1addaab376f4dc227f5368bbd8eff901820fd1cc14ed8cad63b29249e9d463"
 # MODEL = "stability-ai/stable-diffusion:27b93a2413e7f36cd83da926f3656280b2931564ff050bf9575f1fdf9bcd7478"
 
 os.environ['SPOTIPY_CLIENT_ID'] = parameters.get_parameter("/recordle/spotify_client_id", decrypt=True)
@@ -47,8 +45,8 @@ root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 PROMPTS = {
     0: "{}",
     1: "A picture or scene that encapsulates the phrase \"{}\"",
-    # 2: "A pictorial representation of \"{}\"",
-    2: "{}"
+    2: "A pictorial representation of \"{}\"",
+    # 2: "{}"
 }
 
 
@@ -170,11 +168,12 @@ def generate_covers(album_data, local, n=3):
     else:
         prefix = '/tmp'
 
+    model = MODEL
     for x in range(n):
-       if x == 2:
-           model = MODEL2
-       else:
-           model = MODEL
+    #    if x == 2:
+    #        model = MODEL2
+    #    else:
+    #        model = MODEL
        url = replicate.run(
             model,
             input={"prompt": PROMPTS[x].format(album_data['title']), "negative_prompt":"typography, text, writing, titles"}
