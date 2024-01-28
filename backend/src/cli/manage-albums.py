@@ -65,13 +65,13 @@ def remove_album_todo(album_id: str):
 def add_album_todo_immediately(album_ids):
     """ Add album(s) to the list of albums to download """
     albums_new = album_ids.split(',')
-    album_new = [_format_spotify_url(a) for a in album_new]
+    albums_new = [_format_spotify_url(a) for a in albums_new]
 
     albums_old = get_album_list(local=True)
     logger.info("total albums in list: {}".format(len(albums_old)))
     
     albums_new.extend(albums_old)
-    albums = list(set(albums_new))
+    albums = sorted(set(albums_new), key=albums_new.index)
     
     prefix = root+'/data'
 

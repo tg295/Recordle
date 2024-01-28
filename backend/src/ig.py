@@ -41,6 +41,8 @@ def post_carousel(caption = '',media_url = [],instagram_account_id='',access_tok
         response = requests.post(url, params=param)
         response = response.json()
         print(response)
+        if response.get("error"):
+            raise Exception(response['error']['message'])
         container_id.append(response['id'])
     carousel_container_id = make_carousel_container(container_id=container_id,caption=caption,access_token=access_token,instagram_account_id=instagram_account_id)
     return carousel_container_id
@@ -71,65 +73,66 @@ def post_to_instagram(album_data, bucket, day):
     artist_hashtags = " ".join(["#{}".format(artist_name.replace(" ", "").lower()) for artist_name in album_data['artist'].split(', ')])
     caption = f"Day {day}: {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['artist'])} • {re.sub('[A-Za-zÀ-ÖØ-öø-ÿ]', '_', album_data['title'])} ({album_data['release_date'][:4]}) \n𝒂𝒏𝒔𝒘𝒆𝒓 𝒃𝒆𝒍𝒐𝒘...\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n.\n{album_data['artist']} • {album_data['title']} ({album_data['release_date'][:4]})\n{artist_hashtags} #aiart #albumcovers #albumart #records #musicartist #musicart #artsciencetechnology #art #digitalart #artificialintelligence #musiclovers #music #fantano @afantano"
     # caption = f"Day {day}: {album_data['artist']} • {album_data['title']} ({album_data['release_date'][:4]})\n{artist_hashtags} #aiart #albumcovers #albumart #records #musicartist #musicart #artsciencetechnology #art #digitalart #artificialintelligence #musiclovers #music #fantano @afantano"
-    # r = get_long_lived_access_token()
-    # print(r.json())
     img_urls = [f"https://{bucket}.s3.eu-west-2.amazonaws.com/img/{album_data['id']}_{album_data['formatted_title']}_GEN_{i}.png" for i in range(3)]
-    creation_id = post_carousel(caption=caption, media_url=img_urls, instagram_account_id=IG_ACCOUNT_ID, access_token=IG_LL_ACCESS_TOKEN)
-    publish_container(creation_id=creation_id,instagram_account_id=IG_ACCOUNT_ID,access_token=IG_LL_ACCESS_TOKEN)
+    try:
+        creation_id = post_carousel(caption=caption, media_url=img_urls, instagram_account_id=IG_ACCOUNT_ID, access_token=IG_LL_ACCESS_TOKEN)
+        publish_container(creation_id=creation_id,instagram_account_id=IG_ACCOUNT_ID,access_token=IG_LL_ACCESS_TOKEN)
+    except Exception as e:
+        if str(e).startswith("Error validating access token"):
+            print('Error posting to Instagram: Refresh user access token and exchange for long-lived access token!!!')
+        else:
+            print('Error posting to Instagram: Unknown')
+
+        
 
 
 if __name__ == "__main__":
 
-    import os
-    import sys
-    import time
+    # import os
+    # import sys
+    # import time
 
-    sys.path.append(os.path.join(os.getcwd()))
+    # sys.path.append(os.path.join(os.getcwd()))
 
-    n = 4
-    m = 0
-    i = 0
-    j = 103
+    # n = 4
+    # m = 0
+    # i = 0
+    # j = 103
 
-    from src.handlers.main import download_from_aws
-    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    prefix = root+'/data'
+    # from src.handlers.main import download_from_aws
+    # root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    # prefix = root+'/data'
 
-    filepath = download_from_aws('albums_filtered.txt', '{}/albums_filtered.txt'.format(prefix))
+    # filepath = download_from_aws('albums_filtered.txt', '{}/albums_filtered.txt'.format(prefix))
 
-    # j += 1 # account for 0 index
+    # # j += 1 # account for 0 index
 
-    for album_id in open(filepath, 'r').readlines():
+    # for album_id in open(filepath, 'r').readlines():
 
-        if i < j:
-            i += 1
-            continue
-        album_id = album_id.strip('\n')
+    #     if i < j:
+    #         i += 1
+    #         continue
+    #     album_id = album_id.strip('\n')
 
-        print('------ {} ------'.format(j))
+    #     print('------ {} ------'.format(j))
 
-        url = 'https://alt-covers-bucket.s3.eu-west-2.amazonaws.com'
-        r = requests.get(f"{url}/data/{album_id}.json")
-        album_data = r.json()
-        print(album_data)
-        post_to_instagram(album_data, 'alt-covers-bucket', j)
+    #     url = 'https://alt-covers-bucket.s3.eu-west-2.amazonaws.com'
+    #     r = requests.get(f"{url}/data/{album_id}.json")
+    #     album_data = r.json()
+    #     print(album_data)
+    #     post_to_instagram(album_data, 'alt-covers-bucket', j)
 
-        j += 1
-        m += 1
-        i += 1
+    #     j += 1
+    #     m += 1
+    #     i += 1
 
-        if m == n:
-            break
+    #     if m == n:
+    #         break
 
     #     time.sleep(5)
-    # print(IG_CLIENT_ID)
-    # print(IG_CLIENT_SECRET)
-    # r = requests.get('https://graph.facebook.com/oauth/access_token?client_id={}&client_secret={}&grant_type=client_credentials'.format(IG_CLIENT_ID, IG_CLIENT_SECRET))
-    # r = get_long_lived_access_token(access_token='EAAjzbgPtvUcBOwhgyAm0tnqvhJJGQsjdsZCvOoXHV9jxV4Rtp1jyyjXpfJGL0ehOcOU5G1xkYOIZC2hluROqERKfwmzmRyKm6PAqqyaYCzMzhXOw5ISP7ig8AaISXcXGhD3ODyilxdG4NEzmYBZAMQyaZBRJULpIkVL8CNwgCXxYCkQCSujk2BMFZCu6CohHCYTygk7B40ZBxgoAYGXPZBumZCZBx0mdOZAJgpfAmO6mwQbjd3VzucWEzH1uCezsTIIuq4m9JrrAZDZD')
-    # print(r.json())
-    # print(r.json())
-    # print(r.text)
-    # print(r.json())
+    r = get_long_lived_access_token(access_token="<INSERT MANUALLY GENERATED USER ACCESS TOKEN HERE>")
+    print(r.json())
+    print(r.text)
     # img_urls = [
     #     "https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/7nXJ5k4XgRj5OLg9m8V3zc_purple_rain_GEN_0.png",
     #     "https://alt-covers-bucket.s3.eu-west-2.amazonaws.com/img/7nXJ5k4XgRj5OLg9m8V3zc_purple_rain_GEN_1.png",
