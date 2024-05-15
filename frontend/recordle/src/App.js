@@ -8,7 +8,7 @@ import './fonts.css';
 import './index.css';
 import Blink from 'react-blink-text';
 import { ColorRing } from 'react-loader-spinner'
-import Draggable, { DraggableCore } from "react-draggable";
+import Draggable from "react-draggable";
 
 // import { text } from '@fortawesome/fontawesome-svg-core';
 // import InstructionsModal from "./Components/InstructionsModal";
@@ -24,26 +24,26 @@ import Draggable, { DraggableCore } from "react-draggable";
 const removeAccents = str =>
   str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-const scrollToTop = () => {
-  window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
-};
+// const scrollToTop = () => {
+//   window.scrollTo({ top: 0, left: 0, behavior: 'smooth' });
+// };
 
-function getIndicesOf(searchStr, str, caseSensitive) {
-  var searchStrLen = searchStr.length;
-  if (searchStrLen === 0) {
-    return [];
-  }
-  var startIndex = 0, index, indices = [];
-  if (!caseSensitive) {
-    str = str.toLowerCase();
-    searchStr = searchStr.toLowerCase();
-  }
-  while ((index = str.indexOf(searchStr, startIndex)) > -1) {
-    indices.push(index);
-    startIndex = index + searchStrLen;
-  }
-  return indices;
-}
+// function getIndicesOf(searchStr, str, caseSensitive) {
+//   var searchStrLen = searchStr.length;
+//   if (searchStrLen === 0) {
+//     return [];
+//   }
+//   var startIndex = 0, index, indices = [];
+//   if (!caseSensitive) {
+//     str = str.toLowerCase();
+//     searchStr = searchStr.toLowerCase();
+//   }
+//   while ((index = str.indexOf(searchStr, startIndex)) > -1) {
+//     indices.push(index);
+//     startIndex = index + searchStrLen;
+//   }
+//   return indices;
+// }
 
 function setCharAt(str, index, chr) {
   if (index > str.length - 1) return str;
@@ -428,6 +428,10 @@ const App = () => {
     //   setIsMinusGreyedOut(true);
     //   setIsPlusGreyedOut(true);
     // }
+    var i;
+    var j;
+    var word;
+    var revealedContent;
     let textAnswerRevealed = `${jsonData.artist} • ${jsonData.title}`;
     let formattedTitle = answer.formatted_title.toLowerCase().replace(/_/g, " ");
     let formattedArtist = answer.artist.toLowerCase().replace(/_/g, " ");
@@ -475,14 +479,14 @@ const App = () => {
       // setAttempts(0);
     }
     else if (inputSimilarityArtist > 0.9) {
-      var revealedContent = content;
+      revealedContent = content;
       const words = formattedArtist.split(" ");
-      for (var i = 0; i < words.length; i++) {
+      for (i = 0; i < words.length; i++) {
         const idx = wordInThing(words[i].toLowerCase(), textAnswerRevealed.toLowerCase())
         if (idx >= 0) {
-          var word = words[i];
-          for (var j = 0; j < word.length; j++) {
-            var revealedContent = setCharAt(revealedContent, idx + j, word[j]);
+          word = words[i];
+          for (j = 0; j < word.length; j++) {
+            setCharAt(revealedContent, idx + j, word[j]);
           }
           setContent(revealedContent);
         }
@@ -492,11 +496,11 @@ const App = () => {
       setInputValue("");
     }
     else {
-      var revealedContent = content;
+      revealedContent = content;
       // const answerWords = " " + textAnswerRevealed;
       const words = inputValue.split(" ");
-      for (var i = 0; i < words.length; i++) {
-        var word = words[i].toLowerCase();
+      for (i = 0; i < words.length; i++) {
+        word = words[i].toLowerCase();
         // const re = new RegExp(`/\b${word}\b/`);
         const re = RegExp(`\\b${word}\\b`, 'g');
         let allMatchItr = textAnswerRevealed.toLowerCase().matchAll(re);
@@ -507,9 +511,9 @@ const App = () => {
         }
         // var indices = getIndicesOf(word, answerWords);
         if (indices.length > 0) {
-          for (var j = 0; j < indices.length; j++) {
+          for (j = 0; j < indices.length; j++) {
             for (var k = 0; k < word.length; k++) {
-              var revealedContent = setCharAt(revealedContent, indices[j] + k, word[k]);
+              revealedContent = setCharAt(revealedContent, indices[j] + k, word[k]);
             }
 
             setContent(revealedContent);
@@ -683,7 +687,7 @@ const App = () => {
           disabled={isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)}
           key={inputKey}
           id='input-box'
-          class='form-control'
+          className='form-control'
           type="text"
           value={inputValue}
           onChange={handleInputChange}
@@ -966,15 +970,15 @@ const App = () => {
     // background: "linear-gradient(0deg, rgba(211,235,216,1) 10%, rgba(211,235,216,1) 10%, rgba(211,235,216,0) 100%)",
   };
 
-  const inputContainerStyles = {
-    width: "100%",
-    height: "100%",
-    bottom: "max(22vmin, 21vh)",
-    position: "relative",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-  };
+  // const inputContainerStyles = {
+  //   width: "100%",
+  //   height: "100%",
+  //   bottom: "max(22vmin, 21vh)",
+  //   position: "relative",
+  //   display: "flex",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  // };
 
   const inputStyles = {
     zIndex: 1000000,
@@ -994,20 +998,20 @@ const App = () => {
     transition: 'opacity 0.2s, transform 0.5s',
   };
 
-  const enterButtonStyles = {
-    height: "20%",
-    width: "10vmin",
-    padding: "3vmin",
-    fontSize: "3vmin",
-    background: "#e66439",
-    color: "white",
-    border: "none",
-    borderRadius: "5px",
-    cursor: "pointer",
-    fontFamily: "CustomFont2",
-    position: "relative",
-    marginLeft: "1vmin",
-  };
+  // const enterButtonStyles = {
+  //   height: "20%",
+  //   width: "10vmin",
+  //   padding: "3vmin",
+  //   fontSize: "3vmin",
+  //   background: "#e66439",
+  //   color: "white",
+  //   border: "none",
+  //   borderRadius: "5px",
+  //   cursor: "pointer",
+  //   fontFamily: "CustomFont2",
+  //   position: "relative",
+  //   marginLeft: "1vmin",
+  // };
 
   const progressMessageStyles = {
     fontFamily: "CustomFont2",
@@ -1137,10 +1141,10 @@ const App = () => {
     width: "50vmin",
   }
 
-  const formStyles = {
-    // marginBottom: "1px",
-    position: "relative"
-  }
+  // const formStyles = {
+  //   // marginBottom: "1px",
+  //   position: "relative"
+  // }
 
   return (
     <div style={containerStyles}>
@@ -1171,6 +1175,9 @@ const App = () => {
               <Blink fontSize="3.5vmin" color="#b62c2c" blinkTime={isCorrectAnswer ? 1 : 0}
                 text={!isAnswerVisible ? `${loadLives(lives)}` : isCorrectAnswer ? loadLives(lives) : ""}>
               </Blink>
+              {/* <div fontSize="3.5vmin" color="#b62c2c"
+                text={!isAnswerVisible ? `${loadLives(lives)}` : isCorrectAnswer ? loadLives(lives) : ""}>
+              </div> */}
             </div>
             {/* <h3 style={subHeaderStyles}>Guess the song</h3> */}
             <TextBox content={content} />
