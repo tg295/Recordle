@@ -1,2 +1,2 @@
-# alt-covers
+# Recordle
 Mek gud covers.
