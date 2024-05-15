@@ -57,7 +57,7 @@ function Footer({ setShowModal, setShowKeyboard, showKeyboard, setIsIncorrectAns
             <button style={instructionsButtonStyes} onClick={() => setShowModal(true) & setIsIncorrectAnswer(false)}>help</button>
             <button style={keyboardButtonStyles} onClick={() => setShowKeyboard(!showKeyboard) & setIsIncorrectAnswer(false)}>keyboard</button>
             <a style={beerContainerStyles} href="https://www.buymeacoffee.com/thebacongardner">
-                buy me beer
+                buy me a beer
             </a>
         </footer>
     )
