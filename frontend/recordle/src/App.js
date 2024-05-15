@@ -1203,7 +1203,6 @@ const App = () => {
           </div>
           <div id="clues" style={isAnswerVisible ? imgContainerStyles : defaultImgStyles}>
             {slides.length > 0 && jsonData ? (
-              <ImageSlider slides={slides} />
               <ImageSlider slides={slides} sliderIndex={sliderIndex} setSliderIndex={setSliderIndex} />
             ) : (
               <p>Loading slides...</p>
