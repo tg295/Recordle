@@ -323,7 +323,6 @@ const App = () => {
     setInputValue("");
     setLives(5);
     setAttempts(0);
-    setIsCorrectAnswer(false);
     setIsCorrectAnswer(false);    
     setSliderIndex(0);
 
