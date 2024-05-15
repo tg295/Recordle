@@ -99,27 +99,26 @@ const dotStyle = {
 };
 
 
-const ImageSlider = ({ slides }) => {
+const ImageSlider = ({ slides, sliderIndex, setSliderIndex }) => {
     const [isLoading, setIsLoading] = useState(true);
-    const [currentIndex, setCurrentIndex] = useState(0);
 
     // const goToPrevious = () => {
     //     setIsLoading(true);
-    //     const isFirstSlide = currentIndex === 0;
-    //     const newIndex = isFirstSlide ? slides.length - 1 : currentIndex - 1;
-    //     setCurrentIndex(newIndex);
+    //     const isFirstSlide = sliderIndex === 0;
+    //     const newIndex = isFirstSlide ? slides.length - 1 : sliderIndex - 1;
+    //     setSliderIndex(newIndex);
     // };
     const goToNext = () => {
         // document.getElementById('clues').style.zIndex = 0;
         // document.getElementById('answer').style.zIndex = -1;
         setIsLoading(true);
-        const isLastSlide = currentIndex === slides.length - 1;
-        const newIndex = isLastSlide ? 0 : currentIndex + 1;
-        setCurrentIndex(newIndex);
+        const isLastSlide = sliderIndex === slides.length - 1;
+        const newIndex = isLastSlide ? 0 : sliderIndex + 1;
+        setSliderIndex(newIndex);
     };
 
     const goToSlide = (slideIndex) => {
-        setCurrentIndex(slideIndex);
+        setSliderIndex(slideIndex);
     };
 
     const handleImageLoad = () => {
@@ -137,7 +136,7 @@ const ImageSlider = ({ slides }) => {
                     </div>
                 </div> */}
                 <img
-                    src={slides[currentIndex].url}
+                    src={slides[sliderIndex].url}
                     onClick={goToNext}
                     style={{ ...slideStyles }}
                     onLoad={handleImageLoad}
@@ -150,7 +149,7 @@ const ImageSlider = ({ slides }) => {
                             key={slideIndex}
                             onClick={() => goToSlide(slideIndex)}
                         >
-                            {slideIndex === currentIndex ? "▪" : "▫"}
+                            {slideIndex === sliderIndex ? "▪" : "▫"}
                         </div>
                     ))}
                 </div>

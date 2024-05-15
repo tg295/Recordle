@@ -324,6 +324,8 @@ const App = () => {
     setLives(5);
     setAttempts(0);
     setIsCorrectAnswer(false);
+    setIsCorrectAnswer(false);    
+    setSliderIndex(0);
 
     // setIsLoading(true);
     // console.log(isLoading);
@@ -1202,6 +1204,7 @@ const App = () => {
           <div id="clues" style={isAnswerVisible ? imgContainerStyles : defaultImgStyles}>
             {slides.length > 0 && jsonData ? (
               <ImageSlider slides={slides} />
+              <ImageSlider slides={slides} sliderIndex={sliderIndex} setSliderIndex={setSliderIndex} />
             ) : (
               <p>Loading slides...</p>
             )}
