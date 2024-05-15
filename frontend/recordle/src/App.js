@@ -117,11 +117,12 @@ function handleToggleDoNotShowAgain() {
 
 const App = () => {
 
-  const placeholderImage = vinyl; // Replace with your desired placeholder image URL
-  const now = new Date();
-  const start = new Date(2023, 5, 8);
-  const diff = now.getTime() - start.getTime();
-  const day = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const placeholderImage = vinyl; // Replace with your desired placeholder image URL  
+  // const now = new Date();
+  // const start = new Date(2023, 10, 25);
+  // const diff = now.getTime() - start.getTime();
+  // const day = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const [day, setDay] = useState(0);
 
   const doNotShowAgain = localStorage.getItem("doNotShowAgain");
   const [showModal, setShowModal] = useState(!doNotShowAgain ? true : false);
@@ -151,8 +152,11 @@ const App = () => {
   const [isCorrectAnswer, setIsCorrectAnswer] = useState(false);
   const [isIncorrectAnswer, setIsIncorrectAnswer] = useState(false);
   const [isImageVisible, setIsImageVisible] = useState(false);
-  const [isPlusGreyedOut, setIsPlusGreyedOut] = useState(selectedIndex === day);
-  const [isMinusGreyedOut, setIsMinusGreyedOut] = useState(selectedIndex === 0);
+  // const [isPlusGreyedOut, setIsPlusGreyedOut] = useState(selectedIndex === day);
+  const [isPlusGreyedOut, setIsPlusGreyedOut] = useState(true);
+  // const [isMinusGreyedOut, setIsMinusGreyedOut] = useState(selectedIndex === 0);
+  const [isMinusGreyedOut, setIsMinusGreyedOut] = useState(false);
+  const [sliderIndex, setSliderIndex] = useState(0);
 
   const storedDays = JSON.parse(localStorage.getItem('guessedDays')) || [];
   const revealedDays = JSON.parse(localStorage.getItem('revealedDays')) || [];
@@ -180,9 +184,18 @@ const App = () => {
     const fetchTextData = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`${process.env.REACT_APP_BASE_URL}/albums_filtered.txt`, { cache: "no-cache" });
+        const url = `${process.env.REACT_APP_BASE_URL}/albums_filtered.txt`
+        console.log(process.env.REACT_APP_BASE_URL)
+        if (process.env.REACT_APP_BASE_URL === undefined){
+          throw new Error('Missing ENV var `REACT_APP_BASE_URL`')
+        }
+        const response = await fetch(url, { cache: "no-cache" });
         const data = await response.text();
         const dataArray = data.split('\n').filter(item => item.trim() !== '');
+        const daysDone = dataArray.length;
+        console.log(daysDone);
+        setDay(daysDone);
+        setSelectedIndex(daysDone-1);
         setTextData(dataArray);
         setIsLoading(false);
       } catch (error) {
@@ -197,7 +210,6 @@ const App = () => {
     const fetchJsonData = async () => {
       try {
         setIsLoading(true);
-        // console.log(isLoading);
         if (textData.length > 0) {
           const albumId = textData[selectedIndex];
           const url = `${process.env.REACT_APP_BASE_URL}/data/${albumId}.json`;
@@ -211,7 +223,7 @@ const App = () => {
           ];
 
           const answer = { url: `${process.env.REACT_APP_BASE_URL}/img/${jsonData.id}_${jsonData.formatted_title}_REAL.png`, title: jsonData.title, formatted_title: jsonData.formatted_title, artist: jsonData.artist }
-
+          // console.log(answer)
           setJsonData(jsonData);
           setSlides(newSlides);
           setAnswer(answer);
@@ -253,7 +265,7 @@ const App = () => {
     };
 
     fetchJsonData();
-  }, [selectedIndex, textData]);
+  }, [selectedIndex, textData, day]);
 
 
   // const handleRevealClick = () => {
@@ -330,12 +342,12 @@ const App = () => {
     // setIsLoading(true);
     // console.log(isLoading);
     const newIndex = selectedIndex + increment;
-    // console.log(newIndex);
-    // console.log(day);
+    console.log(newIndex);
+    console.log(day);
     if (newIndex >= 0 && newIndex < textData.length) {
       setSelectedIndex(newIndex);
       // setShowReleaseDate(true);
-      setIsPlusGreyedOut(newIndex === day); // Update the isPlusGreyedOut state based on the selectedIndex
+      setIsPlusGreyedOut(newIndex === (day - 1)); // Update the isPlusGreyedOut state based on the selectedIndex
       setIsMinusGreyedOut(newIndex === 0); // Update the isMinusGreyedOut state based on the selectedIndex
       // setIsArtistGifVisible(false);
       // setIsReleaseDateGifVisible(false);
