@@ -615,7 +615,6 @@ const App = () => {
       backgroundColor: "#d3ebd8",
       border: "2px solid pink",
       borderRadius: "5px",
-      padding: "5px",
       // transform: "translateY(-70%)",
       // top: "50%",
       // maxHeight: "15px",
