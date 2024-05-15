@@ -215,6 +215,7 @@ const App = () => {
           setJsonData(jsonData);
           setSlides(newSlides);
           setAnswer(answer);
+          setSliderIndex(0);
 
           if (isDayGuessedCorrectly(selectedIndex) || isDayRevealed(selectedIndex)) {
             setContent(`${jsonData.artist} • ${jsonData.title}`)
