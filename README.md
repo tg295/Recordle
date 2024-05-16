@@ -5,7 +5,7 @@
 An early PoC for a game, currently in the form of a web application built in React. Give it a try at: https://www.recordle.app/
 
 
-<img src="./screenrec1.gif" alt="screenRec1">
+<img src="./screenrec1.gif" alt="screenRec1" height=500>
 
 
 ## Rules
@@ -24,7 +24,7 @@ A new, randomly selected, album is added everyday at 00:00 GMT.
 
 New albums are also posted automatically to a [Recordle instagram account](https://www.instagram.com/p/Cz4yCUUIBga):
 
-<img src="./screenrec2.gif" alt="screenRec2">
+<img src="./screenrec2.gif" alt="screenRec2" height=500>
 
 ## Intended improvements
 
