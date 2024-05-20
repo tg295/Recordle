@@ -22,7 +22,7 @@ For an additional hint you can reveal the year of release by tapping the questio
 
 A new, randomly selected, album is added everyday at 00:00 GMT.
 
-New albums are also posted automatically to a [Recordle instagram account](https://www.instagram.com/p/Cz4yCUUIBga):
+New albums are also posted automatically to a [Recordle instagram account](https://www.instagram.com/recordle.app/):
 
 <img src="./screenrec2.gif" alt="screenRec2" height=500>
 
